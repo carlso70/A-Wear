@@ -1,0 +1,862 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 50;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		61F559702158747400776195 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61F5596F2158747400776195 /* AppDelegate.swift */; };
+		61F559722158747400776195 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61F559712158747400776195 /* ViewController.swift */; };
+		61F559752158747400776195 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 61F559732158747400776195 /* Main.storyboard */; };
+		61F559772158747600776195 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 61F559762158747600776195 /* Assets.xcassets */; };
+		61F5597A2158747600776195 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 61F559782158747600776195 /* LaunchScreen.storyboard */; };
+		61F559852158747600776195 /* AwearTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61F559842158747600776195 /* AwearTests.swift */; };
+		61F559902158747600776195 /* AwearUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61F5598F2158747600776195 /* AwearUITests.swift */; };
+		61F559952158747600776195 /* Awear WatchKit App.app in Embed Watch Content */ = {isa = PBXBuildFile; fileRef = 61F559942158747600776195 /* Awear WatchKit App.app */; };
+		61F5599B2158747600776195 /* Interface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 61F559992158747600776195 /* Interface.storyboard */; };
+		61F5599D2158747700776195 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 61F5599C2158747700776195 /* Assets.xcassets */; };
+		61F559A42158747700776195 /* Awear WatchKit Extension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 61F559A32158747700776195 /* Awear WatchKit Extension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		61F559A92158747700776195 /* InterfaceController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61F559A82158747700776195 /* InterfaceController.swift */; };
+		61F559AB2158747700776195 /* ExtensionDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61F559AA2158747700776195 /* ExtensionDelegate.swift */; };
+		61F559AD2158747700776195 /* NotificationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61F559AC2158747700776195 /* NotificationController.swift */; };
+		61F559AF2158747800776195 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 61F559AE2158747800776195 /* Assets.xcassets */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		61F559812158747600776195 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 61F559642158747400776195 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 61F5596B2158747400776195;
+			remoteInfo = Awear;
+		};
+		61F5598C2158747600776195 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 61F559642158747400776195 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 61F5596B2158747400776195;
+			remoteInfo = Awear;
+		};
+		61F559962158747600776195 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 61F559642158747400776195 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 61F559932158747600776195;
+			remoteInfo = "Awear WatchKit App";
+		};
+		61F559A52158747700776195 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 61F559642158747400776195 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 61F559A22158747700776195;
+			remoteInfo = "Awear WatchKit Extension";
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		61F559B72158747800776195 /* Embed App Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				61F559A42158747700776195 /* Awear WatchKit Extension.appex in Embed App Extensions */,
+			);
+			name = "Embed App Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		61F559BB2158747800776195 /* Embed Watch Content */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "$(CONTENTS_FOLDER_PATH)/Watch";
+			dstSubfolderSpec = 16;
+			files = (
+				61F559952158747600776195 /* Awear WatchKit App.app in Embed Watch Content */,
+			);
+			name = "Embed Watch Content";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		61F5596C2158747400776195 /* Awear.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Awear.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		61F5596F2158747400776195 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		61F559712158747400776195 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		61F559742158747400776195 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		61F559762158747600776195 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		61F559792158747600776195 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		61F5597B2158747600776195 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		61F559802158747600776195 /* AwearTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AwearTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		61F559842158747600776195 /* AwearTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AwearTests.swift; sourceTree = "<group>"; };
+		61F559862158747600776195 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		61F5598B2158747600776195 /* AwearUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AwearUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		61F5598F2158747600776195 /* AwearUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AwearUITests.swift; sourceTree = "<group>"; };
+		61F559912158747600776195 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		61F559942158747600776195 /* Awear WatchKit App.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Awear WatchKit App.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		61F5599A2158747600776195 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Interface.storyboard; sourceTree = "<group>"; };
+		61F5599C2158747700776195 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		61F5599E2158747700776195 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		61F559A32158747700776195 /* Awear WatchKit Extension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "Awear WatchKit Extension.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
+		61F559A82158747700776195 /* InterfaceController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InterfaceController.swift; sourceTree = "<group>"; };
+		61F559AA2158747700776195 /* ExtensionDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtensionDelegate.swift; sourceTree = "<group>"; };
+		61F559AC2158747700776195 /* NotificationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationController.swift; sourceTree = "<group>"; };
+		61F559AE2158747800776195 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		61F559B02158747800776195 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		61F559B12158747800776195 /* PushNotificationPayload.apns */ = {isa = PBXFileReference; lastKnownFileType = text; path = PushNotificationPayload.apns; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		61F559692158747400776195 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		61F5597D2158747600776195 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		61F559882158747600776195 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		61F559A02158747700776195 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		61F559632158747400776195 = {
+			isa = PBXGroup;
+			children = (
+				61F5596E2158747400776195 /* Awear */,
+				61F559832158747600776195 /* AwearTests */,
+				61F5598E2158747600776195 /* AwearUITests */,
+				61F559982158747600776195 /* Awear WatchKit App */,
+				61F559A72158747700776195 /* Awear WatchKit Extension */,
+				61F5596D2158747400776195 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		61F5596D2158747400776195 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				61F5596C2158747400776195 /* Awear.app */,
+				61F559802158747600776195 /* AwearTests.xctest */,
+				61F5598B2158747600776195 /* AwearUITests.xctest */,
+				61F559942158747600776195 /* Awear WatchKit App.app */,
+				61F559A32158747700776195 /* Awear WatchKit Extension.appex */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		61F5596E2158747400776195 /* Awear */ = {
+			isa = PBXGroup;
+			children = (
+				61F5596F2158747400776195 /* AppDelegate.swift */,
+				61F559712158747400776195 /* ViewController.swift */,
+				61F559732158747400776195 /* Main.storyboard */,
+				61F559762158747600776195 /* Assets.xcassets */,
+				61F559782158747600776195 /* LaunchScreen.storyboard */,
+				61F5597B2158747600776195 /* Info.plist */,
+			);
+			path = Awear;
+			sourceTree = "<group>";
+		};
+		61F559832158747600776195 /* AwearTests */ = {
+			isa = PBXGroup;
+			children = (
+				61F559842158747600776195 /* AwearTests.swift */,
+				61F559862158747600776195 /* Info.plist */,
+			);
+			path = AwearTests;
+			sourceTree = "<group>";
+		};
+		61F5598E2158747600776195 /* AwearUITests */ = {
+			isa = PBXGroup;
+			children = (
+				61F5598F2158747600776195 /* AwearUITests.swift */,
+				61F559912158747600776195 /* Info.plist */,
+			);
+			path = AwearUITests;
+			sourceTree = "<group>";
+		};
+		61F559982158747600776195 /* Awear WatchKit App */ = {
+			isa = PBXGroup;
+			children = (
+				61F559992158747600776195 /* Interface.storyboard */,
+				61F5599C2158747700776195 /* Assets.xcassets */,
+				61F5599E2158747700776195 /* Info.plist */,
+			);
+			path = "Awear WatchKit App";
+			sourceTree = "<group>";
+		};
+		61F559A72158747700776195 /* Awear WatchKit Extension */ = {
+			isa = PBXGroup;
+			children = (
+				61F559A82158747700776195 /* InterfaceController.swift */,
+				61F559AA2158747700776195 /* ExtensionDelegate.swift */,
+				61F559AC2158747700776195 /* NotificationController.swift */,
+				61F559AE2158747800776195 /* Assets.xcassets */,
+				61F559B02158747800776195 /* Info.plist */,
+				61F559B12158747800776195 /* PushNotificationPayload.apns */,
+			);
+			path = "Awear WatchKit Extension";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		61F5596B2158747400776195 /* Awear */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 61F559BC2158747800776195 /* Build configuration list for PBXNativeTarget "Awear" */;
+			buildPhases = (
+				61F559682158747400776195 /* Sources */,
+				61F559692158747400776195 /* Frameworks */,
+				61F5596A2158747400776195 /* Resources */,
+				61F559BB2158747800776195 /* Embed Watch Content */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				61F559972158747600776195 /* PBXTargetDependency */,
+			);
+			name = Awear;
+			productName = Awear;
+			productReference = 61F5596C2158747400776195 /* Awear.app */;
+			productType = "com.apple.product-type.application";
+		};
+		61F5597F2158747600776195 /* AwearTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 61F559BF2158747800776195 /* Build configuration list for PBXNativeTarget "AwearTests" */;
+			buildPhases = (
+				61F5597C2158747600776195 /* Sources */,
+				61F5597D2158747600776195 /* Frameworks */,
+				61F5597E2158747600776195 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				61F559822158747600776195 /* PBXTargetDependency */,
+			);
+			name = AwearTests;
+			productName = AwearTests;
+			productReference = 61F559802158747600776195 /* AwearTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		61F5598A2158747600776195 /* AwearUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 61F559C22158747800776195 /* Build configuration list for PBXNativeTarget "AwearUITests" */;
+			buildPhases = (
+				61F559872158747600776195 /* Sources */,
+				61F559882158747600776195 /* Frameworks */,
+				61F559892158747600776195 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				61F5598D2158747600776195 /* PBXTargetDependency */,
+			);
+			name = AwearUITests;
+			productName = AwearUITests;
+			productReference = 61F5598B2158747600776195 /* AwearUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+		61F559932158747600776195 /* Awear WatchKit App */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 61F559B82158747800776195 /* Build configuration list for PBXNativeTarget "Awear WatchKit App" */;
+			buildPhases = (
+				61F559922158747600776195 /* Resources */,
+				61F559B72158747800776195 /* Embed App Extensions */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				61F559A62158747700776195 /* PBXTargetDependency */,
+			);
+			name = "Awear WatchKit App";
+			productName = "Awear WatchKit App";
+			productReference = 61F559942158747600776195 /* Awear WatchKit App.app */;
+			productType = "com.apple.product-type.application.watchapp2";
+		};
+		61F559A22158747700776195 /* Awear WatchKit Extension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 61F559B42158747800776195 /* Build configuration list for PBXNativeTarget "Awear WatchKit Extension" */;
+			buildPhases = (
+				61F5599F2158747700776195 /* Sources */,
+				61F559A02158747700776195 /* Frameworks */,
+				61F559A12158747700776195 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "Awear WatchKit Extension";
+			productName = "Awear WatchKit Extension";
+			productReference = 61F559A32158747700776195 /* Awear WatchKit Extension.appex */;
+			productType = "com.apple.product-type.watchkit2-extension";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		61F559642158747400776195 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastSwiftUpdateCheck = 1000;
+				LastUpgradeCheck = 1000;
+				ORGANIZATIONNAME = "James Carlson";
+				TargetAttributes = {
+					61F5596B2158747400776195 = {
+						CreatedOnToolsVersion = 10.0;
+					};
+					61F5597F2158747600776195 = {
+						CreatedOnToolsVersion = 10.0;
+						TestTargetID = 61F5596B2158747400776195;
+					};
+					61F5598A2158747600776195 = {
+						CreatedOnToolsVersion = 10.0;
+						TestTargetID = 61F5596B2158747400776195;
+					};
+					61F559932158747600776195 = {
+						CreatedOnToolsVersion = 10.0;
+					};
+					61F559A22158747700776195 = {
+						CreatedOnToolsVersion = 10.0;
+					};
+				};
+			};
+			buildConfigurationList = 61F559672158747400776195 /* Build configuration list for PBXProject "Awear" */;
+			compatibilityVersion = "Xcode 9.3";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 61F559632158747400776195;
+			productRefGroup = 61F5596D2158747400776195 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				61F5596B2158747400776195 /* Awear */,
+				61F5597F2158747600776195 /* AwearTests */,
+				61F5598A2158747600776195 /* AwearUITests */,
+				61F559932158747600776195 /* Awear WatchKit App */,
+				61F559A22158747700776195 /* Awear WatchKit Extension */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		61F5596A2158747400776195 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				61F5597A2158747600776195 /* LaunchScreen.storyboard in Resources */,
+				61F559772158747600776195 /* Assets.xcassets in Resources */,
+				61F559752158747400776195 /* Main.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		61F5597E2158747600776195 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		61F559892158747600776195 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		61F559922158747600776195 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				61F5599D2158747700776195 /* Assets.xcassets in Resources */,
+				61F5599B2158747600776195 /* Interface.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		61F559A12158747700776195 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				61F559AF2158747800776195 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		61F559682158747400776195 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				61F559722158747400776195 /* ViewController.swift in Sources */,
+				61F559702158747400776195 /* AppDelegate.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		61F5597C2158747600776195 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				61F559852158747600776195 /* AwearTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		61F559872158747600776195 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				61F559902158747600776195 /* AwearUITests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		61F5599F2158747700776195 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				61F559AD2158747700776195 /* NotificationController.swift in Sources */,
+				61F559AB2158747700776195 /* ExtensionDelegate.swift in Sources */,
+				61F559A92158747700776195 /* InterfaceController.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		61F559822158747600776195 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 61F5596B2158747400776195 /* Awear */;
+			targetProxy = 61F559812158747600776195 /* PBXContainerItemProxy */;
+		};
+		61F5598D2158747600776195 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 61F5596B2158747400776195 /* Awear */;
+			targetProxy = 61F5598C2158747600776195 /* PBXContainerItemProxy */;
+		};
+		61F559972158747600776195 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 61F559932158747600776195 /* Awear WatchKit App */;
+			targetProxy = 61F559962158747600776195 /* PBXContainerItemProxy */;
+		};
+		61F559A62158747700776195 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 61F559A22158747700776195 /* Awear WatchKit Extension */;
+			targetProxy = 61F559A52158747700776195 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		61F559732158747400776195 /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				61F559742158747400776195 /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		61F559782158747600776195 /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				61F559792158747600776195 /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+		61F559992158747600776195 /* Interface.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				61F5599A2158747600776195 /* Base */,
+			);
+			name = Interface.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		61F559B22158747800776195 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		61F559B32158747800776195 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		61F559B52158747800776195 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_COMPLICATION_NAME = Complication;
+				CODE_SIGN_STYLE = Automatic;
+				INFOPLIST_FILE = "Awear WatchKit Extension/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.cs407.Awear.watchkitapp.watchkitextension;
+				PRODUCT_NAME = "${TARGET_NAME}";
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 4.2;
+				TARGETED_DEVICE_FAMILY = 4;
+				WATCHOS_DEPLOYMENT_TARGET = 5.0;
+			};
+			name = Debug;
+		};
+		61F559B62158747800776195 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_COMPLICATION_NAME = Complication;
+				CODE_SIGN_STYLE = Automatic;
+				INFOPLIST_FILE = "Awear WatchKit Extension/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.cs407.Awear.watchkitapp.watchkitextension;
+				PRODUCT_NAME = "${TARGET_NAME}";
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 4.2;
+				TARGETED_DEVICE_FAMILY = 4;
+				WATCHOS_DEPLOYMENT_TARGET = 5.0;
+			};
+			name = Release;
+		};
+		61F559B92158747800776195 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_STYLE = Automatic;
+				IBSC_MODULE = Awear_WatchKit_Extension;
+				INFOPLIST_FILE = "Awear WatchKit App/Info.plist";
+				PRODUCT_BUNDLE_IDENTIFIER = com.cs407.Awear.watchkitapp;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 4.2;
+				TARGETED_DEVICE_FAMILY = 4;
+				WATCHOS_DEPLOYMENT_TARGET = 5.0;
+			};
+			name = Debug;
+		};
+		61F559BA2158747800776195 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_STYLE = Automatic;
+				IBSC_MODULE = Awear_WatchKit_Extension;
+				INFOPLIST_FILE = "Awear WatchKit App/Info.plist";
+				PRODUCT_BUNDLE_IDENTIFIER = com.cs407.Awear.watchkitapp;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 4.2;
+				TARGETED_DEVICE_FAMILY = 4;
+				WATCHOS_DEPLOYMENT_TARGET = 5.0;
+			};
+			name = Release;
+		};
+		61F559BD2158747800776195 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_STYLE = Automatic;
+				INFOPLIST_FILE = Awear/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.cs407.Awear;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 4.2;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		61F559BE2158747800776195 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_STYLE = Automatic;
+				INFOPLIST_FILE = Awear/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.cs407.Awear;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 4.2;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		61F559C02158747800776195 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				INFOPLIST_FILE = AwearTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.cs407.AwearTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 4.2;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Awear.app/Awear";
+			};
+			name = Debug;
+		};
+		61F559C12158747800776195 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				INFOPLIST_FILE = AwearTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.cs407.AwearTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 4.2;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Awear.app/Awear";
+			};
+			name = Release;
+		};
+		61F559C32158747800776195 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				INFOPLIST_FILE = AwearUITests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.cs407.AwearUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 4.2;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = Awear;
+			};
+			name = Debug;
+		};
+		61F559C42158747800776195 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				INFOPLIST_FILE = AwearUITests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.cs407.AwearUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 4.2;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = Awear;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		61F559672158747400776195 /* Build configuration list for PBXProject "Awear" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				61F559B22158747800776195 /* Debug */,
+				61F559B32158747800776195 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		61F559B42158747800776195 /* Build configuration list for PBXNativeTarget "Awear WatchKit Extension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				61F559B52158747800776195 /* Debug */,
+				61F559B62158747800776195 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		61F559B82158747800776195 /* Build configuration list for PBXNativeTarget "Awear WatchKit App" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				61F559B92158747800776195 /* Debug */,
+				61F559BA2158747800776195 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		61F559BC2158747800776195 /* Build configuration list for PBXNativeTarget "Awear" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				61F559BD2158747800776195 /* Debug */,
+				61F559BE2158747800776195 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		61F559BF2158747800776195 /* Build configuration list for PBXNativeTarget "AwearTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				61F559C02158747800776195 /* Debug */,
+				61F559C12158747800776195 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		61F559C22158747800776195 /* Build configuration list for PBXNativeTarget "AwearUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				61F559C32158747800776195 /* Debug */,
+				61F559C42158747800776195 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 61F559642158747400776195 /* Project object */;
+}
