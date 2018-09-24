@@ -9,13 +9,22 @@
 import WatchKit
 import Foundation
 
-
 class InterfaceController: WKInterfaceController {
-
+    
+    @IBOutlet weak var CounterLabel: WKInterfaceLabel!
+    
+    var count:Int = 0
+    
     override func awake(withContext context: Any?) {
         super.awake(withContext: context)
         
         // Configure interface objects here.
+        CounterLabel.setText(String(count))
+    }
+    
+    @IBAction func ListenButtonOnClick() {
+        count += 1
+        CounterLabel.setText(String(count))
     }
     
     override func willActivate() {
