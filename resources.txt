@@ -4,10 +4,28 @@
 //  to coordinate using the same methodologies throughout the project.  //
 //////////////////////////////////////////////////////////////////////////
 
+Slider iOS Tutorial:
+https://www.ioscreator.com/tutorials/slider-ios-tutorial-ios11
+
+	Super rudimentary slider for creating a 0-100 value. Can be
+	used for deciding max volume level.
+
+Stackoverflow: How to make iPhone vibrate using Swift?
+https://stackoverflow.com/questions/26455880/how-to-make-iphone-vibrate-using-swift
+
+	really quick easy fix for creating a vibration. Has multiple
+	implementations.
+
+Tutorial: Detecting When A User Blows Into The Mic
+https://web.archive.org/web/20090823020843/http://mobileorchard.com/tutorial-detecting-when-a-user-blows-into-the-mic/
+
+	GREAT short tutorial to realtime check audio levels to detect
+	when the user goes past a certain volume level.
+
 
 Stackoverflow: how to monitor audio input on ios using swift - example?
 https://stackoverflow.com/questions/35929989/how-to-monitor-audio-input-on-ios-using-swift-example
-	
+
 	Good example code on using AVFoundation classes. Similar
 	application allows for good translation to our use. The only
 	problem is that it's for iOS. Also includes references to
@@ -47,9 +65,9 @@ https://www.raywenderlich.com/345-audio-recording-in-watchos-tutorial
 Github: SwiftyAudio
 https://github.com/arielelkin/SwiftyAudio/blob/master/SwiftyAudio/ViewController.swift
 
-	Made for working with AVAudioEngine, has real example of 
+	Made for working with AVAudioEngine, has real example of
 	using realtime audio processing. May not be exactly what
-	we need, but we could derive from it. 
+	we need, but we could derive from it.
 
 
 Vimeo: Ariel Elkin: Real-Time Audio using Swift
