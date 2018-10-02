@@ -4,6 +4,13 @@
 //  to coordinate using the same methodologies throughout the project.  //
 //////////////////////////////////////////////////////////////////////////
 
+Stackoverflow: iOS Background audio recording
+https://stackoverflow.com/questions/42020124/ios-background-audio-recording
+
+	See the first paragraph for background audio recording.
+	Should work for us as you begin the recording in the
+	foreground.
+
 Slider iOS Tutorial:
 https://www.ioscreator.com/tutorials/slider-ios-tutorial-ios11
 
