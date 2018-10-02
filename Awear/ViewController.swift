@@ -9,9 +9,17 @@
 import UIKit
 import UserNotifications
 import AudioToolbox
+import UIKit
+import AVFoundation
+import CoreAudio
 
 class ViewController: UIViewController {
     
+    var recorder: AVAudioRecorder!
+    var levelTimer = Timer()
+    
+    let LEVEL_THRESHOLD: Float = -10.0
+
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
@@ -20,9 +28,48 @@ class ViewController: UIViewController {
         let debitOverdraftNotifCategory = UNNotificationCategory(identifier: "debitOverdraftNotification", actions: [], intentIdentifiers: [], options: [])
         // #1.2 - Register the notification type.
         UNUserNotificationCenter.current().setNotificationCategories([debitOverdraftNotifCategory])
+        
+        
+        // Setup recording
+        let documents = URL(fileURLWithPath: NSSearchPathForDirectoriesInDomains(FileManager.SearchPathDirectory.documentDirectory, FileManager.SearchPathDomainMask.userDomainMask, true)[0])
+        let url = documents.appendingPathComponent("record.caf")
+        
+        let recordSettings: [String: Any] = [
+            AVFormatIDKey:              kAudioFormatAppleIMA4,
+            AVSampleRateKey:            44100.0,
+            AVNumberOfChannelsKey:      2,
+            AVEncoderBitRateKey:        12800,
+            AVLinearPCMBitDepthKey:     16,
+            AVEncoderAudioQualityKey:   AVAudioQuality.max.rawValue
+        ]
+        
+        let audioSession = AVAudioSession.sharedInstance()
+        do {
+            try audioSession.setCategory(AVAudioSession.Category.playAndRecord, mode: AVAudioSession.Mode.default, options: AVAudioSession.CategoryOptions.defaultToSpeaker)
+            try audioSession.setActive(true)
+            try recorder = AVAudioRecorder(url:url, settings: recordSettings)
+        } catch {
+            return
+        }
+        
+        recorder.prepareToRecord()
+        recorder.isMeteringEnabled = true
+        recorder.record()
+        
+        levelTimer = Timer.scheduledTimer(timeInterval: 0.02, target: self, selector: #selector(levelTimerCallback), userInfo: nil, repeats: true)
     }
     
-    
+    // Callback ever 0.02 seconds
+    @objc func levelTimerCallback() {
+        recorder.updateMeters()
+        
+        let level = recorder.averagePower(forChannel: 0)
+        let isLoud = level > LEVEL_THRESHOLD
+        
+        // do whatever you want with isLoud
+        print("IsLoud? : ",isLoud)
+    }
+   
     @IBAction func vibrateTest(_ sender: Any) {
         AudioServicesPlayAlertSound(SystemSoundID(kSystemSoundID_Vibrate))
     }
@@ -70,5 +117,11 @@ class ViewController: UIViewController {
         }
     }
     
+    override func didReceiveMemoryWarning() {
+        super.didReceiveMemoryWarning()
+        // Dispose of any resources that can be recreated.
+    }
+    
+
 }
 
