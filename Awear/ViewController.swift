@@ -17,7 +17,6 @@ class ViewController: UIViewController {
     
     var recorder: AVAudioRecorder!
     var levelTimer = Timer()
-    
     let LEVEL_THRESHOLD: Float = -10.0
 
     override func viewDidLoad() {
@@ -45,7 +44,8 @@ class ViewController: UIViewController {
         
         let audioSession = AVAudioSession.sharedInstance()
         do {
-            try audioSession.setCategory(AVAudioSession.Category.playAndRecord, mode: AVAudioSession.Mode.default, options: AVAudioSession.CategoryOptions.defaultToSpeaker)
+            // Option here attempts to mix with others (aka mix with system sounds, doesnt work however)
+            try audioSession.setCategory(AVAudioSession.Category.playAndRecord, mode: AVAudioSession.Mode.default, options: AVAudioSession.CategoryOptions.mixWithOthers)
             try audioSession.setActive(true)
             try recorder = AVAudioRecorder(url:url, settings: recordSettings)
         } catch {
@@ -68,6 +68,12 @@ class ViewController: UIViewController {
         
         // do whatever you want with isLoud
         print("IsLoud? : ",isLoud)
+        
+        // Notifications
+        if isLoud {
+            // Vibrate
+            AudioServicesPlayAlertSound(SystemSoundID(kSystemSoundID_Vibrate))
+        }
     }
    
     @IBAction func vibrateTest(_ sender: Any) {
