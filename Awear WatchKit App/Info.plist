@@ -29,5 +29,9 @@
 	<string>com.cs407.Awear</string>
 	<key>WKWatchKitApp</key>
 	<true/>
+    <key>UIBackgroundModes</key>
+    <array>
+        <string>audio</string>
+    </array>
 </dict>
 </plist>

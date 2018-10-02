@@ -13,15 +13,13 @@
             <objects>
                 <controller id="AgC-eL-Hgc" customClass="InterfaceController" customModule="Awear_WatchKit_App" customModuleProvider="target">
                     <items>
-                        <label width="134" alignment="left" text="Label" id="T3o-c3-Vf6"/>
-                        <button width="1" alignment="left" title="Button" id="a1J-gE-Wn0">
+                        <button width="1" alignment="left" title="Record Audio" id="a1J-gE-Wn0">
                             <connections>
-                                <action selector="ListenButtonOnClick" destination="AgC-eL-Hgc" id="tn1-4B-lvo"/>
+                                <action selector="recordAudioOnClick" destination="AgC-eL-Hgc" id="aL2-Ro-iuD"/>
                             </connections>
                         </button>
                     </items>
                     <connections>
-                        <outlet property="CounterLabel" destination="T3o-c3-Vf6" id="VB3-1y-mJh"/>
                         <outlet property="ListenButton" destination="a1J-gE-Wn0" id="8kn-dL-Kgg"/>
                     </connections>
                 </controller>

@@ -8,25 +8,17 @@
 
 import WatchKit
 import Foundation
+import AVFoundation
 
 class InterfaceController: WKInterfaceController {
-    
-    @IBOutlet weak var CounterLabel: WKInterfaceLabel!
-    
-    var count:Int = 0
-    
+
+    var engine = AVAudioEngine()
+
     override func awake(withContext context: Any?) {
         super.awake(withContext: context)
         
-        // Configure interface objects here.
-        CounterLabel.setText(String(count))
     }
-    
-    @IBAction func ListenButtonOnClick() {
-        count += 1
-        CounterLabel.setText(String(count))
-    }
-    
+
     override func willActivate() {
         // This method is called when watch view controller is about to be visible to user
         super.willActivate()
