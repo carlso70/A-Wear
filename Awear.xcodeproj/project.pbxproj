@@ -47,17 +47,17 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		61F5596C2158747400776195 /* Awear.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; name = Awear.app; path = "/Users/jamescarlson/Desktop/Awear/build/Debug-iphoneos/Awear.app"; sourceTree = "<absolute>"; };
+		0CDF2EE5216477BF00A4F2C1 /* Awear.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; name = Awear.app; path = "/Users/chrisconcepcion/Desktop/PurdueSenior/CS407/A-Wear/build/Debug-iphoneos/Awear.app"; sourceTree = "<absolute>"; };
+		0CDF2EE6216477BF00A4F2C1 /* AwearTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; name = AwearTests.xctest; path = "/Users/chrisconcepcion/Desktop/PurdueSenior/CS407/A-Wear/build/Debug-iphoneos/AwearTests.xctest"; sourceTree = "<absolute>"; };
+		0CDF2EE7216477BF00A4F2C1 /* AwearUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; name = AwearUITests.xctest; path = "/Users/chrisconcepcion/Desktop/PurdueSenior/CS407/A-Wear/build/Debug-iphoneos/AwearUITests.xctest"; sourceTree = "<absolute>"; };
 		61F5596F2158747400776195 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		61F559712158747400776195 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		61F559742158747400776195 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		61F559762158747600776195 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		61F559792158747600776195 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		61F5597B2158747600776195 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		61F559802158747600776195 /* AwearTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; name = AwearTests.xctest; path = "/Users/jamescarlson/Desktop/Awear/build/Debug-iphoneos/AwearTests.xctest"; sourceTree = "<absolute>"; };
 		61F559842158747600776195 /* AwearTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AwearTests.swift; sourceTree = "<group>"; };
 		61F559862158747600776195 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		61F5598B2158747600776195 /* AwearUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; name = AwearUITests.xctest; path = "/Users/jamescarlson/Desktop/Awear/build/Debug-iphoneos/AwearUITests.xctest"; sourceTree = "<absolute>"; };
 		61F5598F2158747600776195 /* AwearUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AwearUITests.swift; sourceTree = "<group>"; };
 		61F559912158747600776195 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -145,7 +145,7 @@
 			);
 			name = Awear;
 			productName = Awear;
-			productReference = 61F5596C2158747400776195 /* Awear.app */;
+			productReference = 0CDF2EE5216477BF00A4F2C1 /* Awear.app */;
 			productType = "com.apple.product-type.application";
 		};
 		61F5597F2158747600776195 /* AwearTests */ = {
@@ -163,7 +163,7 @@
 			);
 			name = AwearTests;
 			productName = AwearTests;
-			productReference = 61F559802158747600776195 /* AwearTests.xctest */;
+			productReference = 0CDF2EE6216477BF00A4F2C1 /* AwearTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
 		61F5598A2158747600776195 /* AwearUITests */ = {
@@ -181,7 +181,7 @@
 			);
 			name = AwearUITests;
 			productName = AwearUITests;
-			productReference = 61F5598B2158747600776195 /* AwearUITests.xctest */;
+			productReference = 0CDF2EE7216477BF00A4F2C1 /* AwearUITests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
 		};
 /* End PBXNativeTarget section */
@@ -478,6 +478,7 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 9P92PT9WKU;
 				INFOPLIST_FILE = AwearTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -498,6 +499,7 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 9P92PT9WKU;
 				INFOPLIST_FILE = AwearTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -517,6 +519,7 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 9P92PT9WKU;
 				INFOPLIST_FILE = AwearUITests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -536,6 +539,7 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 9P92PT9WKU;
 				INFOPLIST_FILE = AwearUITests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
