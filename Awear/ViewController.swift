@@ -50,7 +50,7 @@ class ViewController: UIViewController {
             AVEncoderAudioQualityKey:   AVAudioQuality.max.rawValue
         ]
         
-        let audioSession = AVAudioSession()
+        let audioSession = AVAudioSession.sharedInstance()
         do {
             // Option here attempts to mix with others (aka mix with system sounds, doesnt work however)
             try audioSession.setCategory(AVAudioSession.Category.playAndRecord, mode: AVAudioSession.Mode.default, options: AVAudioSession.CategoryOptions.mixWithOthers)
@@ -81,7 +81,10 @@ class ViewController: UIViewController {
         // Notifications
         if isLoud {
             // Vibrate
+            recorder.stop()
+            levelTimer.invalidate()
             AudioServicesPlayAlertSound(SystemSoundID(kSystemSoundID_Vibrate))
+            setupAudioRecording()
         }
     }
    
