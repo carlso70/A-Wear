@@ -64,7 +64,7 @@ class ViewController: UIViewController {
         recorder.isMeteringEnabled = true
         recorder.record()
         
-        // Schedules a timer, which fires a callback(levelTimerCallback) every 2 seconds
+        // Schedules a timer, which fires a callback(levelTimerCallback) every 0.02 seconds
         levelTimer = Timer.scheduledTimer(timeInterval: 0.02, target: self, selector: #selector(levelTimerCallback), userInfo: nil, repeats: true)
     }
 
