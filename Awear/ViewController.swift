@@ -18,15 +18,24 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
     
     var recorder: AVAudioRecorder!
     var levelTimer = Timer()
-    let LEVEL_THRESHOLD: Float = -10.0
+    var LEVEL_THRESHOLD: Float = -10.0
     let locationMgr = CLLocationManager()
 
+    @IBOutlet weak var volumeLabel: UILabel!
+    @IBOutlet weak var volumeSlider: UISlider!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
         setupNotifications()
         setupAudioRecording()
         getMyLocation()
+    }
+    
+    @IBAction func onSliderChange(_ sender: Any) {
+        print(volumeSlider.value)
+        volumeLabel.text = "\(volumeSlider.value)"
+        LEVEL_THRESHOLD = -1 * volumeSlider.value
     }
     
     // Uses core location to get the user's current location
