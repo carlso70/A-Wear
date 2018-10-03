@@ -12,20 +12,57 @@ import AudioToolbox
 import UIKit
 import AVFoundation
 import CoreAudio
+import CoreLocation
 
-class ViewController: UIViewController {
+class ViewController: UIViewController, CLLocationManagerDelegate {
     
     var recorder: AVAudioRecorder!
     var levelTimer = Timer()
     let LEVEL_THRESHOLD: Float = -10.0
-
+    let locationMgr = CLLocationManager()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
         
         setupNotifications()
         setupAudioRecording()
+        getMyLocation()
     }
+    
+    // Uses core location to get the user's current location
+    func getMyLocation() {
+        let status  = CLLocationManager.authorizationStatus()
+        
+        if status == .notDetermined {
+            locationMgr.requestWhenInUseAuthorization()
+            return
+        }
+        
+        if status == .denied || status == .restricted {
+            let alert = UIAlertController(title: "Location Services Disabled", message: "Please enable Location Services in Settings", preferredStyle: .alert)
+            
+            let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+            alert.addAction(okAction)
+            
+            present(alert, animated: true, completion: nil)
+            return
+        }
+        
+        locationMgr.delegate = self
+        locationMgr.startUpdatingLocation()
+    }
+    
+    /* CL LOCATION MANANAGER DELAGATE METHODS */
+    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        let currentLocation = locations.last!
+        print("Current location: \(currentLocation)")
+    }
+    
+    func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
+        print("Error \(error)")
+    }
+    /* END OF CL LOCATION MANAGER DELEAGATE METHODS */
     
     // Initializes a notification that can be triggered
     func setupNotifications() {
@@ -76,7 +113,7 @@ class ViewController: UIViewController {
         let isLoud = level > LEVEL_THRESHOLD
         
         // do whatever you want with isLoud
-        print("IsLoud? : ",isLoud)
+        //print("IsLoud? : ",isLoud)
         
         // Notifications
         if isLoud {
