@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		20EB4A685FB560B87F2A48F7 /* Pods_Awear.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E80E73293224BBD2AE6862CD /* Pods_Awear.framework */; };
+		615AA7545E8C288A08976529 /* Pods_Awear_WatchKit_Extension.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 273F56C2F8B4FB77C239F450 /* Pods_Awear_WatchKit_Extension.framework */; };
 		61F559702158747400776195 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61F5596F2158747400776195 /* AppDelegate.swift */; };
 		61F559722158747400776195 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61F559712158747400776195 /* ViewController.swift */; };
 		61F559752158747400776195 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 61F559732158747400776195 /* Main.storyboard */; };
@@ -22,6 +24,9 @@
 		61F559AB2158747700776195 /* ExtensionDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61F559AA2158747700776195 /* ExtensionDelegate.swift */; };
 		61F559AD2158747700776195 /* NotificationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61F559AC2158747700776195 /* NotificationController.swift */; };
 		61F559AF2158747800776195 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 61F559AE2158747800776195 /* Assets.xcassets */; };
+		C0713C2A9D2FE921F40814AB /* Pods_AwearTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 92DD5ADCC686D251DE36872C /* Pods_AwearTests.framework */; };
+		CADB8D74646F98DFDC2EF20C /* Pods_AwearUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0A80811D8D303CF870EA7679 /* Pods_AwearUITests.framework */; };
+		DF3D521A547B7EE176524191 /* Pods_Awear_WatchKit_App.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 85BCAF5C9F1C6283A1ABCF91 /* Pods_Awear_WatchKit_App.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -81,6 +86,11 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		05D12F2F090D37BD1C699564 /* Pods-Awear WatchKit Extension.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Awear WatchKit Extension.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Awear WatchKit Extension/Pods-Awear WatchKit Extension.debug.xcconfig"; sourceTree = "<group>"; };
+		0A80811D8D303CF870EA7679 /* Pods_AwearUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_AwearUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		1BD4487CC141B9467E8C12DB /* Pods-AwearTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AwearTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-AwearTests/Pods-AwearTests.release.xcconfig"; sourceTree = "<group>"; };
+		273F56C2F8B4FB77C239F450 /* Pods_Awear_WatchKit_Extension.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Awear_WatchKit_Extension.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		2B3CF2D6D4E7F0DD066E92D9 /* Pods-AwearUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AwearUITests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-AwearUITests/Pods-AwearUITests.debug.xcconfig"; sourceTree = "<group>"; };
 		61F5596C2158747400776195 /* Awear.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Awear.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		61F5596F2158747400776195 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		61F559712158747400776195 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -105,6 +115,16 @@
 		61F559AE2158747800776195 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		61F559B02158747800776195 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		61F559B12158747800776195 /* PushNotificationPayload.apns */ = {isa = PBXFileReference; lastKnownFileType = text; path = PushNotificationPayload.apns; sourceTree = "<group>"; };
+		6502388F8EA599CDA996980C /* Pods-AwearUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AwearUITests.release.xcconfig"; path = "Pods/Target Support Files/Pods-AwearUITests/Pods-AwearUITests.release.xcconfig"; sourceTree = "<group>"; };
+		6DD26A797743192800C26C7E /* Pods-Awear.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Awear.release.xcconfig"; path = "Pods/Target Support Files/Pods-Awear/Pods-Awear.release.xcconfig"; sourceTree = "<group>"; };
+		85BCAF5C9F1C6283A1ABCF91 /* Pods_Awear_WatchKit_App.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Awear_WatchKit_App.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		8C89A7457294637B0D2A721F /* Pods-Awear WatchKit Extension.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Awear WatchKit Extension.release.xcconfig"; path = "Pods/Target Support Files/Pods-Awear WatchKit Extension/Pods-Awear WatchKit Extension.release.xcconfig"; sourceTree = "<group>"; };
+		92DD5ADCC686D251DE36872C /* Pods_AwearTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_AwearTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		994C1C800FA587F9B4C41714 /* Pods-AwearTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AwearTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-AwearTests/Pods-AwearTests.debug.xcconfig"; sourceTree = "<group>"; };
+		B5E2D0C1259C1C41F9553DFE /* Pods-Awear WatchKit App.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Awear WatchKit App.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Awear WatchKit App/Pods-Awear WatchKit App.debug.xcconfig"; sourceTree = "<group>"; };
+		E14B1CC705CA03AB9DF30E64 /* Pods-Awear.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Awear.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Awear/Pods-Awear.debug.xcconfig"; sourceTree = "<group>"; };
+		E80E73293224BBD2AE6862CD /* Pods_Awear.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Awear.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		F3C0268376EE069758460B18 /* Pods-Awear WatchKit App.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Awear WatchKit App.release.xcconfig"; path = "Pods/Target Support Files/Pods-Awear WatchKit App/Pods-Awear WatchKit App.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -112,6 +132,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				20EB4A685FB560B87F2A48F7 /* Pods_Awear.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -119,6 +140,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C0713C2A9D2FE921F40814AB /* Pods_AwearTests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -126,6 +148,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CADB8D74646F98DFDC2EF20C /* Pods_AwearUITests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -133,12 +156,50 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				615AA7545E8C288A08976529 /* Pods_Awear_WatchKit_Extension.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D9886EBFA2994B35C8E0A85E /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				DF3D521A547B7EE176524191 /* Pods_Awear_WatchKit_App.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		059027DB502CEF031E13A945 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				E14B1CC705CA03AB9DF30E64 /* Pods-Awear.debug.xcconfig */,
+				6DD26A797743192800C26C7E /* Pods-Awear.release.xcconfig */,
+				B5E2D0C1259C1C41F9553DFE /* Pods-Awear WatchKit App.debug.xcconfig */,
+				F3C0268376EE069758460B18 /* Pods-Awear WatchKit App.release.xcconfig */,
+				05D12F2F090D37BD1C699564 /* Pods-Awear WatchKit Extension.debug.xcconfig */,
+				8C89A7457294637B0D2A721F /* Pods-Awear WatchKit Extension.release.xcconfig */,
+				994C1C800FA587F9B4C41714 /* Pods-AwearTests.debug.xcconfig */,
+				1BD4487CC141B9467E8C12DB /* Pods-AwearTests.release.xcconfig */,
+				2B3CF2D6D4E7F0DD066E92D9 /* Pods-AwearUITests.debug.xcconfig */,
+				6502388F8EA599CDA996980C /* Pods-AwearUITests.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
+		5D32C1AB200CEAF2BD289410 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				E80E73293224BBD2AE6862CD /* Pods_Awear.framework */,
+				85BCAF5C9F1C6283A1ABCF91 /* Pods_Awear_WatchKit_App.framework */,
+				273F56C2F8B4FB77C239F450 /* Pods_Awear_WatchKit_Extension.framework */,
+				92DD5ADCC686D251DE36872C /* Pods_AwearTests.framework */,
+				0A80811D8D303CF870EA7679 /* Pods_AwearUITests.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		61F559632158747400776195 = {
 			isa = PBXGroup;
 			children = (
@@ -148,6 +209,8 @@
 				61F559982158747600776195 /* Awear WatchKit App */,
 				61F559A72158747700776195 /* Awear WatchKit Extension */,
 				61F5596D2158747400776195 /* Products */,
+				059027DB502CEF031E13A945 /* Pods */,
+				5D32C1AB200CEAF2BD289410 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -224,10 +287,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 61F559BC2158747800776195 /* Build configuration list for PBXNativeTarget "Awear" */;
 			buildPhases = (
+				1E3F731578BCDF660F5986DF /* [CP] Check Pods Manifest.lock */,
 				61F559682158747400776195 /* Sources */,
 				61F559692158747400776195 /* Frameworks */,
 				61F5596A2158747400776195 /* Resources */,
 				61F559BB2158747800776195 /* Embed Watch Content */,
+				EE812BD31ADD687BAE8069C3 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -243,6 +308,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 61F559BF2158747800776195 /* Build configuration list for PBXNativeTarget "AwearTests" */;
 			buildPhases = (
+				DD08AB22948C1BA63EAAB6AE /* [CP] Check Pods Manifest.lock */,
 				61F5597C2158747600776195 /* Sources */,
 				61F5597D2158747600776195 /* Frameworks */,
 				61F5597E2158747600776195 /* Resources */,
@@ -261,6 +327,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 61F559C22158747800776195 /* Build configuration list for PBXNativeTarget "AwearUITests" */;
 			buildPhases = (
+				C83CCC6A9A6E17606B0679D9 /* [CP] Check Pods Manifest.lock */,
 				61F559872158747600776195 /* Sources */,
 				61F559882158747600776195 /* Frameworks */,
 				61F559892158747600776195 /* Resources */,
@@ -279,8 +346,10 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 61F559B82158747800776195 /* Build configuration list for PBXNativeTarget "Awear WatchKit App" */;
 			buildPhases = (
+				811E4356794B87C3042E1309 /* [CP] Check Pods Manifest.lock */,
 				61F559922158747600776195 /* Resources */,
 				61F559B72158747800776195 /* Embed App Extensions */,
+				D9886EBFA2994B35C8E0A85E /* Frameworks */,
 			);
 			buildRules = (
 			);
@@ -296,6 +365,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 61F559B42158747800776195 /* Build configuration list for PBXNativeTarget "Awear WatchKit Extension" */;
 			buildPhases = (
+				B71E097EAD6F31F8EA995F40 /* [CP] Check Pods Manifest.lock */,
 				61F5599F2158747700776195 /* Sources */,
 				61F559A02158747700776195 /* Frameworks */,
 				61F559A12158747700776195 /* Resources */,
@@ -409,6 +479,143 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		1E3F731578BCDF660F5986DF /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-Awear-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		811E4356794B87C3042E1309 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-Awear WatchKit App-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		B71E097EAD6F31F8EA995F40 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-Awear WatchKit Extension-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		C83CCC6A9A6E17606B0679D9 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-AwearUITests-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		DD08AB22948C1BA63EAAB6AE /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-AwearTests-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		EE812BD31ADD687BAE8069C3 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${SRCROOT}/Pods/Target Support Files/Pods-Awear/Pods-Awear-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/fluid-slider/fluid_slider.framework",
+				"${BUILT_PRODUCTS_DIR}/pop/pop.framework",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/fluid_slider.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/pop.framework",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Awear/Pods-Awear-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		61F559682158747400776195 /* Sources */ = {
@@ -617,6 +824,7 @@
 		};
 		61F559B52158747800776195 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 05D12F2F090D37BD1C699564 /* Pods-Awear WatchKit Extension.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_COMPLICATION_NAME = Complication;
 				CODE_SIGN_STYLE = Automatic;
@@ -639,6 +847,7 @@
 		};
 		61F559B62158747800776195 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 8C89A7457294637B0D2A721F /* Pods-Awear WatchKit Extension.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_COMPLICATION_NAME = Complication;
 				CODE_SIGN_STYLE = Automatic;
@@ -661,6 +870,7 @@
 		};
 		61F559B92158747800776195 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = B5E2D0C1259C1C41F9553DFE /* Pods-Awear WatchKit App.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
@@ -688,6 +898,7 @@
 		};
 		61F559BA2158747800776195 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = F3C0268376EE069758460B18 /* Pods-Awear WatchKit App.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
@@ -714,6 +925,7 @@
 		};
 		61F559BD2158747800776195 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = E14B1CC705CA03AB9DF30E64 /* Pods-Awear.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
@@ -732,6 +944,7 @@
 		};
 		61F559BE2158747800776195 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 6DD26A797743192800C26C7E /* Pods-Awear.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
@@ -750,6 +963,7 @@
 		};
 		61F559C02158747800776195 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 994C1C800FA587F9B4C41714 /* Pods-AwearTests.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
@@ -770,6 +984,7 @@
 		};
 		61F559C12158747800776195 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 1BD4487CC141B9467E8C12DB /* Pods-AwearTests.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
@@ -790,6 +1005,7 @@
 		};
 		61F559C32158747800776195 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 2B3CF2D6D4E7F0DD066E92D9 /* Pods-AwearUITests.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
@@ -809,6 +1025,7 @@
 		};
 		61F559C42158747800776195 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 6502388F8EA599CDA996980C /* Pods-AwearUITests.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
