@@ -24,11 +24,10 @@ class ViewController: UIViewController {
         // Do any additional setup after loading the view, typically from a nib.
         
         // #1.1 - Create "the notification's category value--its type."
-        let debitOverdraftNotifCategory = UNNotificationCategory(identifier: "debitOverdraftNotification", actions: [], intentIdentifiers: [], options: [])
+        let debitOverdraftNotifCategory = UNNotificationCategory(identifier: "volNotification", actions: [], intentIdentifiers: [], options: [])
         // #1.2 - Register the notification type.
         UNUserNotificationCenter.current().setNotificationCategories([debitOverdraftNotifCategory])
-        
-        
+
         // Setup recording
         let documents = URL(fileURLWithPath: NSSearchPathForDirectoriesInDomains(FileManager.SearchPathDirectory.documentDirectory, FileManager.SearchPathDomainMask.userDomainMask, true)[0])
         let url = documents.appendingPathComponent("record.caf")
@@ -95,20 +94,20 @@ class ViewController: UIViewController {
             // #2.1 - "Assign a value to this property that matches the identifier
             // property of one of the UNNotificationCategory objects you
             // previously registered with your app."
-            content.categoryIdentifier = "debitOverdraftNotification"
+            content.categoryIdentifier = "volNotification"
             
             // create the notification's content to be presented
             // to the user
-            content.title = "DEBIT OVERDRAFT NOTICE!"
-            content.subtitle = "Exceeded balance by $300.00."
-            content.body = "One-time overdraft fee is $25. Should we cover transaction?"
+            content.title = "Loud noise notification!"
+            content.subtitle = "Exceeded maximum volume reached"
+            content.body = "Please lower your voice"
             content.sound = UNNotificationSound.default
             content.badge = 1
             
             // #2.2 - create a "trigger condition that causes a notification
             // to be delivered after the specified amount of time elapses";
             // deliver after 10 seconds
-            let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 10, repeats: false)
+            let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 5, repeats: false)
             
             // create a "request to schedule a local notification, which
             // includes the content of the notification and the trigger conditions for delivery"
