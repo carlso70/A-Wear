@@ -24,7 +24,6 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
-        
         setupNotifications()
         setupAudioRecording()
         getMyLocation()
@@ -120,19 +119,15 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
             // Need to stop timer and audio session before playing a vibration
             recorder.stop()
             levelTimer.invalidate()
-            // Vibrate
+            // Vibrate, and send notification
             AudioServicesPlayAlertSound(SystemSoundID(kSystemSoundID_Vibrate))
+            sendNotification()
             // Restart audio recording
             setupAudioRecording()
         }
     }
-   
-    @IBAction func vibrateTest(_ sender: Any) {
-        AudioServicesPlayAlertSound(SystemSoundID(kSystemSoundID_Vibrate))
-    }
-    
-    // Sends a test notification 10 seconds after pressing the button, notification will appear if app is in background
-    @IBAction func sendNotification(_ sender: Any) {
+
+    func sendNotification() {
         // find out what are the user's notification preferences
         UNUserNotificationCenter.current().getNotificationSettings { (settings) in
             
@@ -159,7 +154,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
             // #2.2 - create a "trigger condition that causes a notification
             // to be delivered after the specified amount of time elapses";
             // deliver after 10 seconds
-            let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 5, repeats: false)
+            let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 0.1, repeats: false)
             
             // create a "request to schedule a local notification, which
             // includes the content of the notification and the trigger conditions for delivery"
@@ -170,15 +165,17 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
             // trigger conditions associated with your request. When the
             // trigger condition is met, the system delivers your notification."
             UNUserNotificationCenter.current().add(request, withCompletionHandler: nil)
-            
         }
+    }
+        
+    // Sends a test notification 10 seconds after pressing the button, notification will appear if app is in background
+    @IBAction func sendNotification(_ sender: Any) {
+        sendNotification()
     }
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-    
-
 }
 
