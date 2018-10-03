@@ -23,11 +23,20 @@ class ViewController: UIViewController {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
         
+        setupNotifications()
+        setupAudioRecording()
+    }
+    
+    // Initializes a notification that can be triggered
+    func setupNotifications() {
         // #1.1 - Create "the notification's category value--its type."
         let debitOverdraftNotifCategory = UNNotificationCategory(identifier: "volNotification", actions: [], intentIdentifiers: [], options: [])
         // #1.2 - Register the notification type.
         UNUserNotificationCenter.current().setNotificationCategories([debitOverdraftNotifCategory])
-
+    }
+    
+    // Initializes the audio recording instance
+    func setupAudioRecording() {
         // Setup recording
         let documents = URL(fileURLWithPath: NSSearchPathForDirectoriesInDomains(FileManager.SearchPathDirectory.documentDirectory, FileManager.SearchPathDomainMask.userDomainMask, true)[0])
         let url = documents.appendingPathComponent("record.caf")
@@ -41,7 +50,7 @@ class ViewController: UIViewController {
             AVEncoderAudioQualityKey:   AVAudioQuality.max.rawValue
         ]
         
-        let audioSession = AVAudioSession.sharedInstance()
+        let audioSession = AVAudioSession()
         do {
             // Option here attempts to mix with others (aka mix with system sounds, doesnt work however)
             try audioSession.setCategory(AVAudioSession.Category.playAndRecord, mode: AVAudioSession.Mode.default, options: AVAudioSession.CategoryOptions.mixWithOthers)
@@ -55,9 +64,10 @@ class ViewController: UIViewController {
         recorder.isMeteringEnabled = true
         recorder.record()
         
+        // Schedules a timer, which fires a callback(levelTimerCallback) every 2 seconds
         levelTimer = Timer.scheduledTimer(timeInterval: 0.02, target: self, selector: #selector(levelTimerCallback), userInfo: nil, repeats: true)
     }
-    
+
     // Callback ever 0.02 seconds
     @objc func levelTimerCallback() {
         recorder.updateMeters()
