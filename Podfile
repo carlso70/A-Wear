@@ -6,7 +6,6 @@ target 'Awear' do
   use_frameworks!
 
   # Pods for Awear
-  pod 'fluid-slider'
 
   target 'AwearTests' do
     inherit! :search_paths

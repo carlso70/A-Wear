@@ -20,7 +20,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
     var levelTimer = Timer()
     let LEVEL_THRESHOLD: Float = -10.0
     let locationMgr = CLLocationManager()
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
