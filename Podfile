@@ -6,6 +6,7 @@ target 'Awear' do
   use_frameworks!
 
   # Pods for Awear
+  pod 'fluid-slider'
 
   target 'AwearTests' do
     inherit! :search_paths
@@ -16,21 +17,5 @@ target 'Awear' do
     inherit! :search_paths
     # Pods for testing
   end
-
-end
-
-target 'Awear WatchKit App' do
-  # Comment the next line if you're not using Swift and don't want to use dynamic frameworks
-  use_frameworks!
-
-  # Pods for Awear WatchKit App
-
-end
-
-target 'Awear WatchKit Extension' do
-  # Comment the next line if you're not using Swift and don't want to use dynamic frameworks
-  use_frameworks!
-
-  # Pods for Awear WatchKit Extension
 
 end
