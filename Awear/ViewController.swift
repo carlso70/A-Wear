@@ -80,10 +80,12 @@ class ViewController: UIViewController {
         
         // Notifications
         if isLoud {
-            // Vibrate
+            // Need to stop timer and audio session before playing a vibration
             recorder.stop()
             levelTimer.invalidate()
+            // Vibrate
             AudioServicesPlayAlertSound(SystemSoundID(kSystemSoundID_Vibrate))
+            // Restart audio recording
             setupAudioRecording()
         }
     }
