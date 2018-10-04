@@ -21,8 +21,10 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
     var LEVEL_THRESHOLD: Float = -10.0
     let locationMgr = CLLocationManager()
 
+    @IBOutlet weak var currentVolume: UILabel!
     @IBOutlet weak var volumeLabel: UILabel!
     @IBOutlet weak var volumeSlider: UISlider!
+    @IBOutlet weak var calibrateButton: UIButton!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -35,7 +37,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
     @IBAction func onSliderChange(_ sender: Any) {
         print(volumeSlider.value)
         volumeLabel.text = "\(volumeSlider.value)"
-        LEVEL_THRESHOLD = -1 * volumeSlider.value
+        LEVEL_THRESHOLD = volumeSlider.value
     }
     
     // Uses core location to get the user's current location
@@ -83,6 +85,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
     // Initializes the audio recording instance
     func setupAudioRecording() {
         // Setup recording
+        view.backgroundColor = UIColor.cyan
         let documents = URL(fileURLWithPath: NSSearchPathForDirectoriesInDomains(FileManager.SearchPathDirectory.documentDirectory, FileManager.SearchPathDomainMask.userDomainMask, true)[0])
         let url = documents.appendingPathComponent("record.caf")
         
@@ -113,18 +116,54 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
         levelTimer = Timer.scheduledTimer(timeInterval: 0.02, target: self, selector: #selector(levelTimerCallback), userInfo: nil, repeats: true)
     }
 
+    @IBAction func calibrateVolume(_ sender: UIButton) {
+//        recorder.stop()
+        levelTimer.invalidate()
+        
+        recorder.updateMeters()
+        currentVolume.text = "\(recorder.averagePower(forChannel: 0))"
+        sender.setTitle("Calibrating...", for: [])
+        volumeLabel.text = "Calibrating..."
+        
+        let now = Date()
+        let later = now.addingTimeInterval(5)
+        var ct: Float = 0
+        var sum: Float = 0
+        
+        while(Date() < later) {
+            recorder.updateMeters()
+            currentVolume.text = "\(recorder.averagePower(forChannel: 0))"
+            sum = sum + recorder.averagePower(forChannel: 0)
+            ct = ct + 1
+        }
+        
+        sender.setTitle("Calibrate", for: [])
+        
+        let avg: Float = sum / ct
+        volumeSlider.minimumValue = avg
+        volumeSlider.maximumValue = avg + 50
+        volumeSlider.value = avg + 25
+        LEVEL_THRESHOLD = volumeSlider.value
+        volumeLabel.text = "\(volumeSlider.value)"
+        
+        setupAudioRecording()
+    }
+    
     // Callback ever 0.02 seconds
     @objc func levelTimerCallback() {
+        
         recorder.updateMeters()
         
         let level = recorder.averagePower(forChannel: 0)
         let isLoud = level > LEVEL_THRESHOLD
+        currentVolume.text = "\(level)"
         
         // do whatever you want with isLoud
         //print("IsLoud? : ",isLoud)
         
         // Notifications
         if isLoud {
+            view.backgroundColor = UIColor.red
             // Need to stop timer and audio session before playing a vibration
             recorder.stop()
             levelTimer.invalidate()
