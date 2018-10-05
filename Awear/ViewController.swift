@@ -26,12 +26,55 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
     @IBOutlet weak var volumeSlider: UISlider!
     @IBOutlet weak var calibrateButton: UIButton!
     
+    var i = 0
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
+//        i = 6
+//        tapped()
         setupNotifications()
         setupAudioRecording()
         getMyLocation()
+    }
+    
+    func tapped() {
+//        i += 1
+        print("Running \(i)")
+        
+        switch i {
+        case 1:
+            let generator = UINotificationFeedbackGenerator()
+            generator.notificationOccurred(.error)
+            print("error") //3 quick pings
+            
+        case 2:
+            let generator = UINotificationFeedbackGenerator()
+            generator.notificationOccurred(.success)
+            print("'success'") //2 quick pings
+        case 3:
+            let generator = UINotificationFeedbackGenerator()
+            generator.notificationOccurred(.warning)
+            print("warning") //2 slow pings
+        case 4:
+            let generator = UIImpactFeedbackGenerator(style: .light)
+            generator.impactOccurred()
+            print("light") // very light ping
+        case 5:
+            let generator = UIImpactFeedbackGenerator(style: .medium)
+            generator.impactOccurred()
+            print("medium") // medium
+            
+        case 6:
+            let generator = UIImpactFeedbackGenerator(style: .heavy)
+            generator.impactOccurred()
+            print("heavy") // decent
+            
+        default:
+            let generator = UISelectionFeedbackGenerator()
+            generator.selectionChanged()
+            i = 7
+        }
     }
     
     @IBAction func onSliderChange(_ sender: Any) {
@@ -113,7 +156,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
         recorder.record()
         
         // Schedules a timer, which fires a callback(levelTimerCallback) every 0.02 seconds
-        levelTimer = Timer.scheduledTimer(timeInterval: 0.02, target: self, selector: #selector(levelTimerCallback), userInfo: nil, repeats: true)
+        levelTimer = Timer.scheduledTimer(timeInterval: 0.001, target: self, selector: #selector(levelTimerCallback), userInfo: nil, repeats: true)
     }
 
     @IBAction func calibrateVolume(_ sender: UIButton) {
@@ -163,12 +206,30 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
         
         // Notifications
         if isLoud {
+//            let generator = UINotificationFeedbackGenerator()
             view.backgroundColor = UIColor.red
             // Need to stop timer and audio session before playing a vibration
+            
+            let diff = level - LEVEL_THRESHOLD
+            if(diff > 15) {
+                let generator = UINotificationFeedbackGenerator()
+                generator.notificationOccurred(.error)
+                print("too loud")
+            }else if(diff > 7) {
+                let generator = UINotificationFeedbackGenerator()
+                generator.notificationOccurred(.success)
+                print("loud")
+            }else {
+                let generator = UIImpactFeedbackGenerator(style: .light)
+                generator.impactOccurred()
+                print("not that loud")
+            }
+            
             recorder.stop()
             levelTimer.invalidate()
             // Vibrate, and send notification
-            AudioServicesPlayAlertSound(SystemSoundID(kSystemSoundID_Vibrate))
+            AudioServicesPlaySystemSound(1521)
+//            AudioServicesPlayAlertSound(SystemSoundID(kSystemSoundID_Vibrate))
             sendNotification()
             // Restart audio recording
             setupAudioRecording()
