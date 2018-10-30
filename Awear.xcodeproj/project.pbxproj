@@ -507,7 +507,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = awear.cs407.Awear.watchkitapp.watchkitextension;
+				PRODUCT_BUNDLE_IDENTIFIER = awear.cs407.Awear.watchkitapps.watchkitextensions;
 				PRODUCT_NAME = "${TARGET_NAME}";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SDKROOT = watchos;
@@ -531,7 +531,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = awear.cs407.Awear.watchkitapp.watchkitextension;
+				PRODUCT_BUNDLE_IDENTIFIER = awear.cs407.Awear.watchkitapps.watchkitextensions;
 				PRODUCT_NAME = "${TARGET_NAME}";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SDKROOT = watchos;
@@ -551,7 +551,7 @@
 				DEVELOPMENT_TEAM = 9P92PT9WKU;
 				IBSC_MODULE = AwearWatch_Extension;
 				INFOPLIST_FILE = AwearWatch/Info.plist;
-				PRODUCT_BUNDLE_IDENTIFIER = awear.cs407.Awear.watchkitapp;
+				PRODUCT_BUNDLE_IDENTIFIER = awear.cs407.Awear.watchkitapps;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = watchos;
 				SKIP_INSTALL = YES;
@@ -570,7 +570,7 @@
 				DEVELOPMENT_TEAM = 9P92PT9WKU;
 				IBSC_MODULE = AwearWatch_Extension;
 				INFOPLIST_FILE = AwearWatch/Info.plist;
-				PRODUCT_BUNDLE_IDENTIFIER = awear.cs407.Awear.watchkitapp;
+				PRODUCT_BUNDLE_IDENTIFIER = awear.cs407.Awear.watchkitapps;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = watchos;
 				SKIP_INSTALL = YES;
