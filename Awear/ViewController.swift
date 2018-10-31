@@ -29,6 +29,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
     @IBOutlet weak var volumeLabel: UILabel!
     @IBOutlet weak var volumeSlider: UISlider!
     @IBOutlet weak var calibrateButton: UIButton!
+    @IBOutlet weak var healthAppBtn: UIButton!
     
     @IBOutlet weak var renableTime: UILabel!
     @IBOutlet weak var disableAudio: UIButton!
@@ -38,6 +39,8 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
     // var pickerData: [String] = [String]();
     var audioEnabled =  true;
     var disableTime = 0;
+    var timedEnabled = true;
+ 
     
     /* Setup WC Session (Watch Connectivity) */
     var session: WCSession?
@@ -99,20 +102,37 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
         
         if(audioEnabled){
             audioEnabled = false;
+            recorder.stop();
+            calibrateButton.isUserInteractionEnabled = false;
+            volumeSlider.isUserInteractionEnabled = false;
+            
+            let earlyDate = Calendar.current.date(
+                byAdding: .minute,
+                value: 1,
+                to: Date())
+            
+            REENABLE_TIME = earlyDate ?? Date();
+            
+            //audioEnabled = false;
             
             disableAudio.setTitle("Enable Listening", for: .normal);
             
+            
+            
+            
             let alert = UIAlertController(title: "Listening Disabled", message: "How long do you want to disable listening?", preferredStyle: .alert)
             
-            let indefAction = UIAlertAction(title: "Indefinitely", style: .default, handler: { (action) in
+            let indefAction = UIAlertAction(title: "Until Enabled", style: .default, handler: { (action) in
                 self.disableTime = -1;
                 
                 self.disableApplication(time: self.disableTime)
+                return
             })
             let oneAction = UIAlertAction(title: "1 hour", style: .default, handler: { (action) in
                 self.disableTime = 1;
                 
                 self.disableApplication(time: self.disableTime)
+                return
             })
             let threeAction = UIAlertAction(title: "3 hours", style: .default, handler: { (action) in
                 self.disableTime = 3;
@@ -142,6 +162,11 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
         }
         else{
             audioEnabled = true;
+            REENABLE_TIME = Date();
+            setupAudioRecording();
+            calibrateButton.isUserInteractionEnabled = true;
+            volumeSlider.isUserInteractionEnabled = true;
+            //levelTimerCallback();
             disableAudio.setTitle("Disable Listening", for: .normal);
             renableTime.text = "";
             
@@ -271,6 +296,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
         sendLevelThresholdMessageToWatch(level: volumeSlider.value)
         
         setupAudioRecording()
+        }
     }
     
     func sendCalibrateMessageToWatch(isCalibrating : Bool) {
@@ -299,6 +325,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
     // Callback ever 0.02 seconds
     @objc func levelTimerCallback() {
         
+        checkDisabled()
         if(audioEnabled){
             recorder.updateMeters()
             
@@ -385,22 +412,10 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
                 setupAudioRecording()
             }
         }
-        else{
-            
-            recorder.stop()
-            calibrateButton.isUserInteractionEnabled = false;
-            volumeSlider.isUserInteractionEnabled = false;
-            
-            if(Date() > REENABLE_TIME){
-                print("HERE")
-                setupAudioRecording()
-                audioEnabled = true;
-                calibrateButton.isUserInteractionEnabled = true;
-                volumeSlider.isUserInteractionEnabled = true;
-            }
-            
-        }
-        
+    }
+
+
+
     }
     
     func disableApplication(time: Int){
@@ -415,11 +430,12 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
         switch time {
         case -1:
             renableTime.text = "Disabled"
+            timedEnabled = false;
             print(time)
         case 1:
             let earlyDate = Calendar.current.date(
-                byAdding: .minute,
-                value: 1,
+                byAdding: .second,
+                value: 15,
                 to: Date())
             myString = formatter.string(from: earlyDate as! Date)
             renableTime.text = "Disabled until: \(myString)"
@@ -506,4 +522,30 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
     func makePretty(){
         calibrateButton.layer.cornerRadius = 6
     }
+    
+    
+    func checkDisabled(){
+        if(audioEnabled)
+        {
+            print("enabled")
+        }else{
+            recorder.stop()
+            calibrateButton.isUserInteractionEnabled = false;
+            volumeSlider.isUserInteractionEnabled = false;
+            
+            if(Date() > REENABLE_TIME && timedEnabled){
+                print("HERE")
+                setupAudioRecording()
+                audioEnabled = true;
+                calibrateButton.isUserInteractionEnabled = true;
+                volumeSlider.isUserInteractionEnabled = true;
+                disableAudio.setTitle("Disable Listening", for: .normal);
+                renableTime.text = "";
+                
+            }
+        }
+        
+        
+    }
+
 }
