@@ -14,16 +14,16 @@ import AVFoundation
 class InterfaceController: WKInterfaceController, WCSessionDelegate {
     
     func session(_ session: WCSession, activationDidCompleteWith activationState: WCSessionActivationState, error: Error?) {}
-
+    
     @IBOutlet weak var voiceLevelLabel: WKInterfaceLabel!
     @IBOutlet weak var volumeSlider: WKInterfaceSlider!
     @IBOutlet weak var calibrateButton: WKInterfaceButton!
     @IBOutlet weak var disableButton: WKInterfaceButton!
-
+    
     
     let session = WCSession.default
     
-    /* Session sets up the dispatch queue for messages */
+    /* Session sets up the dispatch queue for messages recieved from iOS */
     func session(_ session: WCSession, didReceiveApplicationContext applicationContext: [String : Any]) {
         DispatchQueue.main.async {
             self.processApplicationContext()
@@ -59,8 +59,9 @@ class InterfaceController: WKInterfaceController, WCSessionDelegate {
         super.didDeactivate()
     }
     
+    /* Sends a new application context to iOS app to start Calibrating */
     @IBAction func calibrateButtonOnClick() {
-
+        session.sendMessage(["StartCalibrating": true], replyHandler: nil, errorHandler: nil) 
     }
     
     @IBAction func disableButtonOnClick() {

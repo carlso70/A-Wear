@@ -20,6 +20,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
     var recorder: AVAudioRecorder!
     var levelTimer = Timer()
     var LEVEL_THRESHOLD: Float = -10.0
+    var isCalibrating = false
     var VIBRATION_LEVEL = 1
     var REENABLE_TIME = Date();
     let locationMgr = CLLocationManager()
@@ -28,25 +29,29 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
     @IBOutlet weak var volumeLabel: UILabel!
     @IBOutlet weak var volumeSlider: UISlider!
     @IBOutlet weak var calibrateButton: UIButton!
-
+    
     @IBOutlet weak var renableTime: UILabel!
     @IBOutlet weak var disableAudio: UIButton!
     @IBOutlet weak var vibrationSlider: UISlider!
     @IBOutlet weak var vibrateLvl: UILabel!
-
-   // var pickerData: [String] = [String]();
     
-    var i = 0;
+    // var pickerData: [String] = [String]();
     var audioEnabled =  true;
     var disableTime = 0;
- 
     
     /* Setup WC Session (Watch Connectivity) */
+    var session: WCSession?
+    
+    /* Session sets up the dispatch queue for messages recieved from watch */
+    func session(_ session: WCSession, didReceiveMessage message: [String : Any]) {
+        DispatchQueue.main.async {
+            self.processWatchMessages(message: message)
+        }
+    }
+    
     func session(_ session: WCSession, activationDidCompleteWith activationState: WCSessionActivationState, error: Error?) { }
     func sessionDidBecomeInactive(_ session: WCSession) { }
     func sessionDidDeactivate(_ session: WCSession) { }
-    
-    var session: WCSession?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -62,51 +67,19 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
         getMyLocation()
     }
     
-    func tapped() {
-        //        i += 1
-        print("Running \(i)")
-        
-        switch i {
-        case 1:
-            let generator = UINotificationFeedbackGenerator()
-            generator.notificationOccurred(.error)
-            print("error") //3 quick pings
-            
-        case 2:
-            let generator = UINotificationFeedbackGenerator()
-            generator.notificationOccurred(.success)
-            print("'success'") //2 quick pings
-        case 3:
-            let generator = UINotificationFeedbackGenerator()
-            generator.notificationOccurred(.warning)
-            print("warning") //2 slow pings
-        case 4:
-            let generator = UIImpactFeedbackGenerator(style: .light)
-            generator.impactOccurred()
-            print("light") // very light ping
-        case 5:
-            let generator = UIImpactFeedbackGenerator(style: .medium)
-            generator.impactOccurred()
-            print("medium") // medium
-            
-        case 6:
-            let generator = UIImpactFeedbackGenerator(style: .heavy)
-            generator.impactOccurred()
-            print("heavy") // decent
-            
-        default:
-            let generator = UISelectionFeedbackGenerator()
-            generator.selectionChanged()
-            i = 7
+    /* Handles incoming messages from the apple watch */
+    func processWatchMessages(message: [String: Any]) {
+        if message["StartCalibrating"] as? Bool != nil {
+            calibrate()
         }
     }
-
+    
     @IBAction func onSliderChange(_ sender: Any) {
         print(volumeSlider.value)
         volumeLabel.text = "\(volumeSlider.value)"
         LEVEL_THRESHOLD = volumeSlider.value
     }
-
+    
     @IBAction func disableEnableAudio(_sender: UIButton){
         
         if(audioEnabled){
@@ -123,7 +96,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
             })
             let oneAction = UIAlertAction(title: "1 hour", style: .default, handler: { (action) in
                 self.disableTime = 1;
-            
+                
                 self.disableApplication(time: self.disableTime)
             })
             let threeAction = UIAlertAction(title: "3 hours", style: .default, handler: { (action) in
@@ -137,7 +110,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
                 
                 self.disableApplication(time: self.disableTime)
             })
-                
+            
             alert.addAction(oneAction)
             alert.addAction(threeAction)
             alert.addAction(dayAction)
@@ -146,7 +119,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
             present(alert, animated: true, completion: nil)
             
             // add reenable time
-           // print("HEEERETERTERT")
+            // print("HEEERETERTERT")
             //renableTime.text = "Disabled until: \(disableTime)"
             
             disableApplication(time: disableTime)
@@ -244,22 +217,16 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
         levelTimer = Timer.scheduledTimer(timeInterval: 0.001, target: self, selector: #selector(levelTimerCallback), userInfo: nil, repeats: true)
     }
     
-    @IBAction func calibrateVolume(_ sender: UIButton) {
-        /* Tell Watch that calibration is beggining */
-        if let validSession = session {
-            let iPhoneAppContext = ["Calibrating": true]
-            do {
-                try validSession.updateApplicationContext(iPhoneAppContext)
-            } catch {
-                print("Something went wrong")
-            }
-        }
+    func calibrate() {
+        /* Tell watch calibration has begun */
+        isCalibrating = true
+        sendCalibrateMessageToWatch(isCalibrating: isCalibrating)
         
         levelTimer.invalidate()
         
         recorder.updateMeters()
         currentVolume.text = "\(recorder.averagePower(forChannel: 0))"
-        sender.setTitle("Calibrating...", for: [])
+        calibrateButton.setTitle("Calibrating...", for: [])
         volumeLabel.text = "Calibrating..."
         
         let now = Date()
@@ -274,7 +241,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
             ct = ct + 1
         }
         
-        sender.setTitle("Calibrate", for: [])
+        calibrateButton.setTitle("Calibrate", for: [])
         
         let avg: Float = sum / ct
         volumeSlider.minimumValue = avg
@@ -283,108 +250,124 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
         LEVEL_THRESHOLD = volumeSlider.value
         volumeLabel.text = "\(volumeSlider.value)"
         
-        /* Tell Watch that calibration is done */
+        /* Tell watch calibration has ended */
+        isCalibrating = false
+        sendCalibrateMessageToWatch(isCalibrating: isCalibrating)
+        
+        setupAudioRecording()
+    }
+    
+    func sendCalibrateMessageToWatch(isCalibrating : Bool) {
         if let validSession = session {
-            let iPhoneAppContext = ["Calibrating": false]
+            let iPhoneAppContext = ["Calibrating": isCalibrating]
             do {
                 try validSession.updateApplicationContext(iPhoneAppContext)
             } catch {
                 print("Something went wrong")
             }
         }
-
-        setupAudioRecording()
+    }
+    
+    /* Displays a simple error message dialog for the user */
+    func displayErrorMessage(title: String, message: String) {
+        let alert = UIAlertController(title: title , message: message, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+        self.present(alert, animated: true)
+    }
+    
+    @IBAction func calibrateVolume(_ sender: UIButton) {
+        calibrate()
     }
     
     // Callback ever 0.02 seconds
     @objc func levelTimerCallback() {
         
         if(audioEnabled){
-        recorder.updateMeters()
-        
-        let level = recorder.averagePower(forChannel: 0)
-        let isLoud = level > LEVEL_THRESHOLD
-        currentVolume.text = "\(level)"
-        
-        // do whatever you want with isLoud
-        //print("IsLoud? : ",isLoud)
-        
-        // Notifications
-        if isLoud {
-            //            let generator = UINotificationFeedbackGenerator()
-            view.backgroundColor = UIColor.red
-            // Need to stop timer and audio session before playing a vibration
+            recorder.updateMeters()
             
-            let diff = level - LEVEL_THRESHOLD
-            if(diff > 15) {
-                let generator = UINotificationFeedbackGenerator()
-                //generator.notificationOccurred(.error)
+            let level = recorder.averagePower(forChannel: 0)
+            let isLoud = level > LEVEL_THRESHOLD
+            currentVolume.text = "\(level)"
+            
+            // do whatever you want with isLoud
+            //print("IsLoud? : ",isLoud)
+            
+            // Notifications
+            if isLoud {
+                //            let generator = UINotificationFeedbackGenerator()
+                view.backgroundColor = UIColor.red
+                // Need to stop timer and audio session before playing a vibration
                 
-                switch VIBRATION_LEVEL {
-                case 1:
-                    generator.notificationOccurred(.error)
-                case 2:
-                    generator.notificationOccurred(.error)
-                    generator.notificationOccurred(.error)
-                case 3:
-                    generator.notificationOccurred(.error)
-                    generator.notificationOccurred(.error)
-                    generator.notificationOccurred(.error)
-                default:
-                    generator.notificationOccurred(.error)
+                let diff = level - LEVEL_THRESHOLD
+                if(diff > 15) {
+                    let generator = UINotificationFeedbackGenerator()
+                    //generator.notificationOccurred(.error)
+                    
+                    switch VIBRATION_LEVEL {
+                    case 1:
+                        generator.notificationOccurred(.error)
+                    case 2:
+                        generator.notificationOccurred(.error)
+                        generator.notificationOccurred(.error)
+                    case 3:
+                        generator.notificationOccurred(.error)
+                        generator.notificationOccurred(.error)
+                        generator.notificationOccurred(.error)
+                    default:
+                        generator.notificationOccurred(.error)
+                    }
+                    
+                    print("too loud")
+                }else if(diff > 7) {
+                    let generator = UINotificationFeedbackGenerator()
+                    
+                    switch VIBRATION_LEVEL {
+                    case 1:
+                        generator.notificationOccurred(.success)
+                    case 2:
+                        generator.notificationOccurred(.success)
+                        generator.notificationOccurred(.success)
+                    case 3:
+                        generator.notificationOccurred(.success)
+                        generator.notificationOccurred(.success)
+                        generator.notificationOccurred(.success)
+                    default:
+                        generator.notificationOccurred(.success)
+                    }
+                    
+                    //generator.notificationOccurred(.success)
+                    print("loud")
+                }else {
+                    let generator = UIImpactFeedbackGenerator(style: .light)
+                    //  generator.impactOccurred()
+                    
+                    switch VIBRATION_LEVEL {
+                    case 1:
+                        generator.impactOccurred()
+                    case 2:
+                        generator.impactOccurred()
+                        generator.impactOccurred()
+                    case 3:
+                        generator.impactOccurred()
+                        generator.impactOccurred()
+                        generator.impactOccurred()
+                    default:
+                        generator.impactOccurred()
+                    }
+                    
+                    print("not that loud")
                 }
                 
-                print("too loud")
-            }else if(diff > 7) {
-                let generator = UINotificationFeedbackGenerator()
-                
-                switch VIBRATION_LEVEL {
-                case 1:
-                    generator.notificationOccurred(.success)
-                case 2:
-                    generator.notificationOccurred(.success)
-                    generator.notificationOccurred(.success)
-                case 3:
-                    generator.notificationOccurred(.success)
-                    generator.notificationOccurred(.success)
-                    generator.notificationOccurred(.success)
-                default:
-                    generator.notificationOccurred(.success)
-                }
-                
-                //generator.notificationOccurred(.success)
-                print("loud")
-            }else {
-                let generator = UIImpactFeedbackGenerator(style: .light)
-              //  generator.impactOccurred()
-                
-                switch VIBRATION_LEVEL {
-                case 1:
-                    generator.impactOccurred()
-                case 2:
-                    generator.impactOccurred()
-                    generator.impactOccurred()
-                case 3:
-                   generator.impactOccurred()
-                   generator.impactOccurred()
-                   generator.impactOccurred()
-                default:
-                    generator.impactOccurred()
-                }
-                
-                print("not that loud")
+                recorder.stop()
+                levelTimer.invalidate()
+                // Vibrate, and send notification
+                AudioServicesPlaySystemSound(1521)
+                //            AudioServicesPlayAlertSound(SystemSoundID(kSystemSoundID_Vibrate))
+                sendNotification()
+                // Restart audio recording
+                setupAudioRecording()
             }
-            
-            recorder.stop()
-            levelTimer.invalidate()
-            // Vibrate, and send notification
-            AudioServicesPlaySystemSound(1521)
-            //            AudioServicesPlayAlertSound(SystemSoundID(kSystemSoundID_Vibrate))
-            sendNotification()
-            // Restart audio recording
-            setupAudioRecording()
         }
-    }
         else{
             
             recorder.stop()
@@ -405,8 +388,8 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
     
     func disableApplication(time: Int){
         // disable application for time Int
-    
-    
+        
+        
         let formatter = DateFormatter();
         formatter.dateFormat = "MMM d, h:mm a";
         var myString: String;
@@ -450,7 +433,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
             print(time)
         }
     }
-
+    
     func sendNotification() {
         // find out what are the user's notification preferences
         UNUserNotificationCenter.current().getNotificationSettings { (settings) in
