@@ -270,17 +270,19 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
     @IBAction func calibrateVolume(_ sender: UIButton) {
 //        recorder.stop()
         checkDisabled()
-        /* Tell Watch that calibration is beggining */
-        if let validSession = session {
-            let iPhoneAppContext = ["Calibrating": true]
-            do {
-                try validSession.updateApplicationContext(iPhoneAppContext)
-            } catch {
-                print("Something went wrong")
-            }
-        }
+       
         
         if(audioEnabled){
+            
+            /* Tell Watch that calibration is beggining */
+            if let validSession = session {
+                let iPhoneAppContext = ["Calibrating": true]
+                do {
+                    try validSession.updateApplicationContext(iPhoneAppContext)
+                } catch {
+                    print("Something went wrong")
+                }
+            }
         levelTimer.invalidate()
         
         recorder.updateMeters()
