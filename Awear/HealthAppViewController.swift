@@ -1,5 +1,5 @@
 //
-//  SettingsVC.swift
+//  HealthAppViewController.swift
 //  Awear
 //
 //  Created by Kathleen Masterson on 10/31/18.
@@ -15,17 +15,25 @@ import AVFoundation
 import CoreAudio
 import CoreLocation
 
-internal class SettingsVC : UIViewController{
-    
-    @IBOutlet weak var vibrationSlider: UISlider!
+class HealthAppViewController : UIViewController{
+        
+    @IBOutlet weak var backBtn: UIButton!
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        navigationController?.isNavigationBarHidden = false
+
     }
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
+    
+    @IBAction func back(_ sender: UIButton){
+         dismiss(animated: true, completion: nil)
+    }
+    
+    
     
 }

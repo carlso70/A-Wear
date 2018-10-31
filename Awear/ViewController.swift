@@ -28,7 +28,8 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
     @IBOutlet weak var volumeLabel: UILabel!
     @IBOutlet weak var volumeSlider: UISlider!
     @IBOutlet weak var calibrateButton: UIButton!
-
+    @IBOutlet weak var healthAppBtn: UIButton!
+    
     @IBOutlet weak var renableTime: UILabel!
     @IBOutlet weak var disableAudio: UIButton!
     @IBOutlet weak var vibrationSlider: UISlider!
@@ -132,7 +133,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
             
             let alert = UIAlertController(title: "Listening Disabled", message: "How long do you want to disable listening?", preferredStyle: .alert)
             
-            let indefAction = UIAlertAction(title: "Indefinitely", style: .default, handler: { (action) in
+            let indefAction = UIAlertAction(title: "Until Enabled", style: .default, handler: { (action) in
                 self.disableTime = -1;
                 
                 self.disableApplication(time: self.disableTime)
