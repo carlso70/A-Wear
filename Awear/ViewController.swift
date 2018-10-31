@@ -13,33 +13,45 @@ import UIKit
 import AVFoundation
 import CoreAudio
 import CoreLocation
+import WatchConnectivity
 
-class ViewController: UIViewController, CLLocationManagerDelegate {
+class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDelegate {
+    
     
     var recorder: AVAudioRecorder!
     var levelTimer = Timer()
     var LEVEL_THRESHOLD: Float = -10.0
     let locationMgr = CLLocationManager()
-
+    
     @IBOutlet weak var currentVolume: UILabel!
     @IBOutlet weak var volumeLabel: UILabel!
     @IBOutlet weak var volumeSlider: UISlider!
     @IBOutlet weak var calibrateButton: UIButton!
     
     var i = 0
+  
+    /* Setup WC Session (Watch Connectivity) */
+    func session(_ session: WCSession, activationDidCompleteWith activationState: WCSessionActivationState, error: Error?) { }
+    func sessionDidBecomeInactive(_ session: WCSession) { }
+    func sessionDidDeactivate(_ session: WCSession) { }
+    
+    var session: WCSession?
     
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
-//        i = 6
-//        tapped()
+        if WCSession.isSupported() {
+            session = WCSession.default
+            session?.delegate = self
+            session?.activate()
+        }
         setupNotifications()
         setupAudioRecording()
         getMyLocation()
     }
     
     func tapped() {
-//        i += 1
+        //        i += 1
         print("Running \(i)")
         
         switch i {
@@ -158,9 +170,18 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
         // Schedules a timer, which fires a callback(levelTimerCallback) every 0.02 seconds
         levelTimer = Timer.scheduledTimer(timeInterval: 0.001, target: self, selector: #selector(levelTimerCallback), userInfo: nil, repeats: true)
     }
-
+    
     @IBAction func calibrateVolume(_ sender: UIButton) {
-//        recorder.stop()
+        /* Tell Watch that calibration is beggining */
+        if let validSession = session {
+            let iPhoneAppContext = ["Calibrating": true]
+            do {
+                try validSession.updateApplicationContext(iPhoneAppContext)
+            } catch {
+                print("Something went wrong")
+            }
+        }
+        
         levelTimer.invalidate()
         
         recorder.updateMeters()
@@ -189,6 +210,17 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
         LEVEL_THRESHOLD = volumeSlider.value
         volumeLabel.text = "\(volumeSlider.value)"
         
+        /* Tell Watch that calibration is done */
+        if let validSession = session {
+            let iPhoneAppContext = ["Calibrating": false]
+            do {
+                try validSession.updateApplicationContext(iPhoneAppContext)
+            } catch {
+                print("Something went wrong")
+            }
+        }
+        
+        
         setupAudioRecording()
     }
     
@@ -206,7 +238,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
         
         // Notifications
         if isLoud {
-//            let generator = UINotificationFeedbackGenerator()
+            //            let generator = UINotificationFeedbackGenerator()
             view.backgroundColor = UIColor.red
             // Need to stop timer and audio session before playing a vibration
             
@@ -229,14 +261,15 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
             levelTimer.invalidate()
             // Vibrate, and send notification
             AudioServicesPlaySystemSound(1521)
-//            AudioServicesPlayAlertSound(SystemSoundID(kSystemSoundID_Vibrate))
+            //            AudioServicesPlayAlertSound(SystemSoundID(kSystemSoundID_Vibrate))
             sendNotification()
             // Restart audio recording
             setupAudioRecording()
         }
     }
-
+    
     func sendNotification() {
+
         // find out what are the user's notification preferences
         UNUserNotificationCenter.current().getNotificationSettings { (settings) in
             
@@ -276,7 +309,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
             UNUserNotificationCenter.current().add(request, withCompletionHandler: nil)
         }
     }
-        
+    
     // Sends a test notification 10 seconds after pressing the button, notification will appear if app is in background
     @IBAction func sendNotification(_ sender: Any) {
         sendNotification()
