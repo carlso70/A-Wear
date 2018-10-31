@@ -48,10 +48,9 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
             self.processWatchMessages(message: message)
         }
     }
-    
     func session(_ session: WCSession, activationDidCompleteWith activationState: WCSessionActivationState, error: Error?) { }
-    func sessionDidBecomeInactive(_ session: WCSession) { }
-    func sessionDidDeactivate(_ session: WCSession) { }
+    func sessionDidBecomeInactive(_ session: WCSession) { /* TODO */ }
+    func sessionDidDeactivate(_ session: WCSession) { /* TODO */ }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -61,6 +60,9 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
             session = WCSession.default
             session?.delegate = self
             session?.activate()
+            
+            /* Send levels to watch */
+            sendLevelThresholdMessageToWatch(level: LEVEL_THRESHOLD)
         }
         setupNotifications()
         setupAudioRecording()
@@ -69,17 +71,30 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
     
     /* Handles incoming messages from the apple watch */
     func processWatchMessages(message: [String: Any]) {
+        /* Trigger calibration */
         if message["StartCalibrating"] as? Bool != nil {
-            calibrate()
+            self.calibrate()
+        }
+        
+        /* Change level threshold */
+        if let level = message["LevelThreshold"] as? Float {
+            print("LEVEL = \(level)")
+            volumeSlider.value = level
+            changeLevelThreshold(level: volumeSlider.value)
         }
     }
     
-    @IBAction func onSliderChange(_ sender: Any) {
-        print(volumeSlider.value)
+    /* VolumeSlider value between 1 - 10 */
+    func changeLevelThreshold(level: Float) {
         volumeLabel.text = "\(volumeSlider.value)"
-        LEVEL_THRESHOLD = volumeSlider.value
+        LEVEL_THRESHOLD = level
     }
     
+    @IBAction func onSliderChange(_ sender: Any) {
+        changeLevelThreshold(level: volumeSlider.value)
+        sendLevelThresholdMessageToWatch(level: volumeSlider.value)
+    }
+
     @IBAction func disableEnableAudio(_sender: UIButton){
         
         if(audioEnabled){
@@ -221,7 +236,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
         /* Tell watch calibration has begun */
         isCalibrating = true
         sendCalibrateMessageToWatch(isCalibrating: isCalibrating)
-        
+
         levelTimer.invalidate()
         
         recorder.updateMeters()
@@ -253,18 +268,20 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
         /* Tell watch calibration has ended */
         isCalibrating = false
         sendCalibrateMessageToWatch(isCalibrating: isCalibrating)
+        sendLevelThresholdMessageToWatch(level: volumeSlider.value)
         
         setupAudioRecording()
     }
     
     func sendCalibrateMessageToWatch(isCalibrating : Bool) {
         if let validSession = session {
-            let iPhoneAppContext = ["Calibrating": isCalibrating]
-            do {
-                try validSession.updateApplicationContext(iPhoneAppContext)
-            } catch {
-                print("Something went wrong")
-            }
+            validSession.sendMessage(["Calibrating": isCalibrating], replyHandler: nil, errorHandler: nil)
+        }
+    }
+    
+    func sendLevelThresholdMessageToWatch(level: Float) {
+        if let validSession = session {
+            validSession.sendMessage(["LevelThreshold": level], replyHandler: nil, errorHandler: nil)
         }
     }
     
