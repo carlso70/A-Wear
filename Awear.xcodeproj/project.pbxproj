@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		0CDF2EE92166B01F00A4F2C1 /* Launch Screen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0CDF2EE82166B01E00A4F2C1 /* Launch Screen.storyboard */; };
+		421B8F38218963450011CC87 /* SettingsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 421B8F37218963450011CC87 /* SettingsVC.swift */; };
 		447D2B2E2181232B004006AC /* Interface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 447D2B2C2181232B004006AC /* Interface.storyboard */; };
 		447D2B302181232D004006AC /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 447D2B2F2181232D004006AC /* Assets.xcassets */; };
 		447D2B372181232D004006AC /* AwearWatch Extension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 447D2B362181232D004006AC /* AwearWatch Extension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
@@ -83,6 +84,7 @@
 
 /* Begin PBXFileReference section */
 		0CDF2EE82166B01E00A4F2C1 /* Launch Screen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = "Launch Screen.storyboard"; sourceTree = "<group>"; };
+		421B8F37218963450011CC87 /* SettingsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsVC.swift; sourceTree = "<group>"; };
 		447D2B252180F650004006AC /* Awear.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Awear.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		447D2B262180F650004006AC /* AwearTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AwearTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		447D2B272180F650004006AC /* AwearUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AwearUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -189,6 +191,7 @@
 				6129BB112189664B00508718 /* Awear.entitlements */,
 				61F5596F2158747400776195 /* AppDelegate.swift */,
 				61F559712158747400776195 /* ViewController.swift */,
+				421B8F37218963450011CC87 /* SettingsVC.swift */,
 				61F559732158747400776195 /* Main.storyboard */,
 				61F559762158747600776195 /* Assets.xcassets */,
 				61F559782158747600776195 /* LaunchScreen.storyboard */,
@@ -437,6 +440,7 @@
 			files = (
 				61F559722158747400776195 /* ViewController.swift in Sources */,
 				61F559702158747400776195 /* AppDelegate.swift in Sources */,
+				421B8F38218963450011CC87 /* SettingsVC.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
