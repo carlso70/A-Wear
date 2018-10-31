@@ -17,7 +17,6 @@ import WatchConnectivity
 
 class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDelegate {
     
-    
     var recorder: AVAudioRecorder!
     var levelTimer = Timer()
     var LEVEL_THRESHOLD: Float = -10.0
@@ -34,9 +33,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
     @IBOutlet weak var disableAudio: UIButton!
     @IBOutlet weak var vibrationSlider: UISlider!
     @IBOutlet weak var vibrateLvl: UILabel!
-   
-    
-    
+
    // var pickerData: [String] = [String]();
     
     var i = 0;
@@ -63,10 +60,6 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
         setupNotifications()
         setupAudioRecording()
         getMyLocation()
-        
-        
-       
-        
     }
     
     func tapped() {
@@ -107,19 +100,13 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
             i = 7
         }
     }
-    
 
-    
     @IBAction func onSliderChange(_ sender: Any) {
         print(volumeSlider.value)
         volumeLabel.text = "\(volumeSlider.value)"
         LEVEL_THRESHOLD = volumeSlider.value
     }
-    
-    
-   
-    
-    
+
     @IBAction func disableEnableAudio(_sender: UIButton){
         
         if(audioEnabled){
@@ -254,11 +241,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
         
         // Schedules a timer, which fires a callback(levelTimerCallback) every 0.02 seconds
         
-        
-        
         levelTimer = Timer.scheduledTimer(timeInterval: 0.001, target: self, selector: #selector(levelTimerCallback), userInfo: nil, repeats: true)
-        
-        
     }
     
     @IBAction func calibrateVolume(_ sender: UIButton) {
@@ -309,8 +292,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
                 print("Something went wrong")
             }
         }
-        
-        
+
         setupAudioRecording()
     }
     
@@ -467,15 +449,9 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
             renableTime.text = ""
             print(time)
         }
-        
-        
-        
     }
-    
-    
 
     func sendNotification() {
-
         // find out what are the user's notification preferences
         UNUserNotificationCenter.current().getNotificationSettings { (settings) in
             
@@ -531,4 +507,3 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
         calibrateButton.layer.cornerRadius = 6
     }
 }
-
