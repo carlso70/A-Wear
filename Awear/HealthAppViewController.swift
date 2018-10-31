@@ -19,6 +19,8 @@ class HealthAppViewController : UIViewController{
         
     @IBOutlet weak var backBtn: UIButton!
     
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         navigationController?.isNavigationBarHidden = false
@@ -33,6 +35,8 @@ class HealthAppViewController : UIViewController{
     @IBAction func back(_ sender: UIButton){
          dismiss(animated: true, completion: nil)
     }
+    
+    
     
     
     
