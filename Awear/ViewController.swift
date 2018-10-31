@@ -13,8 +13,9 @@ import UIKit
 import AVFoundation
 import CoreAudio
 import CoreLocation
+import WatchConnectivity
 
-class ViewController: UIViewController, CLLocationManagerDelegate {
+class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDelegate {
     
     var recorder: AVAudioRecorder!
     var levelTimer = Timer()
@@ -22,7 +23,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
     var VIBRATION_LEVEL = 1
     var REENABLE_TIME = Date();
     let locationMgr = CLLocationManager()
-
+    
     @IBOutlet weak var currentVolume: UILabel!
     @IBOutlet weak var volumeLabel: UILabel!
     @IBOutlet weak var volumeSlider: UISlider!
@@ -32,9 +33,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
     @IBOutlet weak var disableAudio: UIButton!
     @IBOutlet weak var vibrationSlider: UISlider!
     @IBOutlet weak var vibrateLvl: UILabel!
-   
-    
-    
+
    // var pickerData: [String] = [String]();
     
     var i = 0;
@@ -43,23 +42,29 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
     var timedEnabled = true;
  
     
+    /* Setup WC Session (Watch Connectivity) */
+    func session(_ session: WCSession, activationDidCompleteWith activationState: WCSessionActivationState, error: Error?) { }
+    func sessionDidBecomeInactive(_ session: WCSession) { }
+    func sessionDidDeactivate(_ session: WCSession) { }
+    
+    var session: WCSession?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         makePretty();
         // Do any additional setup after loading the view, typically from a nib.
-//        i = 6
-//        tapped()
+        if WCSession.isSupported() {
+            session = WCSession.default
+            session?.delegate = self
+            session?.activate()
+        }
         setupNotifications()
         setupAudioRecording()
         getMyLocation()
-        
-        
-       
-        
     }
     
     func tapped() {
-//        i += 1
+        //        i += 1
         print("Running \(i)")
         
         switch i {
@@ -96,19 +101,13 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
             i = 7
         }
     }
-    
 
-    
     @IBAction func onSliderChange(_ sender: Any) {
         print(volumeSlider.value)
         volumeLabel.text = "\(volumeSlider.value)"
         LEVEL_THRESHOLD = volumeSlider.value
     }
-    
-    
-   
-    
-    
+
     @IBAction func disableEnableAudio(_sender: UIButton){
         
         if(audioEnabled){
@@ -265,16 +264,21 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
         
         // Schedules a timer, which fires a callback(levelTimerCallback) every 0.02 seconds
         
-        
-        
         levelTimer = Timer.scheduledTimer(timeInterval: 0.001, target: self, selector: #selector(levelTimerCallback), userInfo: nil, repeats: true)
-        
-        
     }
-
+    
     @IBAction func calibrateVolume(_ sender: UIButton) {
 //        recorder.stop()
         checkDisabled()
+        /* Tell Watch that calibration is beggining */
+        if let validSession = session {
+            let iPhoneAppContext = ["Calibrating": true]
+            do {
+                try validSession.updateApplicationContext(iPhoneAppContext)
+            } catch {
+                print("Something went wrong")
+            }
+        }
         
         if(audioEnabled){
         levelTimer.invalidate()
@@ -305,6 +309,16 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
         LEVEL_THRESHOLD = volumeSlider.value
         volumeLabel.text = "\(volumeSlider.value)"
         
+        /* Tell Watch that calibration is done */
+        if let validSession = session {
+            let iPhoneAppContext = ["Calibrating": false]
+            do {
+                try validSession.updateApplicationContext(iPhoneAppContext)
+            } catch {
+                print("Something went wrong")
+            }
+        }
+
         setupAudioRecording()
         }
     }
@@ -325,7 +339,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
         
         // Notifications
         if isLoud {
-//            let generator = UINotificationFeedbackGenerator()
+            //            let generator = UINotificationFeedbackGenerator()
             view.backgroundColor = UIColor.red
             // Need to stop timer and audio session before playing a vibration
             
@@ -393,7 +407,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
             levelTimer.invalidate()
             // Vibrate, and send notification
             AudioServicesPlaySystemSound(1521)
-//            AudioServicesPlayAlertSound(SystemSoundID(kSystemSoundID_Vibrate))
+            //            AudioServicesPlayAlertSound(SystemSoundID(kSystemSoundID_Vibrate))
             sendNotification()
             // Restart audio recording
             setupAudioRecording()
@@ -451,12 +465,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
             renableTime.text = ""
             print(time)
         }
-        
-        
-        
     }
-    
-    
 
     func sendNotification() {
         // find out what are the user's notification preferences
@@ -539,4 +548,3 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
         
     }
 }
-

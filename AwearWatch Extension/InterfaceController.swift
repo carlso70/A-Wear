@@ -8,24 +8,45 @@
 
 import WatchKit
 import Foundation
+import WatchConnectivity
 import AVFoundation
 
-class InterfaceController: WKInterfaceController{
+class InterfaceController: WKInterfaceController, WCSessionDelegate {
     
+    func session(_ session: WCSession, activationDidCompleteWith activationState: WCSessionActivationState, error: Error?) {}
+
     @IBOutlet weak var voiceLevelLabel: WKInterfaceLabel!
     @IBOutlet weak var volumeSlider: WKInterfaceSlider!
     @IBOutlet weak var calibrateButton: WKInterfaceButton!
     @IBOutlet weak var disableButton: WKInterfaceButton!
+
     
-    var recorder: AVAudioRecorder!
-    var levelTimer = Timer()
-    var LEVEL_THRESHOLD: Float = -10.0
+    let session = WCSession.default
+    
+    /* Session sets up the dispatch queue for messages */
+    func session(_ session: WCSession, didReceiveApplicationContext applicationContext: [String : Any]) {
+        DispatchQueue.main.async {
+            self.processApplicationContext()
+        }
+    }
+    
+    func processApplicationContext() {
+        if let iPhoneContext = session.receivedApplicationContext as? [String : Bool] {
+            if iPhoneContext["Calibrating"] == true {
+                voiceLevelLabel.setText("Calibrating")
+            } else {
+                voiceLevelLabel.setText("Not Calibrating")
+            }
+        }
+    }
     
     override func awake(withContext context: Any?) {
         super.awake(withContext: context)
         
-        // Configure interface objects here.
-        setupAudioRecording()
+        processApplicationContext()
+        
+        session.delegate = self
+        session.activate()
     }
     
     override func willActivate() {
@@ -38,52 +59,8 @@ class InterfaceController: WKInterfaceController{
         super.didDeactivate()
     }
     
-    func setupAudioRecording() {
-    }
-    
-    // Callback ever 0.02 seconds
-    @objc func levelTimerCallback() {
-        
-        recorder.updateMeters()
-        
-        let level = recorder.averagePower(forChannel: 0)
-        let isLoud = level > LEVEL_THRESHOLD
-        voiceLevelLabel.setText("Voice Level: \(level)")
-        
-        // do whatever you want with isLoud
-        //print("IsLoud? : ",isLoud)
-        
-        // Notifications
-        if isLoud {
-            //            let generator = UINotificationFeedbackGenerator()
-            //            view.backgroundColor = UIColor.red
-            // Need to stop timer and audio session before playing a vibration
-            
-            let diff = level - LEVEL_THRESHOLD
-            if(diff > 15) {
-                WKInterfaceDevice.current().play(.failure)
-                print("too loud")
-            }else if(diff > 7) {
-                WKInterfaceDevice.current().play(.stop)
-                print("loud")
-            }else {
-                WKInterfaceDevice.current().play(.click)
-                print("not that loud")
-            }
-            
-            recorder.stop()
-            levelTimer.invalidate()
-            // Vibrate, and send notification
-            //            AudioServicesPlaySystemSound(1521)
-            //            AudioServicesPlayAlertSound(SystemSoundID(kSystemSoundID_Vibrate))
-            //            sendNotification()
-            // Restart audio recording
-            setupAudioRecording()
-        }
-    }
-    
-    
     @IBAction func calibrateButtonOnClick() {
+
     }
     
     @IBAction func disableButtonOnClick() {
