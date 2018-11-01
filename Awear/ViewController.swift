@@ -13,6 +13,7 @@ import UIKit
 import AVFoundation
 import CoreAudio
 import CoreLocation
+import CoreData
 import WatchConnectivity
 
 class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDelegate {
@@ -329,7 +330,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
     
     func sendLevelThresholdMessageToWatch(level: Float, maxValue: Float, minValue: Float) {
         if let validSession = session {
-//            validSession.sendMessage(["LevelThreshold": ["level":level, "maxValue": maxValue, "minValue": minValue]], replyHandler: nil, errorHandler: nil)
+            //            validSession.sendMessage(["LevelThreshold": ["level":level, "maxValue": maxValue, "minValue": minValue]], replyHandler: nil, errorHandler: nil)
             validSession.sendMessage(["LevelThreshold":level], replyHandler: nil, errorHandler: nil)
         }
     }
