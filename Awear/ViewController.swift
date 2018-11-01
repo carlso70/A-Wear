@@ -24,6 +24,8 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
     var VIBRATION_LEVEL = 1
     var REENABLE_TIME = Date();
     let locationMgr = CLLocationManager()
+    var RECORD_STATS = true;
+    var WATCH_CONNECT = true;
     
     @IBOutlet weak var currentVolume: UILabel!
     @IBOutlet weak var volumeLabel: UILabel!
@@ -59,6 +61,8 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
         super.viewDidLoad()
         makePretty();
         // Do any additional setup after loading the view, typically from a nib.
+        
+        
         if WCSession.isSupported() {
             session = WCSession.default
             session?.delegate = self
@@ -66,19 +70,22 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
             
             /* Send levels to watch */
             sendLevelThresholdMessageToWatch(level: volumeSlider.value, maxValue: volumeSlider.maximumValue, minValue: volumeSlider.minimumValue )
+            
+            //UserDefaults.standard.set(true, forKey: "watchConnect")
+            UserDefaults.standard.set(true, forKey: "watchSupported")
+            
+        }else{
+            UserDefaults.standard.set(false, forKey: "watchSupported")
+            UserDefaults.standard.set(false, forKey: "watchConnect")
         }
         
         
+        WATCH_CONNECT = UserDefaults.standard.bool(forKey: "watchConnect")
+        RECORD_STATS = UserDefaults.standard.bool(forKey: "recordStats")
         VIBRATION_LEVEL = UserDefaults.standard.integer(forKey: "vibrationLevel")
         audioEnabled =  UserDefaults.standard.bool(forKey: "audioEnabled")
         
-        let alert = UIAlertController(title: "TEST", message: "VVibration Level: \(VIBRATION_LEVEL)", preferredStyle: .alert)
-        
-        alert.addAction(UIAlertAction(title: "Yes", style: .default, handler: nil))
-        //alert.addAction(UIAlertAction(title: "No", style: .cancel, handler: nil))
-        
-        self.present(alert, animated: true)
-        
+    
         setupNotifications()
         setupAudioRecording()
         getMyLocation()
@@ -348,6 +355,9 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
     // Callback ever 0.02 seconds
     @objc func levelTimerCallback() {
         
+        
+        checkDisabled()
+        
         if audioEnabled {
             recorder.updateMeters()
             
@@ -544,8 +554,8 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
     }
     
     
+    func checkDisabled(){
         audioEnabled =  UserDefaults.standard.bool(forKey: "audioEnabled")
-        if(!audioEnabled){
         if(!audioEnabled){
             recorder.stop()
             calibrateButton.isUserInteractionEnabled = false;
