@@ -12,7 +12,7 @@ import WatchConnectivity
 import AVFoundation
 
 class InterfaceController: WKInterfaceController, WCSessionDelegate {
-
+    
     /* Session sets up the dispatch queue for messages recieved from phone */
     func session(_ session: WCSession, activationDidCompleteWith activationState: WCSessionActivationState, error: Error?) {}
     func session(_ session: WCSession, didReceiveMessage message: [String : Any]) {
@@ -25,11 +25,12 @@ class InterfaceController: WKInterfaceController, WCSessionDelegate {
     @IBOutlet weak var volumeSlider: WKInterfaceSlider!
     @IBOutlet weak var calibrateButton: WKInterfaceButton!
     @IBOutlet weak var disableButton: WKInterfaceButton!
-
+    
     let session = WCSession.default
     
     /* Handles incoming messages from the apple watch */
     func processPhoneMessages(message: [String: Any]) {
+        
         /* Trigger calibration */
         if let isCalibrating = message["Calibrating"] as? Bool {
             if isCalibrating {
@@ -43,12 +44,17 @@ class InterfaceController: WKInterfaceController, WCSessionDelegate {
         if let level = message["LevelThreshold"] as? Float {
             volumeSlider.setValue(level)
         }
+ 
+        /* Update voice level from iPhone */
+        if let voice = message["VoiceLevel"] as? Float {
+            voiceLevelLabel.setText("Volume: \(voice)")
+        }
     }
     
-
+    
     override func awake(withContext context: Any?) {
         super.awake(withContext: context)
-
+        
         session.delegate = self
         session.activate()
     }
@@ -73,5 +79,26 @@ class InterfaceController: WKInterfaceController, WCSessionDelegate {
     }
     
     @IBAction func disableButtonOnClick() {
+        
+        let action1 = WKAlertAction(title: "1", style: .destructive){
+            self.disableApp(time: 1)
+        }
+        let action2 = WKAlertAction(title: "3", style: .destructive) {
+            self.disableApp(time: 3)
+        }
+        let action3 = WKAlertAction(title: "24", style: .destructive) {
+            self.disableApp(time: 24)
+        }
+        let action4 = WKAlertAction(title: "24", style: .destructive) {
+            self.disableApp(time: -1) //TODO check how disable forever works
+        }
+        let action5 = WKAlertAction(title: "Cancel", style: .cancel) {}
+        
+        presentAlert(withTitle: "Disable Application", message: "Select Time", preferredStyle: .actionSheet, actions: [action1, action2, action3, action4, action5])
+    }
+    
+    /* Sends a message to the */
+    func disableApp(time: Int) {
+        session.sendMessage(["DisableTime": time], replyHandler: nil, errorHandler: nil)
     }
 }

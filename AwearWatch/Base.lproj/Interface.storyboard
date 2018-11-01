@@ -13,10 +13,10 @@
             <objects>
                 <controller id="AgC-eL-Hgc" customClass="InterfaceController" customModule="AwearWatch" customModuleProvider="target">
                     <items>
-                        <label alignment="left" text="Voice Level: 10" id="vAi-kr-YyU">
+                        <label width="130" alignment="left" text="Voice: 10" id="vAi-kr-YyU">
                             <fontDescription key="font" style="UICTFontTextStyleBody"/>
                         </label>
-                        <slider width="1" alignment="left" continuous="YES" value="5" minimum="1" maximum="10" steps="10" id="7z2-fH-kQ2">
+                        <slider width="1" alignment="left" continuous="YES" minimum="-10" maximum="10" steps="20" id="7z2-fH-kQ2">
                             <connections>
                                 <action selector="volumeThresholdOnChange:" destination="AgC-eL-Hgc" id="Vea-2e-lqw"/>
                             </connections>

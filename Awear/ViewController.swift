@@ -40,7 +40,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
     var audioEnabled =  true;
     var disableTime = 0;
     var timedEnabled = true;
- 
+    
     
     /* Setup WC Session (Watch Connectivity) */
     var session: WCSession?
@@ -65,7 +65,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
             session?.activate()
             
             /* Send levels to watch */
-            sendLevelThresholdMessageToWatch(level: LEVEL_THRESHOLD)
+            sendLevelThresholdMessageToWatch(level: volumeSlider.value, maxValue: volumeSlider.maximumValue, minValue: volumeSlider.minimumValue )
         }
         setupNotifications()
         setupAudioRecording()
@@ -81,9 +81,14 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
         
         /* Change level threshold */
         if let level = message["LevelThreshold"] as? Float {
-            print("LEVEL = \(level)")
             volumeSlider.value = level
             changeLevelThreshold(level: volumeSlider.value)
+        }
+        
+        /* Disable Audio for time */
+        if let downTime = message["DisableTime"] as? Int {
+            self.disableTime = downTime
+            self.disableApplication(time: downTime)
         }
     }
     
@@ -95,12 +100,11 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
     
     @IBAction func onSliderChange(_ sender: Any) {
         changeLevelThreshold(level: volumeSlider.value)
-        sendLevelThresholdMessageToWatch(level: volumeSlider.value)
+        sendLevelThresholdMessageToWatch(level: volumeSlider.value, maxValue: volumeSlider.maximumValue, minValue: volumeSlider.minimumValue)
     }
-
+    
     @IBAction func disableEnableAudio(_sender: UIButton){
-        
-        if(audioEnabled){
+        if audioEnabled {
             audioEnabled = false;
             recorder.stop();
             calibrateButton.isUserInteractionEnabled = false;
@@ -114,35 +118,29 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
             REENABLE_TIME = earlyDate ?? Date();
             
             //audioEnabled = false;
-            
             disableAudio.setTitle("Enable Listening", for: .normal);
-            
-            
-            
             
             let alert = UIAlertController(title: "Listening Disabled", message: "How long do you want to disable listening?", preferredStyle: .alert)
             
             let indefAction = UIAlertAction(title: "Until Enabled", style: .default, handler: { (action) in
                 self.disableTime = -1;
-                
                 self.disableApplication(time: self.disableTime)
                 return
             })
+            
             let oneAction = UIAlertAction(title: "1 hour", style: .default, handler: { (action) in
                 self.disableTime = 1;
-                
                 self.disableApplication(time: self.disableTime)
                 return
             })
+            
             let threeAction = UIAlertAction(title: "3 hours", style: .default, handler: { (action) in
                 self.disableTime = 3;
-                
-                
                 self.disableApplication(time: self.disableTime)
             })
+            
             let dayAction = UIAlertAction(title: "24 hours", style: .default, handler: { (action) in
                 self.disableTime = 24;
-                
                 self.disableApplication(time: self.disableTime)
             })
             
@@ -158,9 +156,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
             //renableTime.text = "Disabled until: \(disableTime)"
             
             disableApplication(time: disableTime)
-            return
-        }
-        else{
+        } else {
             audioEnabled = true;
             REENABLE_TIME = Date();
             setupAudioRecording();
@@ -175,9 +171,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
             alert.addAction(okAction)
             
             present(alert, animated: true, completion: nil)
-            return
         }
-        
     }
     
     // Uses core location to get the user's current location
@@ -261,7 +255,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
         /* Tell watch calibration has begun */
         isCalibrating = true
         sendCalibrateMessageToWatch(isCalibrating: isCalibrating)
-
+        
         levelTimer.invalidate()
         
         recorder.updateMeters()
@@ -293,11 +287,11 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
         /* Tell watch calibration has ended */
         isCalibrating = false
         sendCalibrateMessageToWatch(isCalibrating: isCalibrating)
-        sendLevelThresholdMessageToWatch(level: volumeSlider.value)
+        sendLevelThresholdMessageToWatch(level: volumeSlider.value, maxValue: volumeSlider.maximumValue, minValue: volumeSlider.minimumValue)
         
         setupAudioRecording()
-        }
     }
+    
     
     func sendCalibrateMessageToWatch(isCalibrating : Bool) {
         if let validSession = session {
@@ -305,11 +299,19 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
         }
     }
     
-    func sendLevelThresholdMessageToWatch(level: Float) {
+    func sendLevelThresholdMessageToWatch(level: Float, maxValue: Float, minValue: Float) {
         if let validSession = session {
-            validSession.sendMessage(["LevelThreshold": level], replyHandler: nil, errorHandler: nil)
+//            validSession.sendMessage(["LevelThreshold": ["level":level, "maxValue": maxValue, "minValue": minValue]], replyHandler: nil, errorHandler: nil)
+            validSession.sendMessage(["LevelThreshold":level], replyHandler: nil, errorHandler: nil)
         }
     }
+    
+    func sendVolumeLevelMessageToWatch(level: Float) {
+        if let validSession = session {
+            validSession.sendMessage(["VoiceLevel": level], replyHandler: nil, errorHandler: nil)
+        }
+    }
+    
     
     /* Displays a simple error message dialog for the user */
     func displayErrorMessage(title: String, message: String) {
@@ -326,12 +328,14 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
     @objc func levelTimerCallback() {
         
         checkDisabled()
-        if(audioEnabled){
+        if audioEnabled {
             recorder.updateMeters()
             
             let level = recorder.averagePower(forChannel: 0)
             let isLoud = level > LEVEL_THRESHOLD
             currentVolume.text = "\(level)"
+            /* Tell Apple watch the volume level */
+            sendVolumeLevelMessageToWatch(level: level)
             
             // do whatever you want with isLoud
             //print("IsLoud? : ",isLoud)
@@ -362,7 +366,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
                     }
                     
                     print("too loud")
-                }else if(diff > 7) {
+                } else if diff > 7 {
                     let generator = UINotificationFeedbackGenerator()
                     
                     switch VIBRATION_LEVEL {
@@ -381,7 +385,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
                     
                     //generator.notificationOccurred(.success)
                     print("loud")
-                }else {
+                } else {
                     let generator = UIImpactFeedbackGenerator(style: .light)
                     //  generator.impactOccurred()
                     
@@ -413,19 +417,14 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
             }
         }
     }
-
-
-
-    }
+    
     
     func disableApplication(time: Int){
         // disable application for time Int
         
-        
         let formatter = DateFormatter();
         formatter.dateFormat = "MMM d, h:mm a";
         var myString: String;
-        
         
         switch time {
         case -1:
@@ -525,10 +524,9 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
     
     
     func checkDisabled(){
-        if(audioEnabled)
-        {
+        if audioEnabled {
             print("enabled")
-        }else{
+        } else {
             recorder.stop()
             calibrateButton.isUserInteractionEnabled = false;
             volumeSlider.isUserInteractionEnabled = false;
@@ -541,11 +539,8 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
                 volumeSlider.isUserInteractionEnabled = true;
                 disableAudio.setTitle("Disable Listening", for: .normal);
                 renableTime.text = "";
-                
             }
         }
-        
-        
     }
-
+    
 }
