@@ -101,8 +101,8 @@
 		447D2B412181232E004006AC /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		447D2B432181232E004006AC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		447D2B442181232E004006AC /* PushNotificationPayload.apns */ = {isa = PBXFileReference; lastKnownFileType = text; path = PushNotificationPayload.apns; sourceTree = "<group>"; };
-		6129BB112189664B00508718 /* Awear.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Awear.entitlements; sourceTree = "<group>"; };
 		6129BB122189674D00508718 /* AwearWatch Extension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "AwearWatch Extension.entitlements"; sourceTree = "<group>"; };
+		6129BB13218A78D300508718 /* AwearWatch-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "AwearWatch-Bridging-Header.h"; sourceTree = "<group>"; };
 		61F5596F2158747400776195 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		61F559712158747400776195 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		61F559742158747400776195 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -190,7 +190,6 @@
 		61F5596E2158747400776195 /* Awear */ = {
 			isa = PBXGroup;
 			children = (
-				6129BB112189664B00508718 /* Awear.entitlements */,
 				61F5596F2158747400776195 /* AppDelegate.swift */,
 				61F559712158747400776195 /* ViewController.swift */,
 				61F559732158747400776195 /* Main.storyboard */,
@@ -200,6 +199,7 @@
 				61F559782158747600776195 /* LaunchScreen.storyboard */,
 				61F5597B2158747600776195 /* Info.plist */,
 				0CDF2EE82166B01E00A4F2C1 /* Launch Screen.storyboard */,
+				6129BB13218A78D300508718 /* AwearWatch-Bridging-Header.h */,
 			);
 			path = Awear;
 			sourceTree = "<group>";
@@ -326,12 +326,13 @@
 				TargetAttributes = {
 					447D2B292181232B004006AC = {
 						CreatedOnToolsVersion = 10.0;
+						LastSwiftMigration = 1000;
 					};
 					447D2B352181232D004006AC = {
 						CreatedOnToolsVersion = 10.0;
 						SystemCapabilities = {
 							com.apple.ApplicationGroups.iOS = {
-								enabled = 1;
+								enabled = 0;
 							};
 							com.apple.BackgroundModes.watchos.extension = {
 								enabled = 1;
@@ -342,7 +343,7 @@
 						CreatedOnToolsVersion = 10.0;
 						SystemCapabilities = {
 							com.apple.ApplicationGroups.iOS = {
-								enabled = 1;
+								enabled = 0;
 							};
 							com.apple.BackgroundModes = {
 								enabled = 1;
@@ -521,7 +522,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_COMPLICATION_NAME = Complication;
-				CODE_SIGN_ENTITLEMENTS = "AwearWatch Extension/AwearWatch Extension.entitlements";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 9P92PT9WKU;
@@ -531,7 +531,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = awear.cs407.Awear.watchkitapps.watchkitextensions;
+				PRODUCT_BUNDLE_IDENTIFIER = awear.cs407.Awear.watchkitapps.watchkitextension;
 				PRODUCT_NAME = "${TARGET_NAME}";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SDKROOT = watchos;
@@ -546,7 +546,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_COMPLICATION_NAME = Complication;
-				CODE_SIGN_ENTITLEMENTS = "AwearWatch Extension/AwearWatch Extension.entitlements";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 9P92PT9WKU;
@@ -556,7 +555,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = awear.cs407.Awear.watchkitapps.watchkitextensions;
+				PRODUCT_BUNDLE_IDENTIFIER = awear.cs407.Awear.watchkitapps.watchkitextension;
 				PRODUCT_NAME = "${TARGET_NAME}";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SDKROOT = watchos;
@@ -572,14 +571,22 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 9P92PT9WKU;
 				IBSC_MODULE = AwearWatch_Extension;
 				INFOPLIST_FILE = AwearWatch/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/../Frameworks",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = awear.cs407.Awear.watchkitapps;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = watchos;
 				SKIP_INSTALL = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = "Awear/AwearWatch-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = 4;
 				WATCHOS_DEPLOYMENT_TARGET = 5.0;
@@ -591,14 +598,21 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 9P92PT9WKU;
 				IBSC_MODULE = AwearWatch_Extension;
 				INFOPLIST_FILE = AwearWatch/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/../Frameworks",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = awear.cs407.Awear.watchkitapps;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = watchos;
 				SKIP_INSTALL = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = "Awear/AwearWatch-Bridging-Header.h";
 				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = 4;
 				WATCHOS_DEPLOYMENT_TARGET = 5.0;
@@ -725,7 +739,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_ENTITLEMENTS = Awear/Awear.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 9P92PT9WKU;
 				INFOPLIST_FILE = Awear/Info.plist;
@@ -744,7 +757,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_ENTITLEMENTS = Awear/Awear.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 9P92PT9WKU;
 				INFOPLIST_FILE = Awear/Info.plist;
