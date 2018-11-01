@@ -27,6 +27,11 @@ class SettingsVC : UIViewController{
         
         vibrationSlider.minimumValue = 1;
         vibrationSlider.maximumValue = 3;
+        
+        
+        vibrationSlider.value = Float (UserDefaults.standard.integer(forKey: "vibrationLevel"))
+        let vol = lroundf(vibrationSlider.value);
+        vibrationLvl.text = "\(vol)";
     }
     
     override func didReceiveMemoryWarning() {
@@ -41,5 +46,8 @@ class SettingsVC : UIViewController{
     @IBAction func onVibrateChange(_ sender: Any){
         let vol = lroundf(vibrationSlider.value);
         vibrationLvl.text = "\(vol)";
+        
+        UserDefaults.standard.set(vol, forKey: "vibrationLevel");
+        
     }
 }

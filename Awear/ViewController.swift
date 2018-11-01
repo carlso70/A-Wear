@@ -20,7 +20,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
     var recorder: AVAudioRecorder!
     var levelTimer = Timer()
     var LEVEL_THRESHOLD: Float = -10.0
-    var VIBRATION_LEVEL = 1
+    var VIBRATION_LEVEL = 1;
     var REENABLE_TIME = Date();
     let locationMgr = CLLocationManager()
     
@@ -38,7 +38,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
    // var pickerData: [String] = [String]();
     
     var i = 0;
-    var audioEnabled =  true;
+    var audioEnabled = UserDefaults.standard.bool(forKey: "audioEnabled");
     var disableTime = 0;
     var timedEnabled = true;
  
@@ -59,9 +59,24 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
             session?.delegate = self
             session?.activate()
         }
+        
+        
+        VIBRATION_LEVEL = UserDefaults.standard.integer(forKey: "vibrationLevel")
+        audioEnabled =  UserDefaults.standard.bool(forKey: "audioEnabled")
+        
+        let alert = UIAlertController(title: "TEST", message: "VVibration Level: \(VIBRATION_LEVEL)", preferredStyle: .alert)
+        
+        alert.addAction(UIAlertAction(title: "Yes", style: .default, handler: nil))
+        //alert.addAction(UIAlertAction(title: "No", style: .cancel, handler: nil))
+        
+        self.present(alert, animated: true)
+        
         setupNotifications()
         setupAudioRecording()
         getMyLocation()
+        
+        
+        print("VIBRATION LEVEL: \(VIBRATION_LEVEL)");
     }
     
     func tapped() {
@@ -104,15 +119,21 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
     }
 
     @IBAction func onSliderChange(_ sender: Any) {
+       
+        //alert.addAction(UIAlertAction(title: "No", style: .cancel, handler: nil))
+        
+        //self.present(alert, animated: true)
+        
         print(volumeSlider.value)
         volumeLabel.text = "\(volumeSlider.value)"
         LEVEL_THRESHOLD = volumeSlider.value
     }
 
     @IBAction func disableEnableAudio(_sender: UIButton){
-        
+        audioEnabled =  UserDefaults.standard.bool(forKey: "audioEnabled")
         if(audioEnabled){
-            audioEnabled = false;
+            UserDefaults.standard.set(false, forKey: "audioEnabled")
+            //audioEnabled = false;
             recorder.stop();
             calibrateButton.isUserInteractionEnabled = false;
             volumeSlider.isUserInteractionEnabled = false;
@@ -123,7 +144,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
                 to: Date())
             
             REENABLE_TIME = earlyDate ?? Date();
-            
+            UserDefaults.standard.set(earlyDate, forKey: "reenableTime")
             //audioEnabled = false;
             
             disableAudio.setTitle("Enable Listening", for: .normal);
@@ -172,8 +193,9 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
             return
         }
         else{
-            audioEnabled = true;
+            UserDefaults.standard.set(true, forKey: "audioEnabled")
             REENABLE_TIME = Date();
+            UserDefaults.standard.set(Date(), forKey: "reenableTime")
             setupAudioRecording();
             calibrateButton.isUserInteractionEnabled = true;
             volumeSlider.isUserInteractionEnabled = true;
@@ -272,7 +294,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
 //        recorder.stop()
         checkDisabled()
        
-        
+        audioEnabled =  UserDefaults.standard.bool(forKey: "audioEnabled")
         if(audioEnabled){
             
             /* Tell Watch that calibration is beggining */
@@ -330,6 +352,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
     @objc func levelTimerCallback() {
         
         checkDisabled()
+        audioEnabled =  UserDefaults.standard.bool(forKey: "audioEnabled")
         if(audioEnabled){
         recorder.updateMeters()
         
@@ -528,10 +551,8 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
     
     
     func checkDisabled(){
-        if(audioEnabled)
-        {
-            print("enabled")
-        }else{
+        audioEnabled =  UserDefaults.standard.bool(forKey: "audioEnabled")
+        if(!audioEnabled){
             recorder.stop()
             calibrateButton.isUserInteractionEnabled = false;
             volumeSlider.isUserInteractionEnabled = false;
@@ -539,7 +560,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
             if(Date() > REENABLE_TIME && timedEnabled){
                 print("HERE")
                 setupAudioRecording()
-                audioEnabled = true;
+                UserDefaults.standard.set(true, forKey: "audioEnabled")
                 calibrateButton.isUserInteractionEnabled = true;
                 volumeSlider.isUserInteractionEnabled = true;
                 disableAudio.setTitle("Disable Listening", for: .normal);
