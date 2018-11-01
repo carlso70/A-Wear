@@ -25,6 +25,8 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
     var VIBRATION_LEVEL = 1
     var REENABLE_TIME = Date();
     let locationMgr = CLLocationManager()
+    var RECORD_STATS = true;
+    var WATCH_CONNECT = true;
     
     @IBOutlet weak var currentVolume: UILabel!
     @IBOutlet weak var volumeLabel: UILabel!
@@ -37,8 +39,8 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
     @IBOutlet weak var vibrationSlider: UISlider!
     @IBOutlet weak var vibrateLvl: UILabel!
     
-    // var pickerData: [String] = [String]();
-    var audioEnabled =  true;
+    var i = 0;
+    var audioEnabled = UserDefaults.standard.bool(forKey: "audioEnabled");
     var disableTime = 0;
     var timedEnabled = true;
     
@@ -60,6 +62,8 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
         super.viewDidLoad()
         makePretty();
         // Do any additional setup after loading the view, typically from a nib.
+        
+        
         if WCSession.isSupported() {
             session = WCSession.default
             session?.delegate = self
@@ -67,10 +71,28 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
             
             /* Send levels to watch */
             sendLevelThresholdMessageToWatch(level: volumeSlider.value, maxValue: volumeSlider.maximumValue, minValue: volumeSlider.minimumValue )
+            
+            //UserDefaults.standard.set(true, forKey: "watchConnect")
+            UserDefaults.standard.set(true, forKey: "watchSupported")
+            
+        }else{
+            UserDefaults.standard.set(false, forKey: "watchSupported")
+            UserDefaults.standard.set(false, forKey: "watchConnect")
         }
+        
+        
+        WATCH_CONNECT = UserDefaults.standard.bool(forKey: "watchConnect")
+        RECORD_STATS = UserDefaults.standard.bool(forKey: "recordStats")
+        VIBRATION_LEVEL = UserDefaults.standard.integer(forKey: "vibrationLevel")
+        audioEnabled =  UserDefaults.standard.bool(forKey: "audioEnabled")
+        
+    
         setupNotifications()
         setupAudioRecording()
         getMyLocation()
+        
+        
+        print("VIBRATION LEVEL: \(VIBRATION_LEVEL)");
     }
     
     /* Handles incoming messages from the apple watch */
@@ -105,7 +127,9 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
     }
     
     @IBAction func disableEnableAudio(_sender: UIButton){
-        if audioEnabled {
+        audioEnabled =  UserDefaults.standard.bool(forKey: "audioEnabled")
+        if(audioEnabled){
+            UserDefaults.standard.set(false, forKey: "audioEnabled")
             audioEnabled = false;
             recorder.stop();
             calibrateButton.isUserInteractionEnabled = false;
@@ -117,7 +141,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
                 to: Date())
             
             REENABLE_TIME = earlyDate ?? Date();
-            
+            UserDefaults.standard.set(earlyDate, forKey: "reenableTime")
             //audioEnabled = false;
             disableAudio.setTitle("Enable Listening", for: .normal);
             
@@ -157,9 +181,13 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
             //renableTime.text = "Disabled until: \(disableTime)"
             
             disableApplication(time: disableTime)
-        } else {
+            return
+        }
+        else{
             audioEnabled = true;
+            UserDefaults.standard.set(true, forKey: "audioEnabled")
             REENABLE_TIME = Date();
+            UserDefaults.standard.set(Date(), forKey: "reenableTime")
             setupAudioRecording();
             calibrateButton.isUserInteractionEnabled = true;
             volumeSlider.isUserInteractionEnabled = true;
@@ -251,11 +279,11 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
         
         levelTimer = Timer.scheduledTimer(timeInterval: 0.001, target: self, selector: #selector(levelTimerCallback), userInfo: nil, repeats: true)
     }
-    
     func calibrate() {
         /* Tell watch calibration has begun */
         isCalibrating = true
         sendCalibrateMessageToWatch(isCalibrating: isCalibrating)
+        
         
         levelTimer.invalidate()
         
@@ -328,7 +356,9 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
     // Callback ever 0.02 seconds
     @objc func levelTimerCallback() {
         
+        
         checkDisabled()
+        
         if audioEnabled {
             recorder.updateMeters()
             
@@ -340,12 +370,13 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
             
             // do whatever you want with isLoud
             //print("IsLoud? : ",isLoud)
-            
+            // Need to stop timer and audio session before playing a vibration
             // Notifications
             if isLoud {
                 //            let generator = UINotificationFeedbackGenerator()
                 view.backgroundColor = UIColor.red
                 // Need to stop timer and audio session before playing a vibration
+              //  generator.impactOccurred()
                 
                 let diff = level - LEVEL_THRESHOLD
                 if(diff > 15) {
@@ -525,9 +556,8 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
     
     
     func checkDisabled(){
-        if audioEnabled {
-            print("enabled")
-        } else {
+        audioEnabled =  UserDefaults.standard.bool(forKey: "audioEnabled")
+        if(!audioEnabled){
             recorder.stop()
             calibrateButton.isUserInteractionEnabled = false;
             volumeSlider.isUserInteractionEnabled = false;
@@ -535,6 +565,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
             if(Date() > REENABLE_TIME && timedEnabled){
                 print("HERE")
                 setupAudioRecording()
+                UserDefaults.standard.set(true, forKey: "audioEnabled")
                 audioEnabled = true;
                 calibrateButton.isUserInteractionEnabled = true;
                 volumeSlider.isUserInteractionEnabled = true;

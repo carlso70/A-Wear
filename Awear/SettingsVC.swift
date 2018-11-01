@@ -21,12 +21,44 @@ class SettingsVC : UIViewController{
     @IBOutlet weak var vibrationSlider: UISlider!
     @IBOutlet weak var vibrationLvl: UILabel!
     
+    @IBOutlet weak var statsSwitch: UISwitch!
+    @IBOutlet weak var watchSwitch: UISwitch!
+    
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         vibrationSlider.minimumValue = 1;
         vibrationSlider.maximumValue = 3;
+        
+        
+        vibrationSlider.value = Float (UserDefaults.standard.integer(forKey: "vibrationLevel"))
+        let vol = lroundf(vibrationSlider.value);
+        vibrationLvl.text = "\(vol)";
+        
+        let wtch = UserDefaults.standard.bool(forKey: "watchConnect")
+        let allow = UserDefaults.standard.bool(forKey: "watchSupported")
+        
+        if(!allow){
+            watchSwitch.isUserInteractionEnabled = false;
+        }
+        
+        if(wtch && allow){
+            watchSwitch.setOn(true, animated: false)
+        }
+        else{
+            watchSwitch.setOn(false, animated: false)
+        }
+        
+        let stats = UserDefaults.standard.bool(forKey: "recordStats")
+        
+        if(stats){
+            statsSwitch.setOn(true, animated: false)
+        }
+        else{
+            statsSwitch.setOn(false, animated: false)
+        }
     }
     
     override func didReceiveMemoryWarning() {
@@ -41,5 +73,28 @@ class SettingsVC : UIViewController{
     @IBAction func onVibrateChange(_ sender: Any){
         let vol = lroundf(vibrationSlider.value);
         vibrationLvl.text = "\(vol)";
+        
+        UserDefaults.standard.set(vol, forKey: "vibrationLevel");
+        
+    }
+    
+    @IBAction func watchOnOff(_ sender: Any){
+        if(watchSwitch.isOn)
+        {
+            UserDefaults.standard.set(true, forKey: "watchConnect");
+        }
+        else{
+            UserDefaults.standard.set(false, forKey: "watchConnect");
+        }
+    }
+    
+    @IBAction func statsOnOff(_ sender: Any){
+        if(statsSwitch.isOn)
+        {
+            UserDefaults.standard.set(true, forKey: "recordStats");
+        }
+        else{
+            UserDefaults.standard.set(false, forKey: "recordStats");
+        }
     }
 }
