@@ -14,6 +14,7 @@ import AVFoundation
 import CoreAudio
 import CoreLocation
 import WatchConnectivity
+import HealthKit
 
 class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDelegate {
     
@@ -23,6 +24,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
     var VIBRATION_LEVEL = 1
     var REENABLE_TIME = Date();
     let locationMgr = CLLocationManager()
+    let healthStore = HKHealthStore()
     
     @IBOutlet weak var currentVolume: UILabel!
     @IBOutlet weak var volumeLabel: UILabel!
@@ -366,6 +368,10 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
                 }
                 
                 print("too loud")
+//                fetchLatestHeartRateSample { (result) in
+//                    print("\(result)")
+//
+//                }
             }else if(diff > 7) {
                 let generator = UINotificationFeedbackGenerator()
                 
@@ -530,7 +536,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
     func checkDisabled(){
         if(audioEnabled)
         {
-            print("enabled")
+            //print("enabled")
         }else{
             recorder.stop()
             calibrateButton.isUserInteractionEnabled = false;
@@ -549,5 +555,52 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
         }
         
         
+    }
+    
+    public func fetchLatestHeartRateSample(
+        completion: @escaping (_ samples: [HKQuantitySample]?) -> Void) {
+        
+        /// Create sample type for the heart rate
+        guard let sampleType = HKObjectType
+            .quantityType(forIdentifier: .heartRate) else {
+                completion(nil)
+                return
+        }
+        
+        /// Predicate for specifiying start and end dates for the query
+        let predicate = HKQuery
+            .predicateForSamples(
+                withStart: Date.distantPast,
+                end: Date(),
+                options: .strictEndDate)
+        
+        /// Set sorting by date.
+        let sortDescriptor = NSSortDescriptor(
+            key: HKSampleSortIdentifierStartDate,
+            ascending: false)
+        
+        /// Create the query
+        let query = HKSampleQuery(
+            sampleType: sampleType,
+            predicate: predicate,
+            limit: 1,
+            sortDescriptors: [sortDescriptor]) { (_, results, error) in
+                
+                guard error == nil else {
+                    print("Error: \(error!.localizedDescription)")
+                    return
+                }
+                completion(results as? [HKQuantitySample])
+        }
+        
+        /// Execute the query in the health store
+        healthStore.execute(query)
+    }
+    
+    @IBAction func getHeartRate(_ sender: Any) {
+        fetchLatestHeartRateSample { (result) in
+            print("\(result)\n")
+
+        }
     }
 }
