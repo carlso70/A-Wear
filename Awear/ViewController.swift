@@ -347,7 +347,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
             // Notifications
             if isLoud {
                 //            let generator = UINotificationFeedbackGenerator()
-                view.backgroundColor = UIColor.red
+//                view.backgroundColor = UIColor.red
                 // Need to stop timer and audio session before playing a vibration
               //  generator.impactOccurred()
                 
