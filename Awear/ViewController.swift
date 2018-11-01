@@ -39,7 +39,6 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
     @IBOutlet weak var vibrationSlider: UISlider!
     @IBOutlet weak var vibrateLvl: UILabel!
     
-    var i = 0;
     var audioEnabled = UserDefaults.standard.bool(forKey: "audioEnabled");
     var disableTime = 0;
     var timedEnabled = true;
@@ -62,15 +61,14 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
         super.viewDidLoad()
         makePretty();
         // Do any additional setup after loading the view, typically from a nib.
-        
-        
+
         if WCSession.isSupported() {
             session = WCSession.default
             session?.delegate = self
             session?.activate()
             
             /* Send levels to watch */
-            sendLevelThresholdMessageToWatch(level: volumeSlider.value, maxValue: volumeSlider.maximumValue, minValue: volumeSlider.minimumValue )
+            ConnectivityUtils.sendLevelThresholdMessageToWatch(session: session, level: volumeSlider.value, maxValue: volumeSlider.maximumValue, minValue: volumeSlider.minimumValue )
             
             //UserDefaults.standard.set(true, forKey: "watchConnect")
             UserDefaults.standard.set(true, forKey: "watchSupported")
@@ -105,7 +103,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
         /* Change level threshold */
         if let level = message["LevelThreshold"] as? Float {
             volumeSlider.value = level
-            changeLevelThreshold(level: volumeSlider.value)
+            self.changeLevelThreshold(level: level)
         }
         
         /* Disable Audio for time */
@@ -123,7 +121,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
     
     @IBAction func onSliderChange(_ sender: Any) {
         changeLevelThreshold(level: volumeSlider.value)
-        sendLevelThresholdMessageToWatch(level: volumeSlider.value, maxValue: volumeSlider.maximumValue, minValue: volumeSlider.minimumValue)
+        ConnectivityUtils.sendLevelThresholdMessageToWatch(session: session, level: volumeSlider.value, maxValue: volumeSlider.maximumValue, minValue: volumeSlider.minimumValue)
     }
     
     @IBAction func disableEnableAudio(_sender: UIButton){
@@ -182,8 +180,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
             
             disableApplication(time: disableTime)
             return
-        }
-        else{
+        } else {
             audioEnabled = true;
             UserDefaults.standard.set(true, forKey: "audioEnabled")
             REENABLE_TIME = Date();
@@ -248,7 +245,6 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
     // Initializes the audio recording instance
     func setupAudioRecording() {
         // Setup recording
-        view.backgroundColor = UIColor.cyan
         let documents = URL(fileURLWithPath: NSSearchPathForDirectoriesInDomains(FileManager.SearchPathDirectory.documentDirectory, FileManager.SearchPathDomainMask.userDomainMask, true)[0])
         let url = documents.appendingPathComponent("record.caf")
         
@@ -279,12 +275,12 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
         
         levelTimer = Timer.scheduledTimer(timeInterval: 0.001, target: self, selector: #selector(levelTimerCallback), userInfo: nil, repeats: true)
     }
+    
     func calibrate() {
         /* Tell watch calibration has begun */
         isCalibrating = true
-        sendCalibrateMessageToWatch(isCalibrating: isCalibrating)
-        
-        
+        ConnectivityUtils.sendCalibrateMessageToWatch(session:session, isCalibrating: isCalibrating)
+
         levelTimer.invalidate()
         
         recorder.updateMeters()
@@ -315,32 +311,11 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
         
         /* Tell watch calibration has ended */
         isCalibrating = false
-        sendCalibrateMessageToWatch(isCalibrating: isCalibrating)
-        sendLevelThresholdMessageToWatch(level: volumeSlider.value, maxValue: volumeSlider.maximumValue, minValue: volumeSlider.minimumValue)
+        ConnectivityUtils.sendCalibrateMessageToWatch(session: session, isCalibrating: isCalibrating)
+        ConnectivityUtils.sendLevelThresholdMessageToWatch(session: session, level: volumeSlider.value, maxValue: volumeSlider.maximumValue, minValue: volumeSlider.minimumValue)
         
         setupAudioRecording()
     }
-    
-    
-    func sendCalibrateMessageToWatch(isCalibrating : Bool) {
-        if let validSession = session {
-            validSession.sendMessage(["Calibrating": isCalibrating], replyHandler: nil, errorHandler: nil)
-        }
-    }
-    
-    func sendLevelThresholdMessageToWatch(level: Float, maxValue: Float, minValue: Float) {
-        if let validSession = session {
-            //            validSession.sendMessage(["LevelThreshold": ["level":level, "maxValue": maxValue, "minValue": minValue]], replyHandler: nil, errorHandler: nil)
-            validSession.sendMessage(["LevelThreshold":level], replyHandler: nil, errorHandler: nil)
-        }
-    }
-    
-    func sendVolumeLevelMessageToWatch(level: Float) {
-        if let validSession = session {
-            validSession.sendMessage(["VoiceLevel": level], replyHandler: nil, errorHandler: nil)
-        }
-    }
-    
     
     /* Displays a simple error message dialog for the user */
     func displayErrorMessage(title: String, message: String) {
@@ -355,8 +330,6 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
     
     // Callback ever 0.02 seconds
     @objc func levelTimerCallback() {
-        
-        
         checkDisabled()
         
         if audioEnabled {
@@ -365,9 +338,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
             let level = recorder.averagePower(forChannel: 0)
             let isLoud = level > LEVEL_THRESHOLD
             currentVolume.text = "\(level)"
-            /* Tell Apple watch the volume level */
-            sendVolumeLevelMessageToWatch(level: level)
-            
+
             // do whatever you want with isLoud
             //print("IsLoud? : ",isLoud)
             // Need to stop timer and audio session before playing a vibration
@@ -539,7 +510,6 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
         }
     }
     
-    
     // Sends a test notification 10 seconds after pressing the button, notification will appear if app is in background
     @IBAction func sendNotification(_ sender: Any) {
         sendNotification()
@@ -574,5 +544,4 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
             }
         }
     }
-    
 }

@@ -14,7 +14,7 @@ import UIKit
 class StatisticManager: NSObject {
 
     /* Saves a new entity into the DB */
-    static func save(date: Date, threshold: Float, voiceLevel: Float) {
+    static func save(date: Date, threshold: Float, voiceLevel: Float, heartRate: Float) {
 
         let appDelegate = UIApplication.shared.delegate as! AppDelegate
         let context = appDelegate.persistentContainer.viewContext
@@ -25,6 +25,7 @@ class StatisticManager: NSObject {
         newStat.setValue(date, forKey: "date")
         newStat.setValue(threshold, forKey: "threshold")
         newStat.setValue(voiceLevel, forKey: "voiceLevel")
+        newStat.setValue(heartRate, forKey: "heartRate")
         
         do {
             try context.save()

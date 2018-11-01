@@ -24,8 +24,7 @@ class SettingsVC : UIViewController{
     @IBOutlet weak var statsSwitch: UISwitch!
     @IBOutlet weak var watchSwitch: UISwitch!
     
-    
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
         
