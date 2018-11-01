@@ -15,12 +15,18 @@ import AVFoundation
 import CoreAudio
 import CoreLocation
 
-internal class SettingsVC : UIViewController{
+class SettingsVC : UIViewController{
     
+    @IBOutlet weak var cancelBtn: UIButton!
     @IBOutlet weak var vibrationSlider: UISlider!
+    @IBOutlet weak var vibrationLvl: UILabel!
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        vibrationSlider.minimumValue = 1;
+        vibrationSlider.maximumValue = 3;
     }
     
     override func didReceiveMemoryWarning() {
@@ -28,4 +34,12 @@ internal class SettingsVC : UIViewController{
         // Dispose of any resources that can be recreated.
     }
     
+    @IBAction func cancel(_ sender: UIButton){
+      dismiss(animated: true, completion: nil)
+    }
+    
+    @IBAction func onVibrateChange(_ sender: Any){
+        let vol = lroundf(vibrationSlider.value);
+        vibrationLvl.text = "\(vol)";
+    }
 }
