@@ -20,7 +20,10 @@ class SettingsVC : UIViewController{
     @IBOutlet weak var cancelBtn: UIButton!
     @IBOutlet weak var vibrationSlider: UISlider!
     @IBOutlet weak var vibrationLvl: UILabel!
+    @IBOutlet weak var healthAppSwitch: UISwitch!
     
+    @IBOutlet weak var outdoorSwitch: UISwitch!
+    @IBOutlet weak var resetStatsBtn: UIButton!
     @IBOutlet weak var statsSwitch: UISwitch!
     @IBOutlet weak var watchSwitch: UISwitch!
     
@@ -38,6 +41,23 @@ class SettingsVC : UIViewController{
         
         let wtch = UserDefaults.standard.bool(forKey: "watchConnect")
         let allow = UserDefaults.standard.bool(forKey: "watchSupported")
+        let health = UserDefaults.standard.bool(forKey: "healthEnable")
+        let outdoor = UserDefaults.standard.bool(forKey: "outdoorEnable")
+        
+        if(outdoor){
+            outdoorSwitch.setOn(true, animated: false)
+        }
+        else{
+            outdoorSwitch.setOn(false, animated: false)
+        }
+            
+        
+        if(health){
+            healthAppSwitch.setOn(true, animated: false)
+        }else{
+            healthAppSwitch.setOn(false, animated: false)
+        }
+        
         
         if(!allow){
             watchSwitch.isUserInteractionEnabled = false;
@@ -50,7 +70,9 @@ class SettingsVC : UIViewController{
             watchSwitch.setOn(false, animated: false)
         }
         
+        
         let stats = UserDefaults.standard.bool(forKey: "recordStats")
+        
         
         if(stats){
             statsSwitch.setOn(true, animated: false)
@@ -96,4 +118,65 @@ class SettingsVC : UIViewController{
             UserDefaults.standard.set(false, forKey: "recordStats");
         }
     }
+    
+    @IBAction func resetStatsClick(_ sender: Any) {
+        let alert = UIAlertController(title: "Reset Statistics", message: "Are you sure you want to reset your statistics? This can not be undone.", preferredStyle: .alert)
+        
+        let yesAction = UIAlertAction(title: "Yes", style: .default, handler: { (action) in
+            print("reset stats")
+            return
+        })
+        
+        let noAction = UIAlertAction(title: "No", style: .default, handler: { (action) in
+            print("do not reset stats")
+            return
+        })
+        
+        alert.addAction(yesAction)
+        alert.addAction(noAction)
+        
+        present(alert, animated: true, completion: nil)
+    }
+    
+    @IBAction func healthAppEnabling(_ sender: Any) {
+        if(healthAppSwitch.isOn){
+             UserDefaults.standard.set(true, forKey: "healthEnable");
+        }else{
+            
+            
+            UserDefaults.standard.set(false, forKey: "healthEnable");
+            
+            let alert = UIAlertController(title: "Health Application", message: "You will not be able to use the health application functionality now.", preferredStyle: .alert)
+            
+            let ok = UIAlertAction(title: "Okay", style: .default, handler: nil)
+            
+            alert.addAction(ok)
+            
+            present(alert, animated: true, completion: nil)
+        }
+        
+    }
+    
+    
+    @IBAction func outdoorEnable(_ sender: Any) {
+        if(outdoorSwitch.isOn){
+            UserDefaults.standard.set(true, forKey: "outdoorEnable");
+            
+            let alert = UIAlertController(title: "Outdoor Mode", message: "Outdoor mode is now active. You will be able to set a higher threshold and will also recieve a ping as well as a vibration notification.", preferredStyle: .alert)
+            
+            let ok = UIAlertAction(title: "Okay", style: .default, handler: nil)
+            
+            alert.addAction(ok)
+            
+            present(alert, animated: true, completion: nil)
+        }else{
+            
+            
+            UserDefaults.standard.set(false, forKey: "outdoorEnable");
+            
+          
+        }
+    }
+    
+    
 }

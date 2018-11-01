@@ -27,6 +27,8 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
     let locationMgr = CLLocationManager()
     var RECORD_STATS = true;
     var WATCH_CONNECT = true;
+    var HEALTH_APP = true;
+    var OUTDOOR_MODE = true;
     
     @IBOutlet weak var currentVolume: UILabel!
     @IBOutlet weak var volumeLabel: UILabel!
@@ -36,8 +38,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
     
     @IBOutlet weak var renableTime: UILabel!
     @IBOutlet weak var disableAudio: UIButton!
-    @IBOutlet weak var vibrationSlider: UISlider!
-    @IBOutlet weak var vibrateLvl: UILabel!
+
     
     var audioEnabled = UserDefaults.standard.bool(forKey: "audioEnabled");
     var disableTime = 0;
@@ -83,7 +84,8 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
         RECORD_STATS = UserDefaults.standard.bool(forKey: "recordStats")
         VIBRATION_LEVEL = UserDefaults.standard.integer(forKey: "vibrationLevel")
         audioEnabled =  UserDefaults.standard.bool(forKey: "audioEnabled")
-        
+        OUTDOOR_MODE = UserDefaults.standard.bool(forKey: "outdoorEnable")
+        HEALTH_APP = UserDefaults.standard.bool(forKey: "healthEnable")
     
         setupNotifications()
         setupAudioRecording()
