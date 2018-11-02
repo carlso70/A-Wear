@@ -26,6 +26,8 @@ class SettingsVC : UIViewController{
     @IBOutlet weak var statsSwitch: UISwitch!
     @IBOutlet weak var watchSwitch: UISwitch!
     @IBOutlet weak var saveBtn: UIButton!
+    @IBOutlet weak var outdoorLbl: UILabel!
+    @IBOutlet weak var outdoorMnlSwitch: UISwitch!
     
     var changed = false;
     
@@ -42,13 +44,28 @@ class SettingsVC : UIViewController{
         
         let wtch = UserDefaults.standard.bool(forKey: "watchConnect")
         let allow = UserDefaults.standard.bool(forKey: "watchSupported")
-        let outdoor = UserDefaults.standard.bool(forKey: "outdoorEnable")
+        let outdoor = UserDefaults.standard.bool(forKey: "outdoorAutoEnable")
+        let manout = UserDefaults.standard.bool(forKey: "outdoorManEnable")
         
+        
+        // auto switch
         if(outdoor){
             outdoorSwitch.setOn(true, animated: false)
+            outdoorLbl.isHidden = true;
+            outdoorMnlSwitch.isHidden = true;
+            
         }
         else{
             outdoorSwitch.setOn(false, animated: false)
+            outdoorLbl.isHidden = false;
+            outdoorMnlSwitch.isHidden = false;
+            
+            if(manout){
+               outdoorMnlSwitch.setOn(true, animated: false)
+            }else{
+                outdoorMnlSwitch.setOn(false, animated: false)
+            }
+            
         }
         
         
@@ -145,6 +162,18 @@ class SettingsVC : UIViewController{
         present(alert, animated: true, completion: nil)
     }
     
+    
+    @IBAction func autoOutdoorChange(_ sender: Any) {
+        changed = true;
+        if(outdoorSwitch.isOn){
+            outdoorLbl.isHidden = true;
+            outdoorMnlSwitch.isHidden = true;
+        }else{
+            outdoorLbl.isHidden = false;
+            outdoorMnlSwitch.isHidden = false;
+        }
+    }
+    
     @IBAction func outdoorEnable(_ sender: Any) {
         changed = true;
     }
@@ -184,7 +213,7 @@ class SettingsVC : UIViewController{
         UserDefaults.standard.set(vol, forKey: "vibrationLevel");
         
         if(outdoorSwitch.isOn){
-            UserDefaults.standard.set(true, forKey: "outdoorEnable");
+            UserDefaults.standard.set(true, forKey: "outdoorAutoEnable");
             
             //let alert = UIAlertController(title: "Outdoor Mode", message: "Outdoor mode is now active. You will be able to set a higher threshold and will also recieve a ping as well as a vibration notification.", preferredStyle: .alert)
             
@@ -195,7 +224,13 @@ class SettingsVC : UIViewController{
             //present(alert, animated: true, completion: nil)
         }else{
     
-            UserDefaults.standard.set(false, forKey: "outdoorEnable");
+            UserDefaults.standard.set(false, forKey: "outdoorAutoEnable");
+            
+            if(outdoorMnlSwitch.isOn){
+                UserDefaults.standard.set(true, forKey: "outdoorManEnable");
+            }else{
+                UserDefaults.standard.set(false, forKey: "outdoorManEnable");
+            }
             
             
         }
