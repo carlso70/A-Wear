@@ -424,10 +424,10 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
         }
         
         RECORD_STATS = UserDefaults.standard.bool(forKey: "recordStats")
-        
+        getHeartRate()
         recorder.updateMeters()
         
-        print(dBFS_convertTo_dB(dBFSValue: recorder.averagePower(forChannel: 0)))
+        //print(dBFS_convertTo_dB(dBFSValue: recorder.averagePower(forChannel: 0)))
         
         let level = recorder.averagePower(forChannel: 0) + 160
         let isLoud = level > LEVEL_THRESHOLD
@@ -779,7 +779,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
             let y = x?.description
 
             self.heartRateDisplay.text = y
-//            print("\(String(describing: result?.last?.quantity))\n")
+            print("\(String(describing: result?.last?.quantity))\n")
         }
     }
 
