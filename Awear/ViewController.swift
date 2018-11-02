@@ -26,14 +26,12 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
     var VIBRATION_LEVEL = 1
     var REENABLE_TIME = Date();
     let locationMgr = CLLocationManager()
-<<<<<<< HEAD
     let healthStore = HKHealthStore()
-=======
+
     var RECORD_STATS = true;
     var WATCH_CONNECT = true;
     var HEALTH_APP = true;
     var OUTDOOR_MODE = true;
->>>>>>> master
     
     @IBOutlet weak var currentVolume: UILabel!
     @IBOutlet weak var volumeLabel: UILabel!
@@ -367,7 +365,6 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
         if audioEnabled {
             recorder.updateMeters()
             
-<<<<<<< HEAD
             let diff = level - LEVEL_THRESHOLD
             if(diff > 15) {
                 let generator = UINotificationFeedbackGenerator()
@@ -413,7 +410,6 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
                 print("loud")
             }else {
                 let generator = UIImpactFeedbackGenerator(style: .light)
-=======
             let level = recorder.averagePower(forChannel: 0)
             let isLoud = level > LEVEL_THRESHOLD
             currentVolume.text = "\(level)"
@@ -426,7 +422,6 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
                 //            let generator = UINotificationFeedbackGenerator()
 //                view.backgroundColor = UIColor.red
                 // Need to stop timer and audio session before playing a vibration
->>>>>>> master
               //  generator.impactOccurred()
                 
                 let diff = level - LEVEL_THRESHOLD
@@ -609,15 +604,8 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
     
     
     func checkDisabled(){
-<<<<<<< HEAD
-        if(audioEnabled)
-        {
-            //print("enabled")
-        }else{
-=======
         audioEnabled =  UserDefaults.standard.bool(forKey: "audioEnabled")
         if(!audioEnabled){
->>>>>>> master
             recorder.stop()
             calibrateButton.isUserInteractionEnabled = false;
             volumeSlider.isUserInteractionEnabled = false;
@@ -635,7 +623,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
         }
     }
     
-    public func fetchLatestHeartRateSample(
+    func fetchLatestHeartRateSample(
         completion: @escaping (_ samples: [HKQuantitySample]?) -> Void) {
         
         /// Create sample type for the heart rate
@@ -681,4 +669,5 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
 
         }
     }
+}
 }
