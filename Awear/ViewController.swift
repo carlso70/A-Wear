@@ -306,7 +306,14 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
         
         let avg: Float = sum / ct
         volumeSlider.minimumValue = avg
-        volumeSlider.maximumValue = avg + 50
+        
+        OUTDOOR_MODE = UserDefaults.standard.bool(forKey: "outdoorEnable")
+        if(OUTDOOR_MODE){
+            volumeSlider.maximumValue = avg + 75
+        }else {
+            volumeSlider.maximumValue = avg + 50
+        }
+        
         volumeSlider.value = avg + 25
         LEVEL_THRESHOLD = volumeSlider.value
         volumeLabel.text = "\(volumeSlider.value)"
@@ -368,6 +375,11 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
                         generator.notificationOccurred(.error)
                     default:
                         generator.notificationOccurred(.error)
+                    }
+                    
+                    OUTDOOR_MODE = UserDefaults.standard.bool(forKey: "outdoorEnable")
+                    if(OUTDOOR_MODE){
+                        AudioServicesPlaySystemSound (1016)
                     }
                     
                     print("too loud")
