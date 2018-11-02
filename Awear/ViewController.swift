@@ -27,7 +27,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
     var REENABLE_TIME = Date();
     let locationMgr = CLLocationManager()
     let healthStore = HKHealthStore()
-
+    
     var RECORD_STATS = true;
     var WATCH_CONNECT = true;
     var HEALTH_APP = true;
@@ -41,7 +41,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
     
     @IBOutlet weak var renableTime: UILabel!
     @IBOutlet weak var disableAudio: UIButton!
-
+    
     
     var audioEnabled = UserDefaults.standard.bool(forKey: "audioEnabled");
     var disableTime = 0;
@@ -65,7 +65,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
         super.viewDidLoad()
         makePretty();
         // Do any additional setup after loading the view, typically from a nib.
-
+        
         if WCSession.isSupported() {
             session = WCSession.default
             session?.delegate = self
@@ -77,7 +77,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
             //UserDefaults.standard.set(true, forKey: "watchConnect")
             UserDefaults.standard.set(true, forKey: "watchSupported")
             
-        }else{
+        } else {
             UserDefaults.standard.set(false, forKey: "watchSupported")
             UserDefaults.standard.set(false, forKey: "watchConnect")
         }
@@ -89,7 +89,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
         audioEnabled =  UserDefaults.standard.bool(forKey: "audioEnabled")
         OUTDOOR_MODE = UserDefaults.standard.bool(forKey: "outdoorEnable")
         HEALTH_APP = UserDefaults.standard.bool(forKey: "healthEnable")
-    
+        
         setupNotifications()
         setupAudioRecording()
         getMyLocation()
@@ -116,7 +116,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
             self.disableTime = downTime
             self.disableApplication(time: downTime)
         }
-    
+        
         if let enable = message["Enable"] as? Bool {
             if enable {
                 audioEnabled = true;
@@ -310,7 +310,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
         /* Tell watch calibration has begun */
         isCalibrating = true
         ConnectivityUtils.sendCalibrateMessageToWatch(session:session, isCalibrating: isCalibrating)
-
+        
         levelTimer.invalidate()
         
         recorder.updateMeters()
@@ -362,8 +362,21 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
     @objc func levelTimerCallback() {
         checkDisabled()
         
-        if audioEnabled {
-            recorder.updateMeters()
+        recorder.updateMeters()
+        
+        let level = recorder.averagePower(forChannel: 0)
+        let isLoud = level > LEVEL_THRESHOLD
+        currentVolume.text = "\(level)"
+        
+        // do whatever you want with isLoud
+        //print("IsLoud? : ",isLoud)
+        // Need to stop timer and audio session before playing a vibration
+        // Notifications
+        if isLoud {
+            //            let generator = UINotificationFeedbackGenerator()
+            //                view.backgroundColor = UIColor.red
+            // Need to stop timer and audio session before playing a vibration
+            //  generator.impactOccurred()
             
             let diff = level - LEVEL_THRESHOLD
             if(diff > 15) {
@@ -383,13 +396,10 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
                 default:
                     generator.notificationOccurred(.error)
                 }
-                
+                /* Save event to db */
+                StatisticManager.save(date: Date.init(), threshold: LEVEL_THRESHOLD, voiceLevel: level, heartRate: 85)
                 print("too loud")
-//                fetchLatestHeartRateSample { (result) in
-//                    print("\(result)")
-//
-//                }
-            }else if(diff > 7) {
+            } else if diff > 7 {
                 let generator = UINotificationFeedbackGenerator()
                 
                 switch VIBRATION_LEVEL {
@@ -407,92 +417,39 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
                 }
                 
                 //generator.notificationOccurred(.success)
+                /* Save event to db */
+                StatisticManager.save(date: Date.init(), threshold: LEVEL_THRESHOLD, voiceLevel: level, heartRate: 85)
                 print("loud")
-            }else {
+            } else {
                 let generator = UIImpactFeedbackGenerator(style: .light)
-            let level = recorder.averagePower(forChannel: 0)
-            let isLoud = level > LEVEL_THRESHOLD
-            currentVolume.text = "\(level)"
-
-            // do whatever you want with isLoud
-            //print("IsLoud? : ",isLoud)
-            // Need to stop timer and audio session before playing a vibration
-            // Notifications
-            if isLoud {
-                //            let generator = UINotificationFeedbackGenerator()
-//                view.backgroundColor = UIColor.red
-                // Need to stop timer and audio session before playing a vibration
-              //  generator.impactOccurred()
+                //  generator.impactOccurred()
                 
-                let diff = level - LEVEL_THRESHOLD
-                if(diff > 15) {
-                    let generator = UINotificationFeedbackGenerator()
-                    //generator.notificationOccurred(.error)
-                    
-                    switch VIBRATION_LEVEL {
-                    case 1:
-                        generator.notificationOccurred(.error)
-                    case 2:
-                        generator.notificationOccurred(.error)
-                        generator.notificationOccurred(.error)
-                    case 3:
-                        generator.notificationOccurred(.error)
-                        generator.notificationOccurred(.error)
-                        generator.notificationOccurred(.error)
-                    default:
-                        generator.notificationOccurred(.error)
-                    }
-                    
-                    print("too loud")
-                } else if diff > 7 {
-                    let generator = UINotificationFeedbackGenerator()
-                    
-                    switch VIBRATION_LEVEL {
-                    case 1:
-                        generator.notificationOccurred(.success)
-                    case 2:
-                        generator.notificationOccurred(.success)
-                        generator.notificationOccurred(.success)
-                    case 3:
-                        generator.notificationOccurred(.success)
-                        generator.notificationOccurred(.success)
-                        generator.notificationOccurred(.success)
-                    default:
-                        generator.notificationOccurred(.success)
-                    }
-                    
-                    //generator.notificationOccurred(.success)
-                    print("loud")
-                } else {
-                    let generator = UIImpactFeedbackGenerator(style: .light)
-                    //  generator.impactOccurred()
-                    
-                    switch VIBRATION_LEVEL {
-                    case 1:
-                        generator.impactOccurred()
-                    case 2:
-                        generator.impactOccurred()
-                        generator.impactOccurred()
-                    case 3:
-                        generator.impactOccurred()
-                        generator.impactOccurred()
-                        generator.impactOccurred()
-                    default:
-                        generator.impactOccurred()
-                    }
-                    
-                    print("not that loud")
+                switch VIBRATION_LEVEL {
+                case 1:
+                    generator.impactOccurred()
+                case 2:
+                    generator.impactOccurred()
+                    generator.impactOccurred()
+                case 3:
+                    generator.impactOccurred()
+                    generator.impactOccurred()
+                    generator.impactOccurred()
+                default:
+                    generator.impactOccurred()
                 }
-                
-                recorder.stop()
-                levelTimer.invalidate()
-                // Vibrate, and send notification
-                AudioServicesPlaySystemSound(1521)
-                //            AudioServicesPlayAlertSound(SystemSoundID(kSystemSoundID_Vibrate))
-                sendNotification()
-                // Restart audio recording
-                setupAudioRecording()
+                /* Save event to db */
+                StatisticManager.save(date: Date.init(), threshold: LEVEL_THRESHOLD, voiceLevel: level, heartRate: 85)
+                print("not that loud")
             }
+            
+            recorder.stop()
+            levelTimer.invalidate()
+            // Vibrate, and send notification
+            AudioServicesPlaySystemSound(1521)
+            //            AudioServicesPlayAlertSound(SystemSoundID(kSystemSoundID_Vibrate))
+            sendNotification()
+            // Restart audio recording
+            setupAudioRecording()
         }
     }
     
@@ -669,5 +626,4 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
 
         }
     }
-}
 }
