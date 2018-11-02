@@ -12,16 +12,16 @@ import UIKit
 
 /* Manages the Entity Statistic */
 class StatisticManager: NSObject {
-
+    
     /* Saves a new entity into the DB */
     static func save(date: Date, threshold: Float, voiceLevel: Float, heartRate: Double) {
-
+        
         let appDelegate = UIApplication.shared.delegate as! AppDelegate
         let context = appDelegate.persistentContainer.viewContext
         
         let entity = NSEntityDescription.entity(forEntityName: "Statistic", in: context)
         let newStat = NSManagedObject(entity: entity!, insertInto: context)
-
+        
         newStat.setValue(date, forKey: "date")
         newStat.setValue(threshold, forKey: "threshold")
         newStat.setValue(voiceLevel, forKey: "voiceLevel")
@@ -45,9 +45,9 @@ class StatisticManager: NSObject {
         
         do {
             let result = try context.fetch(request)
-//            for data in result as! [NSManagedObject] {
-//                print(data.value(forKey: "date") as! Date)
-//            }
+            //            for data in result as! [NSManagedObject] {
+            //                print(data.value(forKey: "date") as! Date)
+            //            }
             return result as! [NSManagedObject]
         } catch {
             print("Failed")
@@ -59,7 +59,7 @@ class StatisticManager: NSObject {
     static func deleteAll() -> Bool {
         let appDelegate = UIApplication.shared.delegate as! AppDelegate
         let context = appDelegate.persistentContainer.viewContext
-
+        
         let fetch = NSFetchRequest<NSFetchRequestResult>(entityName: "Statistic")
         let request = NSBatchDeleteRequest(fetchRequest: fetch)
         
@@ -71,5 +71,16 @@ class StatisticManager: NSObject {
             print("FAILED TO DELETE ALL: \(error)")
             return false
         }
+    }
+    
+    /* Returns a series of data where x value is heart rate, and y value is voice level */
+    static func heartRateVsNoiseLevel() -> [(Double, Double)] {
+        var table: [(Double, Double)] = []
+        let result = fetchAll()
+        for data in result {
+            print(data.value(forKey: "date") as! Date)
+            table.append((data.value(forKey: "voiceLevel") as! Double, data.value(forKey: "heartRate") as! Double))
+        }
+        return table
     }
 }
