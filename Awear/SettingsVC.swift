@@ -26,8 +26,10 @@ class SettingsVC : UIViewController{
     @IBOutlet weak var resetStatsBtn: UIButton!
     @IBOutlet weak var statsSwitch: UISwitch!
     @IBOutlet weak var watchSwitch: UISwitch!
+    @IBOutlet weak var saveBtn: UIButton!
     
-
+    var changed = false;
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -88,35 +90,48 @@ class SettingsVC : UIViewController{
     }
     
     @IBAction func cancel(_ sender: UIButton){
-      dismiss(animated: true, completion: nil)
+        
+        if(changed){
+        let alert = UIAlertController(title: "Are you sure?", message: "You have unsaved settings you will lose if you exit now.", preferredStyle: .alert)
+        
+        let yesAction = UIAlertAction(title: "Yes", style: .default, handler: { (action) in
+            self.dismiss(animated: true, completion: nil)
+            print("dont save stats")
+            return
+        })
+        
+        let noAction = UIAlertAction(title: "No", style: .default, handler: { (action) in
+            
+            return
+        })
+        
+        alert.addAction(yesAction)
+        alert.addAction(noAction)
+        
+        present(alert, animated: true, completion: nil)
+        }
+        else{
+            self.dismiss(animated: true, completion: nil)
+        }
+      
     }
     
     @IBAction func onVibrateChange(_ sender: Any){
         let vol = lroundf(vibrationSlider.value);
         vibrationLvl.text = "\(vol)";
         
-        UserDefaults.standard.set(vol, forKey: "vibrationLevel");
+        //UserDefaults.standard.set(vol, forKey: "vibrationLevel");
+        
+        changed = true;
         
     }
     
     @IBAction func watchOnOff(_ sender: Any){
-        if(watchSwitch.isOn)
-        {
-            UserDefaults.standard.set(true, forKey: "watchConnect");
-        }
-        else{
-            UserDefaults.standard.set(false, forKey: "watchConnect");
-        }
+      changed = true;
     }
     
     @IBAction func statsOnOff(_ sender: Any){
-        if(statsSwitch.isOn)
-        {
-            UserDefaults.standard.set(true, forKey: "recordStats");
-        }
-        else{
-            UserDefaults.standard.set(false, forKey: "recordStats");
-        }
+      changed = true;
     }
     
     @IBAction func resetStatsClick(_ sender: Any) {
@@ -139,12 +154,12 @@ class SettingsVC : UIViewController{
     }
     
     @IBAction func healthAppEnabling(_ sender: Any) {
-        if(healthAppSwitch.isOn){
-             UserDefaults.standard.set(true, forKey: "healthEnable");
-        }else{
+        if(!healthAppSwitch.isOn){
+            //UserDefaults.standard.set(true, forKey: "healthEnable");
+        
             
             
-            UserDefaults.standard.set(false, forKey: "healthEnable");
+            //UserDefaults.standard.set(false, forKey: "healthEnable");
             
             let alert = UIAlertController(title: "Health Application", message: "You will not be able to use the health application functionality now.", preferredStyle: .alert)
             
@@ -154,28 +169,74 @@ class SettingsVC : UIViewController{
             
             present(alert, animated: true, completion: nil)
         }
-        
+       changed = true;
     }
     
     
     @IBAction func outdoorEnable(_ sender: Any) {
+        changed = true;
+    }
+    
+    
+    @IBAction func save(_ sender: Any) {
+        let alert = UIAlertController(title: "Saved!", message: "All setting changes have been saved.", preferredStyle: .alert)
+        
+        let ok = UIAlertAction(title: "Okay", style: .default, handler: nil)
+        
+        alert.addAction(ok)
+        
+        present(alert, animated: true, completion: nil)
+        
+        changed = false;
+        if(healthAppSwitch.isOn){
+            UserDefaults.standard.set(true, forKey: "healthEnable");
+        }else{
+            
+            
+            UserDefaults.standard.set(false, forKey: "healthEnable");
+            
+            
+        }
+        
+        if(statsSwitch.isOn)
+        {
+            UserDefaults.standard.set(true, forKey: "recordStats");
+        }
+        else{
+            UserDefaults.standard.set(false, forKey: "recordStats");
+        }
+        
+        if(watchSwitch.isOn)
+        {
+            UserDefaults.standard.set(true, forKey: "watchConnect");
+        }
+        else{
+            UserDefaults.standard.set(false, forKey: "watchConnect");
+        }
+        
+        let vol = lroundf(vibrationSlider.value);
+        vibrationLvl.text = "\(vol)";
+        
+        UserDefaults.standard.set(vol, forKey: "vibrationLevel");
+        
         if(outdoorSwitch.isOn){
             UserDefaults.standard.set(true, forKey: "outdoorEnable");
             
-            let alert = UIAlertController(title: "Outdoor Mode", message: "Outdoor mode is now active. You will be able to set a higher threshold and will also recieve a ping as well as a vibration notification.", preferredStyle: .alert)
+            //let alert = UIAlertController(title: "Outdoor Mode", message: "Outdoor mode is now active. You will be able to set a higher threshold and will also recieve a ping as well as a vibration notification.", preferredStyle: .alert)
             
-            let ok = UIAlertAction(title: "Okay", style: .default, handler: nil)
+            //let ok = UIAlertAction(title: "Okay", style: .default, handler: nil)
             
-            alert.addAction(ok)
+            //alert.addAction(ok)
             
-            present(alert, animated: true, completion: nil)
+            //present(alert, animated: true, completion: nil)
         }else{
             
             
             UserDefaults.standard.set(false, forKey: "outdoorEnable");
             
-          
+            
         }
+        
     }
     
     
