@@ -21,7 +21,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
     
     var recorder: AVAudioRecorder!
     var levelTimer = Timer()
-    var LEVEL_THRESHOLD: Float = -10.0
+    var LEVEL_THRESHOLD: Float = 40
     var isCalibrating = false
     var VIBRATION_LEVEL = 1
     var REENABLE_TIME = Date();
@@ -315,7 +315,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
         levelTimer.invalidate()
         
         recorder.updateMeters()
-        currentVolume.text = "\(recorder.averagePower(forChannel: 0))"
+        currentVolume.text = "\(recorder.averagePower(forChannel: 0) + 160)"
         calibrateButton.setTitle("Calibrating...", for: [])
         volumeLabel.text = "Calibrating..."
         
@@ -326,8 +326,8 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
         
         while(Date() < later) {
             recorder.updateMeters()
-            currentVolume.text = "\(recorder.averagePower(forChannel: 0))"
-            sum = sum + recorder.averagePower(forChannel: 0)
+            currentVolume.text = "\(recorder.averagePower(forChannel: 0) + 160)"
+            sum = sum + recorder.averagePower(forChannel: 0) + 160
             ct = ct + 1
         }
         
@@ -340,12 +340,12 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
         
         checkOutdoor()
         if(OUTDOOR_MODE){
-            volumeSlider.maximumValue = avg + 100
+            volumeSlider.maximumValue = avg + 20
         }else {
-            volumeSlider.maximumValue = avg + 50
+            volumeSlider.maximumValue = avg + 10
         }
         
-        volumeSlider.value = avg + 25
+        volumeSlider.value = avg + (volumeSlider.maximumValue - avg)/2
         LEVEL_THRESHOLD = volumeSlider.value
         volumeLabel.text = "\(volumeSlider.value)"
         
@@ -375,7 +375,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
         
         recorder.updateMeters()
         
-        let level = recorder.averagePower(forChannel: 0)
+        let level = recorder.averagePower(forChannel: 0) + 160
         let isLoud = level > LEVEL_THRESHOLD
         currentVolume.text = "\(level)"
         
