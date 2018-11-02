@@ -767,11 +767,9 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
         }
     }
     
-    @IBAction func getHeartRate(_ sender: Any) {
+    @IBAction func getHeartRate() {
         fetchLatestHeartRateSample { (result) in
-            //this version gives the values in the form of 00.00
-            //print("\(String(describing: result?.last?.quantity.doubleValue(for: HKUnit.count().unitDivided(by: HKUnit.minute()))))")
-            
+            //this version gives the values in the form of 00.0
             let x = result?.last?.quantity.doubleValue(for: HKUnit.count().unitDivided(by: HKUnit.minute())) ?? nil
 
             if(x?.description == nil)
@@ -781,21 +779,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
             let y = x?.description
 
             self.heartRateDisplay.text = y
-            
-//            let num: String! = "\(x)"
-//            if num == nil {
-//                print("nil value")
-//            } else {
-//                self.heartRateDisplay.text = num
-//            }
-//            if let p = x {
-//                print("\(x!)")
-//                self.heartRateDisplay.text = "\(p)"
-//            }
-            
-//            self.heartRateDisplay.text = "\(String(describing: result?.last?.quantity))\n"
 //            print("\(String(describing: result?.last?.quantity))\n")
-//            self.heartRateDisplay.text = "\(String(describing: result?.last?.quantity.doubleValue(for: HKUnit.count().unitDivided(by: HKUnit.minute()))))!"
         }
     }
 
