@@ -35,7 +35,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
     @IBOutlet weak var volumeSlider: UISlider!
     @IBOutlet weak var calibrateButton: UIButton!
     @IBOutlet weak var healthAppBtn: UIButton!
-    
+    @IBOutlet weak var outdoorLbl: UILabel!
     @IBOutlet weak var renableTime: UILabel!
     @IBOutlet weak var disableAudio: UIButton!
 
@@ -84,9 +84,11 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
         RECORD_STATS = UserDefaults.standard.bool(forKey: "recordStats")
         VIBRATION_LEVEL = UserDefaults.standard.integer(forKey: "vibrationLevel")
         audioEnabled =  UserDefaults.standard.bool(forKey: "audioEnabled")
-        OUTDOOR_MODE = UserDefaults.standard.bool(forKey: "outdoorEnable")
+       // OUTDOOR_MODE = UserDefaults.standard.bool(forKey: "outdoorEnable")
         HEALTH_APP = UserDefaults.standard.bool(forKey: "healthEnable")
     
+       
+        checkOutdoor()
         setupNotifications()
         setupAudioRecording()
         getMyLocation()
@@ -307,7 +309,9 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
         let avg: Float = sum / ct
         volumeSlider.minimumValue = avg
         
-        OUTDOOR_MODE = UserDefaults.standard.bool(forKey: "outdoorEnable")
+        //OUTDOOR_MODE = UserDefaults.standard.bool(forKey: "outdoorEnable")
+        
+        checkOutdoor()
         if(OUTDOOR_MODE){
             volumeSlider.maximumValue = avg + 75
         }else {
@@ -340,6 +344,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
     // Callback ever 0.02 seconds
     @objc func levelTimerCallback() {
         checkDisabled()
+        checkOutdoor()
         
         if audioEnabled {
             recorder.updateMeters()
@@ -367,17 +372,17 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
                     case 1:
                         generator.notificationOccurred(.error)
                     case 2:
-                        generator.notificationOccurred(.error)
+                        generator.notificationOccurred(.success)
                         generator.notificationOccurred(.error)
                     case 3:
+                        generator.notificationOccurred(.success)
                         generator.notificationOccurred(.error)
-                        generator.notificationOccurred(.error)
-                        generator.notificationOccurred(.error)
+                       // generator.impactOccurred()
                     default:
                         generator.notificationOccurred(.error)
                     }
                     
-                    OUTDOOR_MODE = UserDefaults.standard.bool(forKey: "outdoorEnable")
+                    //OUTDOOR_MODE = UserDefaults.standard.bool(forKey: "outdoorEnable")
                     if(OUTDOOR_MODE){
                         AudioServicesPlaySystemSound (1016)
                     }
@@ -538,6 +543,18 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
         calibrateButton.layer.cornerRadius = 6
     }
     
+    func checkOutdoor(){
+        OUTDOOR_MODE = UserDefaults.standard.bool(forKey: "outdoorEnable")
+        
+        
+        if(OUTDOOR_MODE){
+            outdoorLbl.text = "OUTDOOR MODE IS ON"
+        }
+        else{
+            outdoorLbl.text = ""
+        }
+        
+    }
     
     func checkDisabled(){
         audioEnabled =  UserDefaults.standard.bool(forKey: "audioEnabled")
