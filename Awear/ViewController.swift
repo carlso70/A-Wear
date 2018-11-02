@@ -395,6 +395,8 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
                         generator.notificationOccurred(.error)
                     }
                     
+                    /* Save event to db */
+                    StatisticManager.save(date: Date.init(), threshold: LEVEL_THRESHOLD, voiceLevel: level, heartRate: 85)
                     print("too loud")
                 } else if diff > 7 {
                     let generator = UINotificationFeedbackGenerator()
@@ -414,6 +416,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
                     }
                     
                     //generator.notificationOccurred(.success)
+                    StatisticManager.save(date: Date.init(), threshold: LEVEL_THRESHOLD, voiceLevel: level, heartRate: 85)
                     print("loud")
                 } else {
                     let generator = UIImpactFeedbackGenerator(style: .light)
@@ -433,6 +436,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
                         generator.impactOccurred()
                     }
                     
+                    StatisticManager.save(date: Date.init(), threshold: LEVEL_THRESHOLD, voiceLevel: level, heartRate: 85)
                     print("not that loud")
                 }
                 
