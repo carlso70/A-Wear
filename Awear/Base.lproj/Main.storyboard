@@ -123,7 +123,7 @@
                                     <color key="titleColor" red="1" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 </state>
                                 <connections>
-                                    <segue destination="yi8-AZ-AZh" kind="show" id="ZGg-9z-VhI"/>
+                                    <action selector="authoriseHealthKitAccess:" destination="BYZ-38-t0r" eventType="touchUpInside" id="Zra-X2-nBL"/>
                                 </connections>
                             </button>
                         </subviews>
