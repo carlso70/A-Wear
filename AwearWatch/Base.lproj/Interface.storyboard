@@ -13,9 +13,6 @@
             <objects>
                 <controller id="AgC-eL-Hgc" customClass="InterfaceController" customModule="AwearWatch" customModuleProvider="target">
                     <items>
-                        <label width="130" alignment="left" text="Voice: 10" id="vAi-kr-YyU">
-                            <fontDescription key="font" style="UICTFontTextStyleBody"/>
-                        </label>
                         <slider width="1" alignment="left" continuous="YES" minimum="-10" maximum="10" steps="20" id="7z2-fH-kQ2">
                             <connections>
                                 <action selector="volumeThresholdOnChange:" destination="AgC-eL-Hgc" id="Vea-2e-lqw"/>
@@ -33,11 +30,17 @@
                                 <action selector="disableButtonOnClick" destination="AgC-eL-Hgc" id="JCF-Ex-txT"/>
                             </connections>
                         </button>
+                        <button width="1" alignment="left" title="Enable" id="MiT-Nb-0L0">
+                            <color key="titleColor" red="0.99999600649999998" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            <color key="backgroundColor" red="0.0" green="0.56031829119999998" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            <connections>
+                                <action selector="enableButtonOnClick" destination="AgC-eL-Hgc" id="CK0-Rw-iez"/>
+                            </connections>
+                        </button>
                     </items>
                     <connections>
                         <outlet property="calibrateButton" destination="i3n-gG-eG5" id="luu-t1-g30"/>
                         <outlet property="disableButton" destination="RE3-C0-Szf" id="l99-fQ-Xlb"/>
-                        <outlet property="voiceLevelLabel" destination="vAi-kr-YyU" id="u13-5N-e6a"/>
                         <outlet property="volumeSlider" destination="7z2-fH-kQ2" id="MiU-vO-X0W"/>
                     </connections>
                 </controller>
