@@ -60,17 +60,6 @@
                                     <action selector="disableEnableAudioWith_sender:" destination="BYZ-38-t0r" eventType="touchUpInside" id="sNd-8X-Y76"/>
                                 </connections>
                             </button>
-
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="eno-Oh-Gi0">
-                                <rect key="frame" x="147" y="607" width="77" height="30"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <state key="normal" title="Health App">
-                                    <color key="titleColor" red="1" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                </state>
-                                <connections>
-                                    <segue destination="yi8-AZ-AZh" kind="show" id="ZGg-9z-VhI"/>
-                                </connections>
-                            </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="1PU-pO-lhB">
                                 <rect key="frame" x="16" y="597" width="86" height="50"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -122,14 +111,6 @@
                                 <state key="normal" title="Record Heart Rate above Max Volume"/>
                                 <connections>
                                     <action selector="getHeartRate:" destination="BYZ-38-t0r" eventType="touchUpInside" id="X2c-Md-4Zf"/>
-                                </connections>
-                            </button>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="1PU-pO-lhB">
-                                <rect key="frame" x="142" y="560" width="86" height="50"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <state key="normal" title="Settings"/>
-                                <connections>
-                                    <segue destination="Xj6-N0-qd6" kind="show" id="RtO-wc-ec7"/>
                                 </connections>
                             </button>
                         </subviews>
