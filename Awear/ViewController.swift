@@ -665,7 +665,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
     
     @IBAction func getHeartRate(_ sender: Any) {
         fetchLatestHeartRateSample { (result) in
-            print("\(result)\n")
+            print("\(result?.last?.quantity)\n")
 
         }
     }
