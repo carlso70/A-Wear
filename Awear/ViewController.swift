@@ -32,6 +32,8 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
     var WATCH_CONNECT = true;
     //var HEALTH_APP = true;
     var OUTDOOR_MODE = true;
+    var OUTDOOR_AUTO = true;
+    var OUTDOOR_MAN = true;
     
     @IBOutlet weak var currentVolume: UILabel!
     @IBOutlet weak var volumeLabel: UILabel!
@@ -89,9 +91,15 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
         audioEnabled =  UserDefaults.standard.bool(forKey: "audioEnabled")
        // OUTDOOR_MODE = UserDefaults.standard.bool(forKey: "outdoorEnable")
        // HEALTH_APP = UserDefaults.standard.bool(forKey: "healthEnable")
+        OUTDOOR_AUTO = UserDefaults.standard.bool(forKey: "outdoorAutoEnable")
+        OUTDOOR_MAN = UserDefaults.standard.bool(forKey: "outdoorManEnable")
+        
+        if(OUTDOOR_AUTO){
+            checkAutoOutdoor();
+        }else if(OUTDOOR_MAN){
+            checkOutdoor()
+        }
     
-       
-        checkOutdoor()
         setupNotifications()
         setupAudioRecording()
         getMyLocation()
@@ -337,8 +345,15 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
         volumeSlider.minimumValue = avg
         
         //OUTDOOR_MODE = UserDefaults.standard.bool(forKey: "outdoorEnable")
+        if(OUTDOOR_AUTO){
+            checkAutoOutdoor()
+        }else if(OUTDOOR_MAN){
+            checkOutdoor()
+        }
+        else{
+            OUTDOOR_MODE = false;
+        }
         
-        checkOutdoor()
         if(OUTDOOR_MODE){
             volumeSlider.maximumValue = avg + 20
         }else {
@@ -371,7 +386,17 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
     // Callback ever 0.02 seconds
     @objc func levelTimerCallback() {
         checkDisabled()
-        checkOutdoor()
+        if(OUTDOOR_AUTO){
+            checkAutoOutdoor()
+        }else if(OUTDOOR_MAN){
+            checkOutdoor()
+        }
+        else{
+            OUTDOOR_MODE = false;
+            
+        }
+        
+        RECORD_STATS = UserDefaults.standard.bool(forKey: "recordStats")
         
         recorder.updateMeters()
         
@@ -590,8 +615,8 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
     }
     
     func checkOutdoor(){
-        OUTDOOR_MODE = UserDefaults.standard.bool(forKey: "outdoorEnable")
-        RECORD_STATS = UserDefaults.standard.bool(forKey: "recordStats")
+        OUTDOOR_MODE = UserDefaults.standard.bool(forKey: "outdoorManEnable")
+        
         
         if(OUTDOOR_MODE){
             outdoorLbl.text = "OUTDOOR MODE IS ON"
@@ -660,6 +685,40 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
         
         /// Execute the query in the health store
         healthStore.execute(query)
+    }
+    
+    func checkAutoOutdoor(){
+        let curr = locationMgr.location
+        
+        let hor = lround(curr?.horizontalAccuracy ?? -1)
+        
+        if (hor < 0)
+        {
+            OUTDOOR_MODE = false;
+            // No Signal
+        }
+        else if (hor > 163)
+        {
+            // Poor Signal
+            OUTDOOR_MODE = false;
+        }
+        else if (hor > 48)
+        {
+            // Average Signal
+            OUTDOOR_MODE = true;
+        }
+        else
+        {
+            // Full Signal
+            OUTDOOR_MODE = true;
+        }
+        
+        if(OUTDOOR_MODE){
+            outdoorLbl.text = "OUTDOOR MODE IS ON"
+        }
+        else{
+            outdoorLbl.text = ""
+        }
     }
     
     @IBAction func getHeartRate(_ sender: Any) {
