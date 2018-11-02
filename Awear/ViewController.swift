@@ -315,7 +315,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
         levelTimer.invalidate()
         
         recorder.updateMeters()
-        currentVolume.text = "\(recorder.averagePower(forChannel: 0) + 320)"
+        currentVolume.text = "\(recorder.averagePower(forChannel: 0) + 160)"
         calibrateButton.setTitle("Calibrating...", for: [])
         volumeLabel.text = "Calibrating..."
         
@@ -326,8 +326,8 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
         
         while(Date() < later) {
             recorder.updateMeters()
-            currentVolume.text = "\(recorder.averagePower(forChannel: 0) + 320)"
-            sum = sum + recorder.averagePower(forChannel: 0) + 320
+            currentVolume.text = "\(recorder.averagePower(forChannel: 0) + 160)"
+            sum = sum + recorder.averagePower(forChannel: 0) + 160
             ct = ct + 1
         }
         
@@ -340,13 +340,13 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
         
         checkOutdoor()
         if(OUTDOOR_MODE){
-            volumeSlider.maximumValue = avg + 40
+            volumeSlider.maximumValue = avg + 80
         }else {
-            volumeSlider.maximumValue = avg + 20
+            volumeSlider.maximumValue = avg + 40
         }
         
         volumeSlider.value = avg + (volumeSlider.maximumValue - avg)/2
-        LEVEL_THRESHOLD = volumeSlider.value
+        LEVEL_THRESHOLD = volumeSlider.maximumValue
         volumeLabel.text = "\(volumeSlider.value)"
         
         /* Tell watch calibration has ended */
@@ -403,7 +403,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
         
         print(dBFS_convertTo_dB(dBFSValue: recorder.averagePower(forChannel: 0)))
         
-        let level = recorder.averagePower(forChannel: 0) + 320
+        let level = recorder.averagePower(forChannel: 0) + 160
         let isLoud = level > LEVEL_THRESHOLD
         currentVolume.text = "\(level)"
         
@@ -419,8 +419,8 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
             ConnectivityUtils.sendLoudNoiseMessageToWatch(session: session, isLoud: true)
             recordStat(voiceLevel: level)
             
-            let diff = level - LEVEL_THRESHOLD
-            if(diff > 15) {
+            let diff = level/LEVEL_THRESHOLD
+            if(diff > 1.3) {
                 let generator = UINotificationFeedbackGenerator()
                 //generator.notificationOccurred(.error)
                 
@@ -447,7 +447,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
                     AudioServicesPlaySystemSound (1009)
                 }
                 print("too loud")
-            } else if diff > 7 {
+            } else if diff > 1.15 {
                 let generator = UINotificationFeedbackGenerator()
                 
                 switch VIBRATION_LEVEL {
