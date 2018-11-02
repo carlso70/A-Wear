@@ -711,9 +711,32 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
     @IBAction func getHeartRate() {
         fetchLatestHeartRateSample { (result) in
             //this version gives the values in the form of 00.00
-            //print("\(String(describing: result?.last?.quantity.doubleValue(for: HKUnit.count().unitDivided(by: HKUnit.minute()))))\n")
-            //print("\(String(describing: result?.last?.quantity))\n")
-            self.heartRateDisplay.text = "\(String(describing: result?.last?.quantity.doubleValue(for: HKUnit.count().unitDivided(by: HKUnit.minute()))))!"
+            //print("\(String(describing: result?.last?.quantity.doubleValue(for: HKUnit.count().unitDivided(by: HKUnit.minute()))))")
+            
+            let x = result?.last?.quantity.doubleValue(for: HKUnit.count().unitDivided(by: HKUnit.minute())) ?? nil
+
+            if(x?.description == nil)
+            {
+                return;
+            }
+            let y = x?.description
+
+            self.heartRateDisplay.text = y
+            
+//            let num: String! = "\(x)"
+//            if num == nil {
+//                print("nil value")
+//            } else {
+//                self.heartRateDisplay.text = num
+//            }
+//            if let p = x {
+//                print("\(x!)")
+//                self.heartRateDisplay.text = "\(p)"
+//            }
+            
+//            self.heartRateDisplay.text = "\(String(describing: result?.last?.quantity))\n"
+//            print("\(String(describing: result?.last?.quantity))\n")
+//            self.heartRateDisplay.text = "\(String(describing: result?.last?.quantity.doubleValue(for: HKUnit.count().unitDivided(by: HKUnit.minute()))))!"
         }
     }
 
