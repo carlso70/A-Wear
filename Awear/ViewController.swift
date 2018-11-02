@@ -500,7 +500,9 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
                 default:
                     generator.notificationOccurred(.success)
                 }
-                
+                if(OUTDOOR_MODE){
+                    AudioServicesPlaySystemSound (1009)
+                }
                 print("loud")
             } else {
                 let generator = UIImpactFeedbackGenerator(style: .light)
