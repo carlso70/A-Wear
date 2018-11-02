@@ -99,6 +99,9 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
             checkAutoOutdoor();
         }else if(OUTDOOR_MAN){
             checkOutdoor()
+        }else{
+            OUTDOOR_MODE = false;
+            outdoorLbl.text = ""
         }
     
         setupNotifications()
@@ -313,13 +316,13 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
         
         // Schedules a timer, which fires a callback(levelTimerCallback) every 0.02 seconds
         
-        levelTimer = Timer.scheduledTimer(timeInterval: 0.001, target: self, selector: #selector(levelTimerCallback), userInfo: nil, repeats: true)
+        levelTimer = Timer.scheduledTimer(timeInterval: 0.1, target: self, selector: #selector(levelTimerCallback), userInfo: nil, repeats: true)
     }
     
     func calibrate() {
         /* Tell watch calibration has begun */
         isCalibrating = true
-        ConnectivityUtils.sendCalibrateMessageToWatch(session:session, isCalibrating: isCalibrating)
+        ConnectivityUtils.sendCalibrateMessageToWatch(session: self.session, isCalibrating: isCalibrating)
         
         levelTimer.invalidate()
         
@@ -346,6 +349,9 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
         volumeSlider.minimumValue = avg
         
         //OUTDOOR_MODE = UserDefaults.standard.bool(forKey: "outdoorEnable")
+        OUTDOOR_AUTO = UserDefaults.standard.bool(forKey: "outdoorAutoEnable")
+        OUTDOOR_MAN = UserDefaults.standard.bool(forKey: "outdoorManEnable")
+        
         if(OUTDOOR_AUTO){
             checkAutoOutdoor()
         }else if(OUTDOOR_MAN){
@@ -353,6 +359,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
         }
         else{
             OUTDOOR_MODE = false;
+            
         }
         
         if(OUTDOOR_MODE){
@@ -367,8 +374,8 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
         
         /* Tell watch calibration has ended */
         isCalibrating = false
-        ConnectivityUtils.sendCalibrateMessageToWatch(session: session, isCalibrating: isCalibrating)
-        ConnectivityUtils.sendLevelThresholdMessageToWatch(session: session, level: volumeSlider.value, maxValue: volumeSlider.maximumValue, minValue: volumeSlider.minimumValue)
+        ConnectivityUtils.sendCalibrateMessageToWatch(session: self.session, isCalibrating: isCalibrating)
+        ConnectivityUtils.sendLevelThresholdMessageToWatch(session: self.session, level: volumeSlider.value, maxValue: volumeSlider.maximumValue, minValue: volumeSlider.minimumValue)
         
         setupAudioRecording()
     }
@@ -413,6 +420,10 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
     // Callback ever 0.02 seconds
     @objc func levelTimerCallback() {
         checkDisabled()
+        
+        OUTDOOR_AUTO = UserDefaults.standard.bool(forKey: "outdoorAutoEnable")
+        OUTDOOR_MAN = UserDefaults.standard.bool(forKey: "outdoorManEnable")
+        
         if(OUTDOOR_AUTO){
             checkAutoOutdoor()
         }else if(OUTDOOR_MAN){
@@ -420,7 +431,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
         }
         else{
             OUTDOOR_MODE = false;
-            
+            outdoorLbl.text = ""
         }
         
         RECORD_STATS = UserDefaults.standard.bool(forKey: "recordStats")
@@ -489,7 +500,9 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
                 default:
                     generator.notificationOccurred(.success)
                 }
-                
+                if(OUTDOOR_MODE){
+                    AudioServicesPlaySystemSound (1009)
+                }
                 print("loud")
             } else {
                 let generator = UIImpactFeedbackGenerator(style: .light)
@@ -738,25 +751,20 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
         
         let hor = lround(curr?.horizontalAccuracy ?? -1)
         
+        print(hor)
+        
         if (hor < 0)
         {
             OUTDOOR_MODE = false;
             // No Signal
         }
-        else if (hor > 163)
-        {
-            // Poor Signal
-            OUTDOOR_MODE = false;
-        }
-        else if (hor > 48)
-        {
-            // Average Signal
-            OUTDOOR_MODE = true;
-        }
-        else
+        else if(hor < 32)
         {
             // Full Signal
             OUTDOOR_MODE = true;
+        }
+        else{
+            OUTDOOR_MODE = false;
         }
         
         if(OUTDOOR_MODE){

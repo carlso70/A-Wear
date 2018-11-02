@@ -24,7 +24,7 @@ class SettingsVC : UIViewController{
     @IBOutlet weak var outdoorSwitch: UISwitch!
     @IBOutlet weak var resetStatsBtn: UIButton!
     @IBOutlet weak var statsSwitch: UISwitch!
-    @IBOutlet weak var watchSwitch: UISwitch!
+
     @IBOutlet weak var saveBtn: UIButton!
     @IBOutlet weak var outdoorLbl: UILabel!
     @IBOutlet weak var outdoorMnlSwitch: UISwitch!
@@ -42,8 +42,7 @@ class SettingsVC : UIViewController{
         let vol = lroundf(vibrationSlider.value);
         vibrationLvl.text = "\(vol)";
         
-        let wtch = UserDefaults.standard.bool(forKey: "watchConnect")
-        let allow = UserDefaults.standard.bool(forKey: "watchSupported")
+   
         let outdoor = UserDefaults.standard.bool(forKey: "outdoorAutoEnable")
         let manout = UserDefaults.standard.bool(forKey: "outdoorManEnable")
         
@@ -69,16 +68,6 @@ class SettingsVC : UIViewController{
         }
         
         
-        if(!allow){
-            watchSwitch.isUserInteractionEnabled = false;
-        }
-        
-        if(wtch && allow){
-            watchSwitch.setOn(true, animated: false)
-        }
-        else{
-            watchSwitch.setOn(false, animated: false)
-        }
         
         
         let stats = UserDefaults.standard.bool(forKey: "recordStats")
@@ -134,9 +123,7 @@ class SettingsVC : UIViewController{
         
     }
     
-    @IBAction func watchOnOff(_ sender: Any){
-      changed = true;
-    }
+
     
     @IBAction func statsOnOff(_ sender: Any){
       changed = true;
@@ -166,6 +153,14 @@ class SettingsVC : UIViewController{
     @IBAction func autoOutdoorChange(_ sender: Any) {
         changed = true;
         if(outdoorSwitch.isOn){
+            let alert = UIAlertController(title: "Automatic Outdoor Mode", message: "Automatic Outdoor mode is now active. This may be inaccurate. If you need it to be completely accurate please use the manual mode.", preferredStyle: .alert)
+            
+            let ok = UIAlertAction(title: "Okay", style: .default, handler: nil)
+            
+            alert.addAction(ok)
+            
+            present(alert, animated: true, completion: nil)
+            
             outdoorLbl.isHidden = true;
             outdoorMnlSwitch.isHidden = true;
         }else{
@@ -199,13 +194,6 @@ class SettingsVC : UIViewController{
             UserDefaults.standard.set(false, forKey: "recordStats");
         }
         
-        if(watchSwitch.isOn)
-        {
-            UserDefaults.standard.set(true, forKey: "watchConnect");
-        }
-        else{
-            UserDefaults.standard.set(false, forKey: "watchConnect");
-        }
         
         let vol = lroundf(vibrationSlider.value);
         vibrationLvl.text = "\(vol)";
@@ -234,6 +222,13 @@ class SettingsVC : UIViewController{
             
             
         }
+        
+        if(outdoorMnlSwitch.isOn){
+            UserDefaults.standard.set(true, forKey: "outdoorManEnable");
+        }else{
+            UserDefaults.standard.set(false, forKey: "outdoorManEnable");
+        }
+        
         
     }
     
