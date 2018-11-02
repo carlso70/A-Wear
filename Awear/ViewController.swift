@@ -355,9 +355,9 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
         }
         
         if(OUTDOOR_MODE){
-            volumeSlider.maximumValue = avg + 80
+            volumeSlider.maximumValue = avg + 60
         }else {
-            volumeSlider.maximumValue = avg + 40
+            volumeSlider.maximumValue = avg + 30
         }
         
         volumeSlider.value = avg + (volumeSlider.maximumValue - avg)/2
