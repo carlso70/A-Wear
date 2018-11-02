@@ -20,7 +20,6 @@ class SettingsVC : UIViewController{
     @IBOutlet weak var cancelBtn: UIButton!
     @IBOutlet weak var vibrationSlider: UISlider!
     @IBOutlet weak var vibrationLvl: UILabel!
-    @IBOutlet weak var healthAppSwitch: UISwitch!
     
     @IBOutlet weak var outdoorSwitch: UISwitch!
     @IBOutlet weak var resetStatsBtn: UIButton!
@@ -43,7 +42,6 @@ class SettingsVC : UIViewController{
         
         let wtch = UserDefaults.standard.bool(forKey: "watchConnect")
         let allow = UserDefaults.standard.bool(forKey: "watchSupported")
-        let health = UserDefaults.standard.bool(forKey: "healthEnable")
         let outdoor = UserDefaults.standard.bool(forKey: "outdoorEnable")
         
         if(outdoor){
@@ -51,13 +49,6 @@ class SettingsVC : UIViewController{
         }
         else{
             outdoorSwitch.setOn(false, animated: false)
-        }
-            
-        
-        if(health){
-            healthAppSwitch.setOn(true, animated: false)
-        }else{
-            healthAppSwitch.setOn(false, animated: false)
         }
         
         
@@ -139,6 +130,7 @@ class SettingsVC : UIViewController{
         
         let yesAction = UIAlertAction(title: "Yes", style: .default, handler: { (action) in
             print("reset stats")
+            StatisticManager.deleteAll()
             return
         })
         
@@ -152,26 +144,6 @@ class SettingsVC : UIViewController{
         
         present(alert, animated: true, completion: nil)
     }
-    
-    @IBAction func healthAppEnabling(_ sender: Any) {
-        if(!healthAppSwitch.isOn){
-            //UserDefaults.standard.set(true, forKey: "healthEnable");
-        
-            
-            
-            //UserDefaults.standard.set(false, forKey: "healthEnable");
-            
-            let alert = UIAlertController(title: "Health Application", message: "You will not be able to use the health application functionality now.", preferredStyle: .alert)
-            
-            let ok = UIAlertAction(title: "Okay", style: .default, handler: nil)
-            
-            alert.addAction(ok)
-            
-            present(alert, animated: true, completion: nil)
-        }
-       changed = true;
-    }
-    
     
     @IBAction func outdoorEnable(_ sender: Any) {
         changed = true;
@@ -188,15 +160,7 @@ class SettingsVC : UIViewController{
         present(alert, animated: true, completion: nil)
         
         changed = false;
-        if(healthAppSwitch.isOn){
-            UserDefaults.standard.set(true, forKey: "healthEnable");
-        }else{
-            
-            
-            UserDefaults.standard.set(false, forKey: "healthEnable");
-            
-            
-        }
+        
         
         if(statsSwitch.isOn)
         {
@@ -230,8 +194,7 @@ class SettingsVC : UIViewController{
             
             //present(alert, animated: true, completion: nil)
         }else{
-            
-            
+    
             UserDefaults.standard.set(false, forKey: "outdoorEnable");
             
             

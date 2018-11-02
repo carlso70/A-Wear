@@ -30,7 +30,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
     
     var RECORD_STATS = true;
     var WATCH_CONNECT = true;
-    var HEALTH_APP = true;
+    //var HEALTH_APP = true;
     var OUTDOOR_MODE = true;
     
     @IBOutlet weak var currentVolume: UILabel!
@@ -88,7 +88,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
         VIBRATION_LEVEL = UserDefaults.standard.integer(forKey: "vibrationLevel")
         audioEnabled =  UserDefaults.standard.bool(forKey: "audioEnabled")
        // OUTDOOR_MODE = UserDefaults.standard.bool(forKey: "outdoorEnable")
-        HEALTH_APP = UserDefaults.standard.bool(forKey: "healthEnable")
+       // HEALTH_APP = UserDefaults.standard.bool(forKey: "healthEnable")
     
        
         checkOutdoor()
