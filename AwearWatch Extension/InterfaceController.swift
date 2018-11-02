@@ -49,6 +49,13 @@ class InterfaceController: WKInterfaceController, WCSessionDelegate {
         if let voice = message["VoiceLevel"] as? Float {
             voiceLevelLabel.setText("Volume: \(voice)")
         }
+        
+        /* Loud depending on vibration level vibrates the watch */
+        if let loud = message["IsLoud"] as? Bool {
+            if loud {
+                WKInterfaceDevice.current().play(.notification)
+            }
+        }
     }
 
     override func awake(withContext context: Any?) {
