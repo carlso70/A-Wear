@@ -36,6 +36,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
     var OUTDOOR_MAN = true;
     
     @IBOutlet weak var currentVolume: UILabel!
+    @IBOutlet weak var heartRateDisplay: UILabel!
     @IBOutlet weak var volumeLabel: UILabel!
     @IBOutlet weak var volumeSlider: UISlider!
     @IBOutlet weak var calibrateButton: UIButton!
@@ -530,6 +531,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
             sendNotification()
             // Restart audio recording
             setupAudioRecording()
+            getHeartRate();
         }
     }
     
@@ -686,6 +688,22 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
         }
     }
     
+    @IBAction func authoriseHealthKitAccess(_ sender: UIButton) {
+        let healthKitTypes: Set = [
+            HKObjectType.quantityType(forIdentifier: HKQuantityTypeIdentifier.heartRate)!
+        ]
+        healthStore.requestAuthorization(toShare: healthKitTypes, read: healthKitTypes) { (_, _) in
+            print("Authorized?")
+        }
+        healthStore.requestAuthorization(toShare: healthKitTypes, read: healthKitTypes) { (bool, error) in
+            if let e = error {
+                print("Oops! Something went wrong during Authorization. \(e.localizedDescription)")
+            } else {
+                print("User has completed the authorization.")
+            }
+        }
+    }
+    
     func fetchLatestHeartRateSample(
         completion: @escaping (_ samples: [HKQuantitySample]?) -> Void) {
         
@@ -755,12 +773,20 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
         }
     }
     
-    @IBAction func getHeartRate(_ sender: Any) {
+    @IBAction func getHeartRate() {
         fetchLatestHeartRateSample { (result) in
-            //this version gives the values in the form of 00.00 count/min
-//            print("\(String(describing: result?.last?.quantity.doubleValue(for: HKUnit.count().unitDivided(by: HKUnit.minute()))))\n")
-            print("\(String(describing: result?.last?.quantity))\n")
+            //this version gives the values in the form of 00.0
+            let x = result?.last?.quantity.doubleValue(for: HKUnit.count().unitDivided(by: HKUnit.minute())) ?? nil
 
+            if(x?.description == nil)
+            {
+                return;
+            }
+            let y = x?.description
+
+            self.heartRateDisplay.text = y
+//            print("\(String(describing: result?.last?.quantity))\n")
         }
     }
+
 }
