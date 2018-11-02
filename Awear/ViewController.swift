@@ -13,6 +13,7 @@ import UIKit
 import AVFoundation
 import CoreAudio
 import CoreLocation
+import CoreData
 import WatchConnectivity
 import HealthKit
 
@@ -21,10 +22,18 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
     var recorder: AVAudioRecorder!
     var levelTimer = Timer()
     var LEVEL_THRESHOLD: Float = -10.0
+    var isCalibrating = false
     var VIBRATION_LEVEL = 1
     var REENABLE_TIME = Date();
     let locationMgr = CLLocationManager()
+<<<<<<< HEAD
     let healthStore = HKHealthStore()
+=======
+    var RECORD_STATS = true;
+    var WATCH_CONNECT = true;
+    var HEALTH_APP = true;
+    var OUTDOOR_MODE = true;
+>>>>>>> master
     
     @IBOutlet weak var currentVolume: UILabel!
     @IBOutlet weak var volumeLabel: UILabel!
@@ -34,86 +43,114 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
     
     @IBOutlet weak var renableTime: UILabel!
     @IBOutlet weak var disableAudio: UIButton!
-    @IBOutlet weak var vibrationSlider: UISlider!
-    @IBOutlet weak var vibrateLvl: UILabel!
 
-   // var pickerData: [String] = [String]();
     
-    var i = 0;
-    var audioEnabled =  true;
+    var audioEnabled = UserDefaults.standard.bool(forKey: "audioEnabled");
     var disableTime = 0;
     var timedEnabled = true;
- 
+    
     
     /* Setup WC Session (Watch Connectivity) */
-    func session(_ session: WCSession, activationDidCompleteWith activationState: WCSessionActivationState, error: Error?) { }
-    func sessionDidBecomeInactive(_ session: WCSession) { }
-    func sessionDidDeactivate(_ session: WCSession) { }
-    
     var session: WCSession?
+    
+    /* Session sets up the dispatch queue for messages recieved from watch */
+    func session(_ session: WCSession, didReceiveMessage message: [String : Any]) {
+        DispatchQueue.main.async {
+            self.processWatchMessages(message: message)
+        }
+    }
+    func session(_ session: WCSession, activationDidCompleteWith activationState: WCSessionActivationState, error: Error?) { }
+    func sessionDidBecomeInactive(_ session: WCSession) { /* TODO */ }
+    func sessionDidDeactivate(_ session: WCSession) { /* TODO */ }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         makePretty();
         // Do any additional setup after loading the view, typically from a nib.
+
         if WCSession.isSupported() {
             session = WCSession.default
             session?.delegate = self
             session?.activate()
+            
+            /* Send levels to watch */
+            ConnectivityUtils.sendLevelThresholdMessageToWatch(session: session, level: volumeSlider.value, maxValue: volumeSlider.maximumValue, minValue: volumeSlider.minimumValue )
+            
+            //UserDefaults.standard.set(true, forKey: "watchConnect")
+            UserDefaults.standard.set(true, forKey: "watchSupported")
+            
+        }else{
+            UserDefaults.standard.set(false, forKey: "watchSupported")
+            UserDefaults.standard.set(false, forKey: "watchConnect")
         }
+        
+        
+        WATCH_CONNECT = UserDefaults.standard.bool(forKey: "watchConnect")
+        RECORD_STATS = UserDefaults.standard.bool(forKey: "recordStats")
+        VIBRATION_LEVEL = UserDefaults.standard.integer(forKey: "vibrationLevel")
+        audioEnabled =  UserDefaults.standard.bool(forKey: "audioEnabled")
+        OUTDOOR_MODE = UserDefaults.standard.bool(forKey: "outdoorEnable")
+        HEALTH_APP = UserDefaults.standard.bool(forKey: "healthEnable")
+    
         setupNotifications()
         setupAudioRecording()
         getMyLocation()
+        
+        
+        print("VIBRATION LEVEL: \(VIBRATION_LEVEL)");
     }
     
-    func tapped() {
-        //        i += 1
-        print("Running \(i)")
+    /* Handles incoming messages from the apple watch */
+    func processWatchMessages(message: [String: Any]) {
+        /* Trigger calibration */
+        if message["StartCalibrating"] as? Bool != nil {
+            self.calibrate()
+        }
         
-        switch i {
-        case 1:
-            let generator = UINotificationFeedbackGenerator()
-            generator.notificationOccurred(.error)
-            print("error") //3 quick pings
-            
-        case 2:
-            let generator = UINotificationFeedbackGenerator()
-            generator.notificationOccurred(.success)
-            print("'success'") //2 quick pings
-        case 3:
-            let generator = UINotificationFeedbackGenerator()
-            generator.notificationOccurred(.warning)
-            print("warning") //2 slow pings
-        case 4:
-            let generator = UIImpactFeedbackGenerator(style: .light)
-            generator.impactOccurred()
-            print("light") // very light ping
-        case 5:
-            let generator = UIImpactFeedbackGenerator(style: .medium)
-            generator.impactOccurred()
-            print("medium") // medium
-            
-        case 6:
-            let generator = UIImpactFeedbackGenerator(style: .heavy)
-            generator.impactOccurred()
-            print("heavy") // decent
-            
-        default:
-            let generator = UISelectionFeedbackGenerator()
-            generator.selectionChanged()
-            i = 7
+        /* Change level threshold */
+        if let level = message["LevelThreshold"] as? Float {
+            volumeSlider.value = level
+            self.changeLevelThreshold(level: level)
+        }
+        
+        /* Disable Audio for time */
+        if let downTime = message["DisableTime"] as? Int {
+            self.disableTime = downTime
+            self.disableApplication(time: downTime)
+        }
+    
+        if let enable = message["Enable"] as? Bool {
+            if enable {
+                audioEnabled = true;
+                UserDefaults.standard.set(audioEnabled, forKey: "audioEnabled")
+                REENABLE_TIME = Date();
+                UserDefaults.standard.set(Date(), forKey: "reenableTime")
+                setupAudioRecording();
+                calibrateButton.isUserInteractionEnabled = true;
+                volumeSlider.isUserInteractionEnabled = true;
+                //levelTimerCallback();
+                disableAudio.setTitle("Disable Listening", for: .normal);
+                renableTime.text = "";
+                
+                let alert = UIAlertController(title: "Listening Enabled", message: "Your application will now listen and notify you", preferredStyle: .alert)
+                let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+                alert.addAction(okAction)
+                
+                present(alert, animated: true, completion: nil)
+            }
         }
     }
-
-    @IBAction func onSliderChange(_ sender: Any) {
-        print(volumeSlider.value)
+    
+    /* VolumeSlider value between 1 - 10 */
+    func changeLevelThreshold(level: Float) {
         volumeLabel.text = "\(volumeSlider.value)"
-        LEVEL_THRESHOLD = volumeSlider.value
+        LEVEL_THRESHOLD = level
     }
-
-    @IBAction func disableEnableAudio(_sender: UIButton){
-        
-        if(audioEnabled){
+    
+    func disableEnable() {
+        audioEnabled = UserDefaults.standard.bool(forKey: "audioEnabled")
+        if audioEnabled {
+            UserDefaults.standard.set(false, forKey: "audioEnabled")
             audioEnabled = false;
             recorder.stop();
             calibrateButton.isUserInteractionEnabled = false;
@@ -125,40 +162,34 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
                 to: Date())
             
             REENABLE_TIME = earlyDate ?? Date();
-            
+            UserDefaults.standard.set(earlyDate, forKey: "reenableTime")
             //audioEnabled = false;
-            
             disableAudio.setTitle("Enable Listening", for: .normal);
-            
-            
-            
             
             let alert = UIAlertController(title: "Listening Disabled", message: "How long do you want to disable listening?", preferredStyle: .alert)
             
             let indefAction = UIAlertAction(title: "Until Enabled", style: .default, handler: { (action) in
                 self.disableTime = -1;
-                
                 self.disableApplication(time: self.disableTime)
                 return
             })
+            
             let oneAction = UIAlertAction(title: "1 hour", style: .default, handler: { (action) in
                 self.disableTime = 1;
-            
                 self.disableApplication(time: self.disableTime)
                 return
             })
+            
             let threeAction = UIAlertAction(title: "3 hours", style: .default, handler: { (action) in
                 self.disableTime = 3;
-                
-                
                 self.disableApplication(time: self.disableTime)
             })
+            
             let dayAction = UIAlertAction(title: "24 hours", style: .default, handler: { (action) in
                 self.disableTime = 24;
-                
                 self.disableApplication(time: self.disableTime)
             })
-                
+            
             alert.addAction(oneAction)
             alert.addAction(threeAction)
             alert.addAction(dayAction)
@@ -167,15 +198,16 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
             present(alert, animated: true, completion: nil)
             
             // add reenable time
-           // print("HEEERETERTERT")
+            // print("HEEERETERTERT")
             //renableTime.text = "Disabled until: \(disableTime)"
             
             disableApplication(time: disableTime)
             return
-        }
-        else{
+        } else {
             audioEnabled = true;
+            UserDefaults.standard.set(audioEnabled, forKey: "audioEnabled")
             REENABLE_TIME = Date();
+            UserDefaults.standard.set(Date(), forKey: "reenableTime")
             setupAudioRecording();
             calibrateButton.isUserInteractionEnabled = true;
             volumeSlider.isUserInteractionEnabled = true;
@@ -188,9 +220,16 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
             alert.addAction(okAction)
             
             present(alert, animated: true, completion: nil)
-            return
         }
-        
+    }
+    
+    @IBAction func onSliderChange(_ sender: Any) {
+        changeLevelThreshold(level: volumeSlider.value)
+        ConnectivityUtils.sendLevelThresholdMessageToWatch(session: session, level: volumeSlider.value, maxValue: volumeSlider.maximumValue, minValue: volumeSlider.minimumValue)
+    }
+    
+    @IBAction func disableEnableAudio(_sender: UIButton){
+        self.disableEnable()
     }
     
     // Uses core location to get the user's current location
@@ -238,7 +277,6 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
     // Initializes the audio recording instance
     func setupAudioRecording() {
         // Setup recording
-        view.backgroundColor = UIColor.cyan
         let documents = URL(fileURLWithPath: NSSearchPathForDirectoriesInDomains(FileManager.SearchPathDirectory.documentDirectory, FileManager.SearchPathDomainMask.userDomainMask, true)[0])
         let url = documents.appendingPathComponent("record.caf")
         
@@ -270,27 +308,16 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
         levelTimer = Timer.scheduledTimer(timeInterval: 0.001, target: self, selector: #selector(levelTimerCallback), userInfo: nil, repeats: true)
     }
     
-    @IBAction func calibrateVolume(_ sender: UIButton) {
-//        recorder.stop()
-        checkDisabled()
-       
-        
-        if(audioEnabled){
-            
-            /* Tell Watch that calibration is beggining */
-            if let validSession = session {
-                let iPhoneAppContext = ["Calibrating": true]
-                do {
-                    try validSession.updateApplicationContext(iPhoneAppContext)
-                } catch {
-                    print("Something went wrong")
-                }
-            }
+    func calibrate() {
+        /* Tell watch calibration has begun */
+        isCalibrating = true
+        ConnectivityUtils.sendCalibrateMessageToWatch(session:session, isCalibrating: isCalibrating)
+
         levelTimer.invalidate()
         
         recorder.updateMeters()
         currentVolume.text = "\(recorder.averagePower(forChannel: 0))"
-        sender.setTitle("Calibrating...", for: [])
+        calibrateButton.setTitle("Calibrating...", for: [])
         volumeLabel.text = "Calibrating..."
         
         let now = Date()
@@ -305,7 +332,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
             ct = ct + 1
         }
         
-        sender.setTitle("Calibrate", for: [])
+        calibrateButton.setTitle("Calibrate", for: [])
         
         let avg: Float = sum / ct
         volumeSlider.minimumValue = avg
@@ -314,40 +341,33 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
         LEVEL_THRESHOLD = volumeSlider.value
         volumeLabel.text = "\(volumeSlider.value)"
         
-        /* Tell Watch that calibration is done */
-        if let validSession = session {
-            let iPhoneAppContext = ["Calibrating": false]
-            do {
-                try validSession.updateApplicationContext(iPhoneAppContext)
-            } catch {
-                print("Something went wrong")
-            }
-        }
-
+        /* Tell watch calibration has ended */
+        isCalibrating = false
+        ConnectivityUtils.sendCalibrateMessageToWatch(session: session, isCalibrating: isCalibrating)
+        ConnectivityUtils.sendLevelThresholdMessageToWatch(session: session, level: volumeSlider.value, maxValue: volumeSlider.maximumValue, minValue: volumeSlider.minimumValue)
+        
         setupAudioRecording()
-        }
+    }
+    
+    /* Displays a simple error message dialog for the user */
+    func displayErrorMessage(title: String, message: String) {
+        let alert = UIAlertController(title: title , message: message, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+        self.present(alert, animated: true)
+    }
+    
+    @IBAction func calibrateVolume(_ sender: UIButton) {
+        calibrate()
     }
     
     // Callback ever 0.02 seconds
     @objc func levelTimerCallback() {
-        
         checkDisabled()
-        if(audioEnabled){
-        recorder.updateMeters()
         
-        let level = recorder.averagePower(forChannel: 0)
-        let isLoud = level > LEVEL_THRESHOLD
-        currentVolume.text = "\(level)"
-        
-        // do whatever you want with isLoud
-        //print("IsLoud? : ",isLoud)
-        
-        // Notifications
-        if isLoud {
-            //            let generator = UINotificationFeedbackGenerator()
-            view.backgroundColor = UIColor.red
-            // Need to stop timer and audio session before playing a vibration
+        if audioEnabled {
+            recorder.updateMeters()
             
+<<<<<<< HEAD
             let diff = level - LEVEL_THRESHOLD
             if(diff > 15) {
                 let generator = UINotificationFeedbackGenerator()
@@ -393,48 +413,104 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
                 print("loud")
             }else {
                 let generator = UIImpactFeedbackGenerator(style: .light)
+=======
+            let level = recorder.averagePower(forChannel: 0)
+            let isLoud = level > LEVEL_THRESHOLD
+            currentVolume.text = "\(level)"
+
+            // do whatever you want with isLoud
+            //print("IsLoud? : ",isLoud)
+            // Need to stop timer and audio session before playing a vibration
+            // Notifications
+            if isLoud {
+                //            let generator = UINotificationFeedbackGenerator()
+//                view.backgroundColor = UIColor.red
+                // Need to stop timer and audio session before playing a vibration
+>>>>>>> master
               //  generator.impactOccurred()
                 
-                switch VIBRATION_LEVEL {
-                case 1:
-                    generator.impactOccurred()
-                case 2:
-                    generator.impactOccurred()
-                    generator.impactOccurred()
-                case 3:
-                   generator.impactOccurred()
-                   generator.impactOccurred()
-                   generator.impactOccurred()
-                default:
-                    generator.impactOccurred()
+                let diff = level - LEVEL_THRESHOLD
+                if(diff > 15) {
+                    let generator = UINotificationFeedbackGenerator()
+                    //generator.notificationOccurred(.error)
+                    
+                    switch VIBRATION_LEVEL {
+                    case 1:
+                        generator.notificationOccurred(.error)
+                    case 2:
+                        generator.notificationOccurred(.error)
+                        generator.notificationOccurred(.error)
+                    case 3:
+                        generator.notificationOccurred(.error)
+                        generator.notificationOccurred(.error)
+                        generator.notificationOccurred(.error)
+                    default:
+                        generator.notificationOccurred(.error)
+                    }
+                    
+                    print("too loud")
+                } else if diff > 7 {
+                    let generator = UINotificationFeedbackGenerator()
+                    
+                    switch VIBRATION_LEVEL {
+                    case 1:
+                        generator.notificationOccurred(.success)
+                    case 2:
+                        generator.notificationOccurred(.success)
+                        generator.notificationOccurred(.success)
+                    case 3:
+                        generator.notificationOccurred(.success)
+                        generator.notificationOccurred(.success)
+                        generator.notificationOccurred(.success)
+                    default:
+                        generator.notificationOccurred(.success)
+                    }
+                    
+                    //generator.notificationOccurred(.success)
+                    print("loud")
+                } else {
+                    let generator = UIImpactFeedbackGenerator(style: .light)
+                    //  generator.impactOccurred()
+                    
+                    switch VIBRATION_LEVEL {
+                    case 1:
+                        generator.impactOccurred()
+                    case 2:
+                        generator.impactOccurred()
+                        generator.impactOccurred()
+                    case 3:
+                        generator.impactOccurred()
+                        generator.impactOccurred()
+                        generator.impactOccurred()
+                    default:
+                        generator.impactOccurred()
+                    }
+                    
+                    print("not that loud")
                 }
                 
-                print("not that loud")
+                recorder.stop()
+                levelTimer.invalidate()
+                // Vibrate, and send notification
+                AudioServicesPlaySystemSound(1521)
+                //            AudioServicesPlayAlertSound(SystemSoundID(kSystemSoundID_Vibrate))
+                sendNotification()
+                // Restart audio recording
+                setupAudioRecording()
             }
-            
-            recorder.stop()
-            levelTimer.invalidate()
-            // Vibrate, and send notification
-            AudioServicesPlaySystemSound(1521)
-            //            AudioServicesPlayAlertSound(SystemSoundID(kSystemSoundID_Vibrate))
-            sendNotification()
-            // Restart audio recording
-            setupAudioRecording()
         }
     }
-       
-        
-        
-    }
+    
     
     func disableApplication(time: Int){
         // disable application for time Int
-    
-    
+        
         let formatter = DateFormatter();
         formatter.dateFormat = "MMM d, h:mm a";
         var myString: String;
         
+        audioEnabled = false
+        UserDefaults.standard.set(audioEnabled, forKey: "audioEnabled")
         
         switch time {
         case -1:
@@ -475,7 +551,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
             print(time)
         }
     }
-
+    
     func sendNotification() {
         // find out what are the user's notification preferences
         UNUserNotificationCenter.current().getNotificationSettings { (settings) in
@@ -517,7 +593,6 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
         }
     }
     
-    
     // Sends a test notification 10 seconds after pressing the button, notification will appear if app is in background
     @IBAction func sendNotification(_ sender: Any) {
         sendNotification()
@@ -534,10 +609,15 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
     
     
     func checkDisabled(){
+<<<<<<< HEAD
         if(audioEnabled)
         {
             //print("enabled")
         }else{
+=======
+        audioEnabled =  UserDefaults.standard.bool(forKey: "audioEnabled")
+        if(!audioEnabled){
+>>>>>>> master
             recorder.stop()
             calibrateButton.isUserInteractionEnabled = false;
             volumeSlider.isUserInteractionEnabled = false;
@@ -545,16 +625,14 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
             if(Date() > REENABLE_TIME && timedEnabled){
                 print("HERE")
                 setupAudioRecording()
+                UserDefaults.standard.set(true, forKey: "audioEnabled")
                 audioEnabled = true;
                 calibrateButton.isUserInteractionEnabled = true;
                 volumeSlider.isUserInteractionEnabled = true;
                 disableAudio.setTitle("Disable Listening", for: .normal);
                 renableTime.text = "";
-                
             }
         }
-        
-        
     }
     
     public func fetchLatestHeartRateSample(
