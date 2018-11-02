@@ -377,6 +377,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
             //                view.backgroundColor = UIColor.red
             // Need to stop timer and audio session before playing a vibration
             //  generator.impactOccurred()
+            ConnectivityUtils.sendLoudNoiseMessageToWatch(session: session, isLoud: true)
             
             let diff = level - LEVEL_THRESHOLD
             if(diff > 15) {

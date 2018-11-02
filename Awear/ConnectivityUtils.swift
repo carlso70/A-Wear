@@ -33,4 +33,10 @@ class ConnectivityUtils: NSObject {
         }
     }
 
+    static func sendLoudNoiseMessageToWatch(session: WCSession?, isLoud: Bool) {
+        if let validSession = session {
+            //            validSession.sendMessage(["LevelThreshold": ["level":level, "maxValue": maxValue, "minValue": minValue]], replyHandler: nil, errorHandler: nil)
+            validSession.sendMessage(["IsLoud": isLoud], replyHandler: nil, errorHandler: nil)
+        }
+    }
 }
