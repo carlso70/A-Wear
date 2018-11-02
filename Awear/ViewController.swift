@@ -316,13 +316,13 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
         
         // Schedules a timer, which fires a callback(levelTimerCallback) every 0.02 seconds
         
-        levelTimer = Timer.scheduledTimer(timeInterval: 0.001, target: self, selector: #selector(levelTimerCallback), userInfo: nil, repeats: true)
+        levelTimer = Timer.scheduledTimer(timeInterval: 0.1, target: self, selector: #selector(levelTimerCallback), userInfo: nil, repeats: true)
     }
     
     func calibrate() {
         /* Tell watch calibration has begun */
         isCalibrating = true
-        ConnectivityUtils.sendCalibrateMessageToWatch(session:session, isCalibrating: isCalibrating)
+        ConnectivityUtils.sendCalibrateMessageToWatch(session: self.session, isCalibrating: isCalibrating)
         
         levelTimer.invalidate()
         
@@ -374,8 +374,8 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
         
         /* Tell watch calibration has ended */
         isCalibrating = false
-        ConnectivityUtils.sendCalibrateMessageToWatch(session: session, isCalibrating: isCalibrating)
-        ConnectivityUtils.sendLevelThresholdMessageToWatch(session: session, level: volumeSlider.value, maxValue: volumeSlider.maximumValue, minValue: volumeSlider.minimumValue)
+        ConnectivityUtils.sendCalibrateMessageToWatch(session: self.session, isCalibrating: isCalibrating)
+        ConnectivityUtils.sendLevelThresholdMessageToWatch(session: self.session, level: volumeSlider.value, maxValue: volumeSlider.maximumValue, minValue: volumeSlider.minimumValue)
         
         setupAudioRecording()
     }

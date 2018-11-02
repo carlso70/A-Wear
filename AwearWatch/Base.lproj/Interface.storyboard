@@ -13,7 +13,7 @@
             <objects>
                 <controller id="AgC-eL-Hgc" customClass="InterfaceController" customModule="AwearWatch" customModuleProvider="target">
                     <items>
-                        <slider width="1" alignment="left" continuous="YES" maximum="180" steps="20" id="7z2-fH-kQ2">
+                        <slider width="1" alignment="left" continuous="YES" value="155" minimum="125" maximum="200" steps="20" id="7z2-fH-kQ2">
                             <connections>
                                 <action selector="volumeThresholdOnChange:" destination="AgC-eL-Hgc" id="Vea-2e-lqw"/>
                             </connections>
