@@ -53,21 +53,11 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="OYX-da-idE">
-                                <rect key="frame" x="125" y="352" width="121" height="38"/>
+                                <rect key="frame" x="125" y="371" width="121" height="38"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <state key="normal" title="Disable Listening"/>
                                 <connections>
                                     <action selector="disableEnableAudioWith_sender:" destination="BYZ-38-t0r" eventType="touchUpInside" id="sNd-8X-Y76"/>
-                                </connections>
-                            </button>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="eno-Oh-Gi0">
-                                <rect key="frame" x="147" y="607" width="77" height="30"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <state key="normal" title="Health App">
-                                    <color key="titleColor" red="1" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                </state>
-                                <connections>
-                                    <segue destination="yi8-AZ-AZh" kind="show" id="ZGg-9z-VhI"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="1PU-pO-lhB">
@@ -105,15 +95,26 @@
                                     <action selector="calibrateVolume:" destination="BYZ-38-t0r" eventType="touchUpInside" id="WMF-fB-HhE"/>
                                 </connections>
                             </button>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="h9a-UM-k1V">
-                                <rect key="frame" x="64" y="476" width="251" height="37"/>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="eno-Oh-Gi0">
+                                <rect key="frame" x="149" y="476" width="77" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="20"/>
-                                <nil key="textColor"/>
-                                <nil key="highlightedColor"/>
-                            </label>
+                                <state key="normal" title="Health App">
+                                    <color key="titleColor" red="1" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                </state>
+                                <connections>
+                                    <segue destination="yi8-AZ-AZh" kind="show" id="ZGg-9z-VhI"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="fdK-SS-EyY">
+                                <rect key="frame" x="61" y="514" width="259" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="Record Heart Rate above Max Volume"/>
+                                <connections>
+                                    <action selector="getHeartRate:" destination="BYZ-38-t0r" eventType="touchUpInside" id="X2c-Md-4Zf"/>
+                                </connections>
+                            </button>
                         </subviews>
-                        <color key="backgroundColor" red="0.0" green="0.99143940210000003" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <color key="backgroundColor" red="0.75804843132255528" green="1" blue="0.70192268580782402" alpha="0.59999999999999998" colorSpace="custom" customColorSpace="sRGB"/>
                         <viewLayoutGuide key="safeArea" id="Uee-0j-aNJ" colorLabel="IBBuiltInLabel-Purple"/>
                     </view>
                     <navigationItem key="navigationItem" id="lIb-FC-vCi"/>
@@ -121,7 +122,6 @@
                         <outlet property="calibrateButton" destination="Ob7-bA-YvV" id="RF4-PC-Inb"/>
                         <outlet property="currentVolume" destination="TaU-zj-FfN" id="yRt-xA-K63"/>
                         <outlet property="disableAudio" destination="OYX-da-idE" id="SQu-nb-yX1"/>
-                        <outlet property="outdoorLbl" destination="h9a-UM-k1V" id="hK4-TZ-Eio"/>
                         <outlet property="renableTime" destination="vwT-i0-8Js" id="yye-8T-DlL"/>
                         <outlet property="volumeLabel" destination="ZYz-CO-UI8" id="jWr-FE-Xuw"/>
                         <outlet property="volumeSlider" destination="8wH-CM-ukV" id="LGI-eq-IJB"/>
@@ -160,6 +160,14 @@
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="OMM-Xc-PuX">
+                                <rect key="frame" x="163" y="556" width="48" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="Cancel"/>
+                                <connections>
+                                    <action selector="cancel:" destination="Xj6-N0-qd6" eventType="touchUpInside" id="NjP-0B-bjn"/>
+                                </connections>
+                            </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Use Watch" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4ma-aS-oXW">
                                 <rect key="frame" x="81" y="109" width="114" height="28"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -234,24 +242,8 @@
                                     <action selector="watchOnOff:" destination="Xj6-N0-qd6" eventType="valueChanged" id="f13-o1-yci"/>
                                 </connections>
                             </switch>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="OMM-Xc-PuX">
-                                <rect key="frame" x="158" y="594" width="48" height="30"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <state key="normal" title="Cancel"/>
-                                <connections>
-                                    <action selector="cancel:" destination="Xj6-N0-qd6" eventType="touchUpInside" id="NjP-0B-bjn"/>
-                                </connections>
-                            </button>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="S7U-KG-26p">
-                                <rect key="frame" x="165" y="556" width="34" height="30"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <state key="normal" title="Save"/>
-                                <connections>
-                                    <action selector="save:" destination="Xj6-N0-qd6" eventType="touchUpInside" id="OKF-K3-sCN"/>
-                                </connections>
-                            </button>
                         </subviews>
-                        <color key="backgroundColor" red="0.0" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <color key="backgroundColor" red="0.808025062084198" green="0.95622605085372925" blue="0.78230947256088257" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <viewLayoutGuide key="safeArea" id="h13-0Y-f41"/>
                     </view>
                     <connections>
@@ -259,7 +251,6 @@
                         <outlet property="healthAppSwitch" destination="DFo-D6-YWr" id="TJD-hH-ywk"/>
                         <outlet property="outdoorSwitch" destination="sKd-rs-sWe" id="54K-4N-BLc"/>
                         <outlet property="resetStatsBtn" destination="oPU-2d-3Wr" id="YIp-hw-ugd"/>
-                        <outlet property="saveBtn" destination="S7U-KG-26p" id="4DT-2Q-KJI"/>
                         <outlet property="statsSwitch" destination="C3M-gV-cx4" id="zch-Oq-GI4"/>
                         <outlet property="vibrationLvl" destination="7Qd-GM-hMf" id="Jdi-Bn-bfN"/>
                         <outlet property="vibrationSlider" destination="OKb-eL-wDX" id="dgx-QH-dXA"/>
@@ -326,15 +317,23 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="YR8-TY-srF">
-                                <rect key="frame" x="72" y="348" width="176" height="49"/>
+                                <rect key="frame" x="99" y="491" width="176" height="49"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <state key="normal" title="Button"/>
+                                <state key="normal" title="Back"/>
                                 <connections>
                                     <action selector="back:" destination="yi8-AZ-AZh" eventType="touchUpInside" id="hxr-ud-nui"/>
                                 </connections>
                             </button>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7am-TE-yAf">
+                                <rect key="frame" x="154" y="209" width="66" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="Authorize"/>
+                                <connections>
+                                    <action selector="authoriseHealthKitAccess:" destination="yi8-AZ-AZh" eventType="touchUpInside" id="B9T-9P-vKa"/>
+                                </connections>
+                            </button>
                         </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <color key="backgroundColor" cocoaTouchSystemColor="lightTextColor"/>
                         <viewLayoutGuide key="safeArea" id="l48-7f-igY"/>
                     </view>
                     <connections>

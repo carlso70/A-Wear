@@ -50,8 +50,7 @@ class InterfaceController: WKInterfaceController, WCSessionDelegate {
             voiceLevelLabel.setText("Volume: \(voice)")
         }
     }
-    
-    
+
     override func awake(withContext context: Any?) {
         super.awake(withContext: context)
         
@@ -69,6 +68,11 @@ class InterfaceController: WKInterfaceController, WCSessionDelegate {
         super.didDeactivate()
     }
     
+    /* Sends a message to the */
+    func disableApp(time: Int) {
+        session.sendMessage(["DisableTime": time], replyHandler: nil, errorHandler: nil)
+    }
+    
     /* Sends a new application context to iOS app to start Calibrating */
     @IBAction func calibrateButtonOnClick() {
         session.sendMessage(["StartCalibrating": true], replyHandler: nil, errorHandler: nil)
@@ -79,7 +83,6 @@ class InterfaceController: WKInterfaceController, WCSessionDelegate {
     }
     
     @IBAction func disableButtonOnClick() {
-        
         let action1 = WKAlertAction(title: "1", style: .destructive){
             self.disableApp(time: 1)
         }
@@ -97,8 +100,8 @@ class InterfaceController: WKInterfaceController, WCSessionDelegate {
         presentAlert(withTitle: "Disable Application", message: "Select Time", preferredStyle: .actionSheet, actions: [action1, action2, action3, action4, action5])
     }
     
-    /* Sends a message to the */
-    func disableApp(time: Int) {
-        session.sendMessage(["DisableTime": time], replyHandler: nil, errorHandler: nil)
+    @IBAction func enableButtonOnClick() {
+        session.sendMessage(["Enable": true], replyHandler: nil, errorHandler: nil)
     }
+
 }

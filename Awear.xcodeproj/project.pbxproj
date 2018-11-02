@@ -19,12 +19,14 @@
 		447D2B402181232D004006AC /* NotificationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 447D2B3F2181232D004006AC /* NotificationController.swift */; };
 		447D2B422181232E004006AC /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 447D2B412181232E004006AC /* Assets.xcassets */; };
 		447D2B472181232E004006AC /* AwearWatch.app in Embed Watch Content */ = {isa = PBXBuildFile; fileRef = 447D2B2A2181232B004006AC /* AwearWatch.app */; };
+		44E14A02218A8121009A2AB8 /* HealthKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 44E14A01218A8121009A2AB8 /* HealthKit.framework */; };
+		44E14A04218A8289009A2AB8 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 61F559732158747400776195 /* Main.storyboard */; };
+		44E14A0A218B704B009A2AB8 /* HealthKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 44E14A09218B704B009A2AB8 /* HealthKit.framework */; };
 		6129BB19218B5FD500508718 /* StatModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 6129BB17218B5FD500508718 /* StatModel.xcdatamodeld */; };
 		6129BB1B218B632100508718 /* StatisticManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6129BB1A218B632100508718 /* StatisticManager.swift */; };
 		6129BB1E218B705400508718 /* ConnectivityUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6129BB1D218B705400508718 /* ConnectivityUtils.swift */; };
 		61F559702158747400776195 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61F5596F2158747400776195 /* AppDelegate.swift */; };
 		61F559722158747400776195 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61F559712158747400776195 /* ViewController.swift */; };
-		61F559752158747400776195 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 61F559732158747400776195 /* Main.storyboard */; };
 		61F559772158747600776195 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 61F559762158747600776195 /* Assets.xcassets */; };
 		61F5597A2158747600776195 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 61F559782158747600776195 /* LaunchScreen.storyboard */; };
 		61F559852158747600776195 /* AwearTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61F559842158747600776195 /* AwearTests.swift */; };
@@ -106,6 +108,11 @@
 		447D2B412181232E004006AC /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		447D2B432181232E004006AC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		447D2B442181232E004006AC /* PushNotificationPayload.apns */ = {isa = PBXFileReference; lastKnownFileType = text; path = PushNotificationPayload.apns; sourceTree = "<group>"; };
+		44E14A01218A8121009A2AB8 /* HealthKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = HealthKit.framework; path = Platforms/WatchOS.platform/Developer/SDKs/WatchOS5.0.sdk/System/Library/Frameworks/HealthKit.framework; sourceTree = DEVELOPER_DIR; };
+		44E14A08218B703A009A2AB8 /* AwearWatch.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = AwearWatch.entitlements; sourceTree = "<group>"; };
+		44E14A09218B704B009A2AB8 /* HealthKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = HealthKit.framework; path = System/Library/Frameworks/HealthKit.framework; sourceTree = SDKROOT; };
+		6129BB112189664B00508718 /* Awear.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Awear.entitlements; sourceTree = "<group>"; };
+		6129BB122189674D00508718 /* AwearWatch Extension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "AwearWatch Extension.entitlements"; sourceTree = "<group>"; };
 		6129BB13218A78D300508718 /* AwearWatch-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "AwearWatch-Bridging-Header.h"; sourceTree = "<group>"; };
 		6129BB18218B5FD500508718 /* StatModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = StatModel.xcdatamodel; sourceTree = "<group>"; };
 		6129BB1A218B632100508718 /* StatisticManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticManager.swift; sourceTree = "<group>"; };
@@ -127,6 +134,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				44E14A02218A8121009A2AB8 /* HealthKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -134,6 +142,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				44E14A0A218B704B009A2AB8 /* HealthKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -157,6 +166,7 @@
 		447D2B2B2181232B004006AC /* AwearWatch */ = {
 			isa = PBXGroup;
 			children = (
+				44E14A08218B703A009A2AB8 /* AwearWatch.entitlements */,
 				447D2B2C2181232B004006AC /* Interface.storyboard */,
 				447D2B2F2181232D004006AC /* Assets.xcassets */,
 				447D2B312181232D004006AC /* Info.plist */,
@@ -177,6 +187,15 @@
 			path = "AwearWatch Extension";
 			sourceTree = "<group>";
 		};
+		44E14A00218A8121009A2AB8 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				44E14A09218B704B009A2AB8 /* HealthKit.framework */,
+				44E14A01218A8121009A2AB8 /* HealthKit.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		61F559632158747400776195 = {
 			isa = PBXGroup;
 			children = (
@@ -190,6 +209,7 @@
 				447D2B2B2181232B004006AC /* AwearWatch */,
 				447D2B362181232D004006AC /* AwearWatch Extension.appex */,
 				447D2B3A2181232D004006AC /* AwearWatch Extension */,
+				44E14A00218A8121009A2AB8 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -336,6 +356,11 @@
 				TargetAttributes = {
 					447D2B292181232B004006AC = {
 						CreatedOnToolsVersion = 10.0;
+						SystemCapabilities = {
+							com.apple.ApplicationGroups.iOS = {
+								enabled = 0;
+							};
+						};
 						LastSwiftMigration = 1000;
 					};
 					447D2B352181232D004006AC = {
@@ -347,6 +372,9 @@
 							com.apple.BackgroundModes.watchos.extension = {
 								enabled = 1;
 							};
+							com.apple.HealthKit.watchos = {
+								enabled = 1;
+							};
 						};
 					};
 					61F5596B2158747400776195 = {
@@ -356,6 +384,9 @@
 								enabled = 0;
 							};
 							com.apple.BackgroundModes = {
+								enabled = 1;
+							};
+							com.apple.HealthKit = {
 								enabled = 1;
 							};
 						};
@@ -417,7 +448,7 @@
 				61F5597A2158747600776195 /* LaunchScreen.storyboard in Resources */,
 				61F559772158747600776195 /* Assets.xcassets in Resources */,
 				0CDF2EE92166B01F00A4F2C1 /* Launch Screen.storyboard in Resources */,
-				61F559752158747400776195 /* Main.storyboard in Resources */,
+				44E14A04218A8289009A2AB8 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
