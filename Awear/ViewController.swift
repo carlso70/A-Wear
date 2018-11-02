@@ -410,7 +410,10 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
                     generator.notificationOccurred(.error)
                 }
                 /* Save event to db */
-                StatisticManager.save(date: Date.init(), threshold: LEVEL_THRESHOLD, voiceLevel: level, heartRate: 85)
+                if(RECORD_STATS){
+                    StatisticManager.save(date: Date.init(), threshold: LEVEL_THRESHOLD, voiceLevel: level, heartRate: 85)
+                    print("saving stats")
+                }
                 
                 if(OUTDOOR_MODE){
                     AudioServicesPlaySystemSound (1009)
@@ -475,7 +478,10 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
         }
         
         /* Save event to db */
+        if(RECORD_STATS){
         StatisticManager.save(date: Date.init(), threshold: LEVEL_THRESHOLD, voiceLevel: voiceLevel, heartRate: Double(heartRate))
+            print("saving stats")
+        }
     }
     
     func disableApplication(time: Int){
@@ -585,7 +591,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
     
     func checkOutdoor(){
         OUTDOOR_MODE = UserDefaults.standard.bool(forKey: "outdoorEnable")
-        
+        RECORD_STATS = UserDefaults.standard.bool(forKey: "recordStats")
         
         if(OUTDOOR_MODE){
             outdoorLbl.text = "OUTDOOR MODE IS ON"
