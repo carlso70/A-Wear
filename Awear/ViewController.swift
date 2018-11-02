@@ -341,7 +341,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
         
         checkOutdoor()
         if(OUTDOOR_MODE){
-            volumeSlider.maximumValue = avg + 75
+            volumeSlider.maximumValue = avg + 100
         }else {
             volumeSlider.maximumValue = avg + 50
         }
@@ -411,6 +411,10 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
                 }
                 /* Save event to db */
                 StatisticManager.save(date: Date.init(), threshold: LEVEL_THRESHOLD, voiceLevel: level, heartRate: 85)
+                
+                if(OUTDOOR_MODE){
+                    AudioServicesPlaySystemSound (1009)
+                }
                 print("too loud")
             } else if diff > 7 {
                 let generator = UINotificationFeedbackGenerator()
