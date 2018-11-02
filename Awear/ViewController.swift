@@ -21,7 +21,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
     
     var recorder: AVAudioRecorder!
     var levelTimer = Timer()
-    var LEVEL_THRESHOLD: Float = -10.0
+    var LEVEL_THRESHOLD: Float = 160
     var isCalibrating = false
     var VIBRATION_LEVEL = 1
     var REENABLE_TIME = Date();
@@ -30,15 +30,18 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
     
     var RECORD_STATS = true;
     var WATCH_CONNECT = true;
-    var HEALTH_APP = true;
+    //var HEALTH_APP = true;
     var OUTDOOR_MODE = true;
+    var OUTDOOR_AUTO = true;
+    var OUTDOOR_MAN = true;
     
     @IBOutlet weak var currentVolume: UILabel!
+    @IBOutlet weak var heartRateDisplay: UILabel!
     @IBOutlet weak var volumeLabel: UILabel!
     @IBOutlet weak var volumeSlider: UISlider!
     @IBOutlet weak var calibrateButton: UIButton!
     @IBOutlet weak var healthAppBtn: UIButton!
-    
+    @IBOutlet weak var outdoorLbl: UILabel!
     @IBOutlet weak var renableTime: UILabel!
     @IBOutlet weak var disableAudio: UIButton!
     
@@ -87,9 +90,17 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
         RECORD_STATS = UserDefaults.standard.bool(forKey: "recordStats")
         VIBRATION_LEVEL = UserDefaults.standard.integer(forKey: "vibrationLevel")
         audioEnabled =  UserDefaults.standard.bool(forKey: "audioEnabled")
-        OUTDOOR_MODE = UserDefaults.standard.bool(forKey: "outdoorEnable")
-        HEALTH_APP = UserDefaults.standard.bool(forKey: "healthEnable")
+       // OUTDOOR_MODE = UserDefaults.standard.bool(forKey: "outdoorEnable")
+       // HEALTH_APP = UserDefaults.standard.bool(forKey: "healthEnable")
+        OUTDOOR_AUTO = UserDefaults.standard.bool(forKey: "outdoorAutoEnable")
+        OUTDOOR_MAN = UserDefaults.standard.bool(forKey: "outdoorManEnable")
         
+        if(OUTDOOR_AUTO){
+            checkAutoOutdoor();
+        }else if(OUTDOOR_MAN){
+            checkOutdoor()
+        }
+    
         setupNotifications()
         setupAudioRecording()
         getMyLocation()
@@ -313,7 +324,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
         levelTimer.invalidate()
         
         recorder.updateMeters()
-        currentVolume.text = "\(recorder.averagePower(forChannel: 0))"
+        currentVolume.text = "\(recorder.averagePower(forChannel: 0) + 160)"
         calibrateButton.setTitle("Calibrating...", for: [])
         volumeLabel.text = "Calibrating..."
         
@@ -324,8 +335,8 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
         
         while(Date() < later) {
             recorder.updateMeters()
-            currentVolume.text = "\(recorder.averagePower(forChannel: 0))"
-            sum = sum + recorder.averagePower(forChannel: 0)
+            currentVolume.text = "\(recorder.averagePower(forChannel: 0) + 160)"
+            sum = sum + recorder.averagePower(forChannel: 0) + 160
             ct = ct + 1
         }
         
@@ -333,9 +344,25 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
         
         let avg: Float = sum / ct
         volumeSlider.minimumValue = avg
-        volumeSlider.maximumValue = avg + 50
-        volumeSlider.value = avg + 25
-        LEVEL_THRESHOLD = volumeSlider.value
+        
+        //OUTDOOR_MODE = UserDefaults.standard.bool(forKey: "outdoorEnable")
+        if(OUTDOOR_AUTO){
+            checkAutoOutdoor()
+        }else if(OUTDOOR_MAN){
+            checkOutdoor()
+        }
+        else{
+            OUTDOOR_MODE = false;
+        }
+        
+        if(OUTDOOR_MODE){
+            volumeSlider.maximumValue = avg + 60
+        }else {
+            volumeSlider.maximumValue = avg + 30
+        }
+        
+        volumeSlider.value = avg + (volumeSlider.maximumValue - avg)/2
+        LEVEL_THRESHOLD = volumeSlider.maximumValue
         volumeLabel.text = "\(volumeSlider.value)"
         
         /* Tell watch calibration has ended */
@@ -357,13 +384,52 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
         calibrate()
     }
     
+    func dBFS_convertTo_dB (dBFSValue: Float) -> Float
+    {
+        var level:Float = 0.0
+        let peak_bottom:Float = -60.0 // dBFS -> -160..0   so it can be -80 or -60
+        
+        if dBFSValue < peak_bottom
+        {
+            level = 0.0
+        }
+        else if dBFSValue >= 0.0
+        {
+            level = 1.0
+        }
+        else
+        {
+            let root:Float              =   2.0
+            let minAmp:Float            =   powf(10.0, 0.05 * peak_bottom)
+            let inverseAmpRange:Float   =   1.0 / (1.0 - minAmp)
+            let amp:Float               =   powf(10.0, 0.05 * dBFSValue)
+            let adjAmp:Float            =   (amp - minAmp) * inverseAmpRange
+            
+            level = powf(adjAmp, 1.0 / root)
+        }
+        return level
+    }
+    
     // Callback ever 0.02 seconds
     @objc func levelTimerCallback() {
         checkDisabled()
+        if(OUTDOOR_AUTO){
+            checkAutoOutdoor()
+        }else if(OUTDOOR_MAN){
+            checkOutdoor()
+        }
+        else{
+            OUTDOOR_MODE = false;
+            
+        }
+        
+        RECORD_STATS = UserDefaults.standard.bool(forKey: "recordStats")
         
         recorder.updateMeters()
         
-        let level = recorder.averagePower(forChannel: 0)
+        print(dBFS_convertTo_dB(dBFSValue: recorder.averagePower(forChannel: 0)))
+        
+        let level = recorder.averagePower(forChannel: 0) + 160
         let isLoud = level > LEVEL_THRESHOLD
         currentVolume.text = "\(level)"
         
@@ -379,8 +445,8 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
             ConnectivityUtils.sendLoudNoiseMessageToWatch(session: session, isLoud: true)
             recordStat(voiceLevel: level)
             
-            let diff = level - LEVEL_THRESHOLD
-            if(diff > 15) {
+            let diff = level/LEVEL_THRESHOLD
+            if(diff > 1.3) {
                 let generator = UINotificationFeedbackGenerator()
                 //generator.notificationOccurred(.error)
                 
@@ -397,9 +463,17 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
                 default:
                     generator.notificationOccurred(.error)
                 }
+                /* Save event to db */
+                if(RECORD_STATS){
+                    StatisticManager.save(date: Date.init(), threshold: LEVEL_THRESHOLD, voiceLevel: level, heartRate: 85)
+                    print("saving stats")
+                }
                 
+                if(OUTDOOR_MODE){
+                    AudioServicesPlaySystemSound (1009)
+                }
                 print("too loud")
-            } else if diff > 7 {
+            } else if diff > 1.15 {
                 let generator = UINotificationFeedbackGenerator()
                 
                 switch VIBRATION_LEVEL {
@@ -446,6 +520,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
             sendNotification()
             // Restart audio recording
             setupAudioRecording()
+            getHeartRate();
         }
     }
     
@@ -458,7 +533,10 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
         }
         
         /* Save event to db */
+        if(RECORD_STATS){
         StatisticManager.save(date: Date.init(), threshold: LEVEL_THRESHOLD, voiceLevel: voiceLevel, heartRate: Double(heartRate))
+            print("saving stats")
+        }
     }
     
     func disableApplication(time: Int){
@@ -566,6 +644,18 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
         calibrateButton.layer.cornerRadius = 6
     }
     
+    func checkOutdoor(){
+        OUTDOOR_MODE = UserDefaults.standard.bool(forKey: "outdoorManEnable")
+        
+        
+        if(OUTDOOR_MODE){
+            outdoorLbl.text = "OUTDOOR MODE IS ON"
+        }
+        else{
+            outdoorLbl.text = ""
+        }
+        
+    }
     
     func checkDisabled(){
         audioEnabled =  UserDefaults.standard.bool(forKey: "audioEnabled")
@@ -583,6 +673,22 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
                 volumeSlider.isUserInteractionEnabled = true;
                 disableAudio.setTitle("Disable Listening", for: .normal);
                 renableTime.text = "";
+            }
+        }
+    }
+    
+    @IBAction func authoriseHealthKitAccess(_ sender: UIButton) {
+        let healthKitTypes: Set = [
+            HKObjectType.quantityType(forIdentifier: HKQuantityTypeIdentifier.heartRate)!
+        ]
+        healthStore.requestAuthorization(toShare: healthKitTypes, read: healthKitTypes) { (_, _) in
+            print("Authorized?")
+        }
+        healthStore.requestAuthorization(toShare: healthKitTypes, read: healthKitTypes) { (bool, error) in
+            if let e = error {
+                print("Oops! Something went wrong during Authorization. \(e.localizedDescription)")
+            } else {
+                print("User has completed the authorization.")
             }
         }
     }
@@ -627,12 +733,54 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
         healthStore.execute(query)
     }
     
-    @IBAction func getHeartRate(_ sender: Any) {
-        fetchLatestHeartRateSample { (result) in
-            //this version gives the values in the form of 00.00 count/min
-//            print("\(String(describing: result?.last?.quantity.doubleValue(for: HKUnit.count().unitDivided(by: HKUnit.minute()))))\n")
-            print("\(String(describing: result?.last?.quantity))\n")
-
+    func checkAutoOutdoor(){
+        let curr = locationMgr.location
+        
+        let hor = lround(curr?.horizontalAccuracy ?? -1)
+        
+        if (hor < 0)
+        {
+            OUTDOOR_MODE = false;
+            // No Signal
+        }
+        else if (hor > 163)
+        {
+            // Poor Signal
+            OUTDOOR_MODE = false;
+        }
+        else if (hor > 48)
+        {
+            // Average Signal
+            OUTDOOR_MODE = true;
+        }
+        else
+        {
+            // Full Signal
+            OUTDOOR_MODE = true;
+        }
+        
+        if(OUTDOOR_MODE){
+            outdoorLbl.text = "OUTDOOR MODE IS ON"
+        }
+        else{
+            outdoorLbl.text = ""
         }
     }
+    
+    @IBAction func getHeartRate() {
+        fetchLatestHeartRateSample { (result) in
+            //this version gives the values in the form of 00.0
+            let x = result?.last?.quantity.doubleValue(for: HKUnit.count().unitDivided(by: HKUnit.minute())) ?? nil
+
+            if(x?.description == nil)
+            {
+                return;
+            }
+            let y = x?.description
+
+            self.heartRateDisplay.text = y
+//            print("\(String(describing: result?.last?.quantity))\n")
+        }
+    }
+
 }

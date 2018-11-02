@@ -36,22 +36,4 @@ class HealthAppViewController : UIViewController{
          dismiss(animated: true, completion: nil)
     }
     
-    @IBAction func authoriseHealthKitAccess(_ sender: UIButton) {
-        let healthKitTypes: Set = [
-            HKObjectType.quantityType(forIdentifier: HKQuantityTypeIdentifier.heartRate)!
-        ]
-        healthStore.requestAuthorization(toShare: healthKitTypes, read: healthKitTypes) { (_, _) in
-            print("Authorized?")
-        }
-        healthStore.requestAuthorization(toShare: healthKitTypes, read: healthKitTypes) { (bool, error) in
-            if let e = error {
-                print("Oops! Something went wrong during Authorization. \(e.localizedDescription)")
-            } else {
-                print("User has completed the authorization.")
-            }
-        }
-    }
-    
-    
-    
 }
