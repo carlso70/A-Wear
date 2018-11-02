@@ -388,76 +388,67 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
             //            let generator = UINotificationFeedbackGenerator()
             //                view.backgroundColor = UIColor.red
             // Need to stop timer and audio session before playing a vibration
-            // Notifications
-            if isLoud {
-                //            let generator = UINotificationFeedbackGenerator()
-//                view.backgroundColor = UIColor.red
-                // Need to stop timer and audio session before playing a vibration
-              //  generator.impactOccurred()
+            //  generator.impactOccurred()
+            ConnectivityUtils.sendLoudNoiseMessageToWatch(session: session, isLoud: true)
+            
+            let diff = level - LEVEL_THRESHOLD
+            if(diff > 15) {
+                let generator = UINotificationFeedbackGenerator()
+                //generator.notificationOccurred(.error)
                 
-                let diff = level - LEVEL_THRESHOLD
-                if(diff > 15) {
-                    let generator = UINotificationFeedbackGenerator()
-                    //generator.notificationOccurred(.error)
-                    
-                    switch VIBRATION_LEVEL {
-                    case 1:
-                        generator.notificationOccurred(.error)
-                    case 2:
-                        generator.notificationOccurred(.success)
-                        generator.notificationOccurred(.error)
-                    case 3:
-                        generator.notificationOccurred(.success)
-                        generator.notificationOccurred(.error)
-                       // generator.impactOccurred()
-                    default:
-                        generator.notificationOccurred(.error)
-                    }
-                    
-                    //OUTDOOR_MODE = UserDefaults.standard.bool(forKey: "outdoorEnable")
-                    if(OUTDOOR_MODE){
-                        AudioServicesPlaySystemSound (1016)
-                    }
-                    
-                    print("too loud")
-                } else if diff > 7 {
-                    let generator = UINotificationFeedbackGenerator()
-                    
-                    switch VIBRATION_LEVEL {
-                    case 1:
-                        generator.notificationOccurred(.success)
-                    case 2:
-                        generator.notificationOccurred(.success)
-                        generator.notificationOccurred(.success)
-                    case 3:
-                        generator.notificationOccurred(.success)
-                        generator.notificationOccurred(.success)
-                        generator.notificationOccurred(.success)
-                    default:
-                        generator.notificationOccurred(.success)
-                    }
-                    
-                    //generator.notificationOccurred(.success)
-                    print("loud")
-                } else {
-                    let generator = UIImpactFeedbackGenerator(style: .light)
-                    //  generator.impactOccurred()
-                    
-                    switch VIBRATION_LEVEL {
-                    case 1:
-                        generator.impactOccurred()
-                    case 2:
-                        generator.impactOccurred()
-                        generator.impactOccurred()
-                    case 3:
-                        generator.impactOccurred()
-                        generator.impactOccurred()
-                        generator.impactOccurred()
-                    default:
-                        generator.impactOccurred()
-                    }
-                    
-                    print("not that loud")
+                switch VIBRATION_LEVEL {
+                case 1:
+                    generator.notificationOccurred(.error)
+                case 2:
+                    generator.notificationOccurred(.error)
+                    generator.notificationOccurred(.error)
+                case 3:
+                    generator.notificationOccurred(.error)
+                    generator.notificationOccurred(.error)
+                    generator.notificationOccurred(.error)
+                default:
+                    generator.notificationOccurred(.error)
+                }
+                /* Save event to db */
+                StatisticManager.save(date: Date.init(), threshold: LEVEL_THRESHOLD, voiceLevel: level, heartRate: 85)
+                print("too loud")
+            } else if diff > 7 {
+                let generator = UINotificationFeedbackGenerator()
+                
+                switch VIBRATION_LEVEL {
+                case 1:
+                    generator.notificationOccurred(.success)
+                case 2:
+                    generator.notificationOccurred(.success)
+                    generator.notificationOccurred(.success)
+                case 3:
+                    generator.notificationOccurred(.success)
+                    generator.notificationOccurred(.success)
+                    generator.notificationOccurred(.success)
+                default:
+                    generator.notificationOccurred(.success)
+                }
+                
+                //generator.notificationOccurred(.success)
+                /* Save event to db */
+                StatisticManager.save(date: Date.init(), threshold: LEVEL_THRESHOLD, voiceLevel: level, heartRate: 85)
+                print("loud")
+            } else {
+                let generator = UIImpactFeedbackGenerator(style: .light)
+                //  generator.impactOccurred()
+                
+                switch VIBRATION_LEVEL {
+                case 1:
+                    generator.impactOccurred()
+                case 2:
+                    generator.impactOccurred()
+                    generator.impactOccurred()
+                case 3:
+                    generator.impactOccurred()
+                    generator.impactOccurred()
+                    generator.impactOccurred()
+                default:
+                    generator.impactOccurred()
                 }
                 /* Save event to db */
                 StatisticManager.save(date: Date.init(), threshold: LEVEL_THRESHOLD, voiceLevel: level, heartRate: 85)
