@@ -36,9 +36,5 @@ class StatisticsViewController : UIViewController{
         dismiss(animated: true, completion: nil)
         
     }
-    
-    
-    
-    
-    
+
 }

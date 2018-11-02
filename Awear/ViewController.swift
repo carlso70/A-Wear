@@ -95,8 +95,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
         setupNotifications()
         setupAudioRecording()
         getMyLocation()
-        
-        
+
         print("VIBRATION LEVEL: \(VIBRATION_LEVEL)");
     }
     
@@ -390,6 +389,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
             // Need to stop timer and audio session before playing a vibration
             //  generator.impactOccurred()
             ConnectivityUtils.sendLoudNoiseMessageToWatch(session: session, isLoud: true)
+            recordStat(voiceLevel: level)
             
             let diff = level - LEVEL_THRESHOLD
             if(diff > 15) {
@@ -433,9 +433,6 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
                     generator.notificationOccurred(.success)
                 }
                 
-                //generator.notificationOccurred(.success)
-                /* Save event to db */
-                StatisticManager.save(date: Date.init(), threshold: LEVEL_THRESHOLD, voiceLevel: level, heartRate: 85)
                 print("loud")
             } else {
                 let generator = UIImpactFeedbackGenerator(style: .light)
@@ -454,8 +451,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
                 default:
                     generator.impactOccurred()
                 }
-                /* Save event to db */
-                StatisticManager.save(date: Date.init(), threshold: LEVEL_THRESHOLD, voiceLevel: level, heartRate: 85)
+                
                 print("not that loud")
             }
             
@@ -470,6 +466,17 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
         }
     }
     
+    func recordStat(voiceLevel: Float) {
+        var heartRate = 85.00
+        do {
+            fetchLatestHeartRateSample { (result) in
+                heartRate = (result?.last?.quantity.doubleValue(for: HKUnit.count().unitDivided(by: HKUnit.minute())))!
+            }
+        }
+        
+        /* Save event to db */
+        StatisticManager.save(date: Date.init(), threshold: LEVEL_THRESHOLD, voiceLevel: voiceLevel, heartRate: Double(heartRate))
+    }
     
     func disableApplication(time: Int){
         // disable application for time Int
@@ -651,7 +658,10 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
     
     @IBAction func getHeartRate(_ sender: Any) {
         fetchLatestHeartRateSample { (result) in
-            print("\(result)\n")
+            //this version gives the values in the form of 00.00 count/min
+//            print("\(String(describing: result?.last?.quantity.doubleValue(for: HKUnit.count().unitDivided(by: HKUnit.minute()))))\n")
+            print("\(String(describing: result?.last?.quantity))\n")
+
         }
     }
 }

@@ -306,9 +306,9 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8PR-Z1-vFp">
-                                <rect key="frame" x="164" y="267" width="46" height="44"/>
+                                <rect key="frame" x="131" y="20" width="112" height="78"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <state key="normal" title="Button"/>
+                                <state key="normal" title="Go Back"/>
                                 <connections>
                                     <action selector="back:" destination="9Y1-zY-OZf" eventType="touchUpInside" id="ims-Ff-eMv"/>
                                 </connections>
