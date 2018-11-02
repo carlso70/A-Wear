@@ -108,11 +108,11 @@
 		447D2B412181232E004006AC /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		447D2B432181232E004006AC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		447D2B442181232E004006AC /* PushNotificationPayload.apns */ = {isa = PBXFileReference; lastKnownFileType = text; path = PushNotificationPayload.apns; sourceTree = "<group>"; };
+		4495FE3C218BDA8E00EC9F8E /* Awear.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Awear.entitlements; sourceTree = "<group>"; };
+		4495FE3D218BDA9E00EC9F8E /* AwearWatch Extension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "AwearWatch Extension.entitlements"; sourceTree = "<group>"; };
 		44E14A01218A8121009A2AB8 /* HealthKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = HealthKit.framework; path = Platforms/WatchOS.platform/Developer/SDKs/WatchOS5.0.sdk/System/Library/Frameworks/HealthKit.framework; sourceTree = DEVELOPER_DIR; };
 		44E14A08218B703A009A2AB8 /* AwearWatch.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = AwearWatch.entitlements; sourceTree = "<group>"; };
 		44E14A09218B704B009A2AB8 /* HealthKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = HealthKit.framework; path = System/Library/Frameworks/HealthKit.framework; sourceTree = SDKROOT; };
-		6129BB112189664B00508718 /* Awear.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Awear.entitlements; sourceTree = "<group>"; };
-		6129BB122189674D00508718 /* AwearWatch Extension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "AwearWatch Extension.entitlements"; sourceTree = "<group>"; };
 		6129BB13218A78D300508718 /* AwearWatch-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "AwearWatch-Bridging-Header.h"; sourceTree = "<group>"; };
 		6129BB18218B5FD500508718 /* StatModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = StatModel.xcdatamodel; sourceTree = "<group>"; };
 		6129BB1A218B632100508718 /* StatisticManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticManager.swift; sourceTree = "<group>"; };
@@ -177,6 +177,7 @@
 		447D2B3A2181232D004006AC /* AwearWatch Extension */ = {
 			isa = PBXGroup;
 			children = (
+				4495FE3D218BDA9E00EC9F8E /* AwearWatch Extension.entitlements */,
 				447D2B3B2181232D004006AC /* InterfaceController.swift */,
 				447D2B3D2181232D004006AC /* ExtensionDelegate.swift */,
 				447D2B3F2181232D004006AC /* NotificationController.swift */,
@@ -216,6 +217,7 @@
 		61F5596E2158747400776195 /* Awear */ = {
 			isa = PBXGroup;
 			children = (
+				4495FE3C218BDA8E00EC9F8E /* Awear.entitlements */,
 				61F5596F2158747400776195 /* AppDelegate.swift */,
 				61F559712158747400776195 /* ViewController.swift */,
 				61F559732158747400776195 /* Main.storyboard */,
@@ -356,12 +358,12 @@
 				TargetAttributes = {
 					447D2B292181232B004006AC = {
 						CreatedOnToolsVersion = 10.0;
+						LastSwiftMigration = 1000;
 						SystemCapabilities = {
 							com.apple.ApplicationGroups.iOS = {
 								enabled = 0;
 							};
 						};
-						LastSwiftMigration = 1000;
 					};
 					447D2B352181232D004006AC = {
 						CreatedOnToolsVersion = 10.0;
@@ -567,6 +569,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_COMPLICATION_NAME = Complication;
+				CODE_SIGN_ENTITLEMENTS = "AwearWatch Extension/AwearWatch Extension.entitlements";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 9P92PT9WKU;
@@ -591,6 +594,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_COMPLICATION_NAME = Complication;
+				CODE_SIGN_ENTITLEMENTS = "AwearWatch Extension/AwearWatch Extension.entitlements";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 9P92PT9WKU;
@@ -784,6 +788,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = Awear/Awear.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 9P92PT9WKU;
 				INFOPLIST_FILE = Awear/Info.plist;
@@ -802,6 +807,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = Awear/Awear.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 9P92PT9WKU;
 				INFOPLIST_FILE = Awear/Info.plist;
