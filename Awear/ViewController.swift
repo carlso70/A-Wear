@@ -15,6 +15,7 @@ import CoreAudio
 import CoreLocation
 import CoreData
 import WatchConnectivity
+import HealthKit
 
 class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDelegate {
     
@@ -25,6 +26,8 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
     var VIBRATION_LEVEL = 1
     var REENABLE_TIME = Date();
     let locationMgr = CLLocationManager()
+    let healthStore = HKHealthStore()
+
     var RECORD_STATS = true;
     var WATCH_CONNECT = true;
     var HEALTH_APP = true;
@@ -362,6 +365,51 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
         if audioEnabled {
             recorder.updateMeters()
             
+            let diff = level - LEVEL_THRESHOLD
+            if(diff > 15) {
+                let generator = UINotificationFeedbackGenerator()
+                //generator.notificationOccurred(.error)
+                
+                switch VIBRATION_LEVEL {
+                case 1:
+                    generator.notificationOccurred(.error)
+                case 2:
+                    generator.notificationOccurred(.error)
+                    generator.notificationOccurred(.error)
+                case 3:
+                    generator.notificationOccurred(.error)
+                    generator.notificationOccurred(.error)
+                    generator.notificationOccurred(.error)
+                default:
+                    generator.notificationOccurred(.error)
+                }
+                
+                print("too loud")
+//                fetchLatestHeartRateSample { (result) in
+//                    print("\(result)")
+//
+//                }
+            }else if(diff > 7) {
+                let generator = UINotificationFeedbackGenerator()
+                
+                switch VIBRATION_LEVEL {
+                case 1:
+                    generator.notificationOccurred(.success)
+                case 2:
+                    generator.notificationOccurred(.success)
+                    generator.notificationOccurred(.success)
+                case 3:
+                    generator.notificationOccurred(.success)
+                    generator.notificationOccurred(.success)
+                    generator.notificationOccurred(.success)
+                default:
+                    generator.notificationOccurred(.success)
+                }
+                
+                //generator.notificationOccurred(.success)
+                print("loud")
+            }else {
+                let generator = UIImpactFeedbackGenerator(style: .light)
             let level = recorder.averagePower(forChannel: 0)
             let isLoud = level > LEVEL_THRESHOLD
             currentVolume.text = "\(level)"
@@ -578,4 +626,52 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
             }
         }
     }
+    
+    func fetchLatestHeartRateSample(
+        completion: @escaping (_ samples: [HKQuantitySample]?) -> Void) {
+        
+        /// Create sample type for the heart rate
+        guard let sampleType = HKObjectType
+            .quantityType(forIdentifier: .heartRate) else {
+                completion(nil)
+                return
+        }
+        
+        /// Predicate for specifiying start and end dates for the query
+        let predicate = HKQuery
+            .predicateForSamples(
+                withStart: Date.distantPast,
+                end: Date(),
+                options: .strictEndDate)
+        
+        /// Set sorting by date.
+        let sortDescriptor = NSSortDescriptor(
+            key: HKSampleSortIdentifierStartDate,
+            ascending: false)
+        
+        /// Create the query
+        let query = HKSampleQuery(
+            sampleType: sampleType,
+            predicate: predicate,
+            limit: 1,
+            sortDescriptors: [sortDescriptor]) { (_, results, error) in
+                
+                guard error == nil else {
+                    print("Error: \(error!.localizedDescription)")
+                    return
+                }
+                completion(results as? [HKQuantitySample])
+        }
+        
+        /// Execute the query in the health store
+        healthStore.execute(query)
+    }
+    
+    @IBAction func getHeartRate(_ sender: Any) {
+        fetchLatestHeartRateSample { (result) in
+            print("\(result)\n")
+
+        }
+    }
+}
 }

@@ -14,13 +14,13 @@ import UIKit
 import AVFoundation
 import CoreAudio
 import CoreLocation
+import HealthKit
 
 class HealthAppViewController : UIViewController{
-        
+    let healthStore = HKHealthStore()
     @IBOutlet weak var backBtn: UIButton!
-    
-    
-    
+    @IBOutlet weak var authBtn: UIButton!
+
     override func viewDidLoad() {
         super.viewDidLoad()
         navigationController?.isNavigationBarHidden = false
@@ -36,7 +36,21 @@ class HealthAppViewController : UIViewController{
          dismiss(animated: true, completion: nil)
     }
     
-    
+    @IBAction func authoriseHealthKitAccess(_ sender: UIButton) {
+        let healthKitTypes: Set = [
+            HKObjectType.quantityType(forIdentifier: HKQuantityTypeIdentifier.heartRate)!
+        ]
+        healthStore.requestAuthorization(toShare: healthKitTypes, read: healthKitTypes) { (_, _) in
+            print("Authorized?")
+        }
+        healthStore.requestAuthorization(toShare: healthKitTypes, read: healthKitTypes) { (bool, error) in
+            if let e = error {
+                print("Oops! Something went wrong during Authorization. \(e.localizedDescription)")
+            } else {
+                print("User has completed the authorization.")
+            }
+        }
+    }
     
     
     
