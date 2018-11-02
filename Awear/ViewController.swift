@@ -629,7 +629,10 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
     
     @IBAction func getHeartRate(_ sender: Any) {
         fetchLatestHeartRateSample { (result) in
-            print("\(result)\n")
+            //this version gives the values in the form of 00.00 count/min
+//            print("\(String(describing: result?.last?.quantity.doubleValue(for: HKUnit.count().unitDivided(by: HKUnit.minute()))))\n")
+            print("\(String(describing: result?.last?.quantity))\n")
+
         }
     }
 }
