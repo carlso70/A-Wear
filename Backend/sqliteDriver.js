@@ -1,22 +1,32 @@
-const sqlite3 = require('sqlite3').verbose();
-var db = new sqlite3.Database(':memory:');
+const
+    sqlite3 = require('sqlite3').verbose(),
+    db = new sqlite3.Database(':memory:');
 
 module.exports = {
-    test: function () {
+    initDB: function () {
         db.serialize(function () {
-            db.run("CREATE TABLE lorem (info TEXT)");
+            db.run("CREATE TABLE IF NOT EXISTS userTable (username TEXT, password TEXT)");
 
-            var stmt = db.prepare("INSERT INTO lorem VALUES (?)");
+            var stmt = db.prepare("INSERT INTO userTable (username, password) VALUES (?, ?)");
             for (var i = 0; i < 10; i++) {
-                stmt.run("Ipsum " + i);
+                stmt.run("Username " + i, "pass " + i);
             }
             stmt.finalize();
 
-            db.each("SELECT rowid AS id, info FROM lorem", function (err, row) {
-                console.log(row.id + ": " + row.info);
+            db.each("SELECT rowid AS id, username AS user, password AS pass FROM userTable", function (err, row) {
+                if (err) {
+                    console.log(err);
+                    return;
+                }
+                console.log(row.id + ": " + row.user + ", " + row.pass);
             });
         });
-        db.close();
+    },
+
+    dropDB: function () {
+        db.serialize(function() {
+            db.run("DROP TABLE IF EXISTS userTable");
+        });
     }
 };
 
