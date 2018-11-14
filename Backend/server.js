@@ -1,8 +1,11 @@
-const express = require('express');
-const app = express();
+const 
+    express = require('express'),
+    app = express(),
+    sqliteDriver = require('./sqliteDriver.js');
 
 app.get('/', (req, res) => {
     res.send('Hello from App Engine!');
+    sqliteDriver.test()
 });
 
 // Listen to the App Engine-specified port, or 8080 otherwise
