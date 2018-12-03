@@ -22,16 +22,39 @@ app.get('/getuser/:userId', (req, res) => {
     }).catch(err => {
         res.send(err);
     });
-})
+});
 
 /* 
  * Add user post request
- * body: {username: string, password: string, isParent: bool, child: string}
+ * body: 
+ *      {
+ *          username: string, 
+ *          password: string, 
+ *          isParent: bool, 
+ *          child: string, 
+ *          enabled: bool, 
+ *          outdoorMode: bool, 
+ *          recordStats: bool
+ *      }
  */
 app.post('/adduser', (req, res) => {
     sqliteDriver.insertUser(req.body.username, req.body.password, req.body.isParent,
          req.body.child, req.body.enabled, req.body.outdoorMode, req.body.recordStats);
     res.sendStatus(200);
+});
+
+/* Login a user, if successful sends the user object, horribly insecure */
+app.post('/login', (req, res) => {
+    sqliteDriver.getUser(req.body.username).then(res => {
+        if (res.password == req.body.password) {
+            res.send(user);
+        } else {
+            res.sendStatus(500);
+        }
+    }).catch(err => {
+        console.log(err);
+        res.sendStatus(500);
+    });
 });
 
 // Listen to the App Engine-specified port, or 8080 otherwise
