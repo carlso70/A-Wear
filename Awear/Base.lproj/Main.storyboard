@@ -242,11 +242,11 @@
                                     <action selector="outdoorEnable:" destination="Xj6-N0-qd6" eventType="valueChanged" id="o56-Pt-TRX"/>
                                 </connections>
                             </switch>
-                            <datePicker contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" datePickerMode="countDownTimer" minuteInterval="5" translatesAutoresizingMaskIntoConstraints="NO" id="Nhp-4Q-vTX">
+                            <datePicker contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" datePickerMode="countDownTimer" countDownDuration="1" minuteInterval="1" useCurrentDate="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Nhp-4Q-vTX">
                                 <rect key="frame" x="63" y="336" width="247" height="100"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
-                                <date key="date" timeIntervalSinceReferenceDate="565475214.85282004">
-                                    <!--2018-12-02 20:26:54 +0000-->
+                                <date key="date" timeIntervalSinceReferenceDate="565421400.85282004">
+                                    <!--2018-12-02 05:30:00 +0000-->
                                 </date>
                             </datePicker>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="SkT-wH-pcG">
