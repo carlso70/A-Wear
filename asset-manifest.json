@@ -1,15 +1,15 @@
 {
-  "main.css": "/static/css/main.df3a3e3a.chunk.css",
-  "main.js": "/static/js/main.41c2b090.chunk.js",
-  "main.js.map": "/static/js/main.41c2b090.chunk.js.map",
-  "static/css/1.83c48348.chunk.css": "/static/css/1.83c48348.chunk.css",
-  "static/js/1.20029dbe.chunk.js": "/static/js/1.20029dbe.chunk.js",
-  "static/js/1.20029dbe.chunk.js.map": "/static/js/1.20029dbe.chunk.js.map",
-  "runtime~main.js": "/static/js/runtime~main.229c360f.js",
-  "runtime~main.js.map": "/static/js/runtime~main.229c360f.js.map",
-  "static/css/main.df3a3e3a.chunk.css.map": "/static/css/main.df3a3e3a.chunk.css.map",
-  "static/css/1.83c48348.chunk.css.map": "/static/css/1.83c48348.chunk.css.map",
-  "index.html": "/index.html",
-  "precache-manifest.ad26967be94c4e0aae1e191117ba9e6b.js": "/precache-manifest.ad26967be94c4e0aae1e191117ba9e6b.js",
-  "service-worker.js": "/service-worker.js"
+  "main.css": "/A-Wear/static/css/main.df3a3e3a.chunk.css",
+  "main.js": "/A-Wear/static/js/main.33c4695d.chunk.js",
+  "main.js.map": "/A-Wear/static/js/main.33c4695d.chunk.js.map",
+  "static/css/1.83c48348.chunk.css": "/A-Wear/static/css/1.83c48348.chunk.css",
+  "static/js/1.20029dbe.chunk.js": "/A-Wear/static/js/1.20029dbe.chunk.js",
+  "static/js/1.20029dbe.chunk.js.map": "/A-Wear/static/js/1.20029dbe.chunk.js.map",
+  "runtime~main.js": "/A-Wear/static/js/runtime~main.5cc7cf60.js",
+  "runtime~main.js.map": "/A-Wear/static/js/runtime~main.5cc7cf60.js.map",
+  "static/css/1.83c48348.chunk.css.map": "/A-Wear/static/css/1.83c48348.chunk.css.map",
+  "static/css/main.df3a3e3a.chunk.css.map": "/A-Wear/static/css/main.df3a3e3a.chunk.css.map",
+  "index.html": "/A-Wear/index.html",
+  "precache-manifest.60ca1be0c003a43c2463e3c1be544376.js": "/A-Wear/precache-manifest.60ca1be0c003a43c2463e3c1be544376.js",
+  "service-worker.js": "/A-Wear/service-worker.js"
 }
