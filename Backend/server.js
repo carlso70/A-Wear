@@ -1,9 +1,14 @@
 const
     express = require('express'),
     app = express(),
+    bodyParser = require('body-parser'),
+    cors = require('cors'),
     sqliteDriver = require('./sqliteDriver.js');
 
-app.use(express.json());
+app.use(cors({ credentials: true, origin: true }));
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
+
 sqliteDriver.initDB();
 
 /* 
@@ -25,6 +30,18 @@ app.get('/getuser/:userId', (req, res) => {
 });
 
 /* 
+ * Update a user, by sending a FULL new user object to replace the user at username
+ */
+app.post('/updateUser', (req, res) => {
+    sqliteDriver.updateUser(req.body.username, req.body.password, req.body.isParent,
+        req.body.child, req.body.enabled, req.body.outdoorMode, req.body.recordStats).then(user => {
+            res.send(user);
+        }).catch(err => {
+            res.send(err);
+        });
+});
+
+/* 
  * Add user post request
  * body: 
  *      {
@@ -38,23 +55,47 @@ app.get('/getuser/:userId', (req, res) => {
  *      }
  */
 app.post('/adduser', (req, res) => {
-    sqliteDriver.insertUser(req.body.username, req.body.password, req.body.isParent,
-         req.body.child, req.body.enabled, req.body.outdoorMode, req.body.recordStats);
-    res.sendStatus(200);
-});
-
-/* Login a user, if successful sends the user object, horribly insecure */
-app.post('/login', (req, res) => {
-    sqliteDriver.getUser(req.body.username).then(res => {
-        if (res.password == req.body.password) {
-            res.send(user);
-        } else {
+    /* Check if user is in, this is hacky af TODO fix */
+    sqliteDriver.getUser(req.body.username).then(user => {
+        console.log(user)
+        if (user.username !== null || user.username !== "")
             res.sendStatus(500);
-        }
+    }).catch(err => {
+        // console.log(err);
+    });
+
+    /* Insert the user */
+    sqliteDriver.insertUser(req.body.username, req.body.password, req.body.isParent,
+        req.body.child, req.body.enabled, req.body.outdoorMode, req.body.recordStats)
+
+    /* Fetch the newly created user from the db */
+    sqliteDriver.getUser(req.body.username).then(user => {
+        res.send(user);
     }).catch(err => {
         console.log(err);
         res.sendStatus(500);
     });
+});
+
+/* Login a user, if successful sends the user object, horribly insecure */
+app.post('/login', (req, res) => {
+    console.log("\nPASSWORD: " + req.body.password + "\nUSERNAME: " + req.body.username + "\n");
+    let pass = req.body.password;
+    sqliteDriver.getUser(req.body.username).then(result => {
+        if (result.password == pass) {
+            res.send(result).end();
+        } else {
+            res.sendStatus(500).end();
+        }
+    }).catch(err => {
+        console.log(err);
+        res.sendStatus(500).end();
+    });
+});
+
+app.get('/cleanout', (req, res) => {
+    sqliteDriver.dropDB();
+    sqliteDriver.initDB();  
 });
 
 // Listen to the App Engine-specified port, or 8080 otherwise

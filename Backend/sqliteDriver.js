@@ -20,6 +20,24 @@ module.exports = {
         });
     },
 
+    /* username: String, password: String, isParent: Boolean, child: String */
+    updateUser: function (username, password, isParent, child, enabled, outdoorMode, recordStats) {
+        if (child == null) child = "";
+        if (isParent == null) isParent = false;
+        if (enabled == null) enabled = false;
+        if (outdoorMode == null) outdoorMode = false;
+        if (recordStats == null) recordStats = false;
+
+        db.serialize(() => {
+            var stmt = db.prepare(`REPLACE INTO userTable (username, password, isParent, child, 
+                enabled, outdoorMode, recordStats) VALUES (?, ?, ?, ?, ?, ?, ?)`);
+            stmt.run(username, password, isParent, child, enabled, outdoorMode, recordStats);
+            stmt.finalize();
+        });
+    },
+
+
+
     /* Returns a promsie with a user by a specific user name */
     getUser: (username) => {
         let sql = `SELECT * FROM userTable WHERE username  = ?`;
