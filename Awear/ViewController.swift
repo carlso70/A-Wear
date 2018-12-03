@@ -217,6 +217,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
         } else {
             audioEnabled = true;
             UserDefaults.standard.set(audioEnabled, forKey: "audioEnabled")
+            UserDefaults.standard.set(false, forKey: "customDisabled");
             REENABLE_TIME = Date();
             UserDefaults.standard.set(Date(), forKey: "reenableTime")
             setupAudioRecording();
@@ -420,7 +421,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
     // Callback ever 0.02 seconds
     @objc func levelTimerCallback() {
         checkDisabled()
-        
+        checkCustomDisable()
         OUTDOOR_AUTO = UserDefaults.standard.bool(forKey: "outdoorAutoEnable")
         OUTDOOR_MAN = UserDefaults.standard.bool(forKey: "outdoorManEnable")
         
@@ -788,6 +789,40 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
 
             self.heartRateDisplay.text = y
             print("\(String(describing: result?.last?.quantity))\n")
+        }
+    }
+    
+    func checkCustomDisable(){
+        let CUSTOM_DISABLE = UserDefaults.standard.bool(forKey: "customDisabled")
+        if(CUSTOM_DISABLE){
+            
+            audioEnabled = false;
+            recorder.stop();
+            calibrateButton.isUserInteractionEnabled = false;
+            volumeSlider.isUserInteractionEnabled = false;
+            
+            //UserDefaults.standard.set(false, forKey: "audioEnabled")
+            let formatter = DateFormatter();
+            formatter.dateFormat = "MMM d, h:mm a";
+            
+            
+            let time = UserDefaults.standard.integer(forKey: "customDisableTime")
+            
+            let earlyDate = Calendar.current.date(
+                byAdding: .second,
+                value: 15,
+                to: Date())
+            var myString = formatter.string(from: earlyDate as! Date)
+            
+            
+            renableTime.text = "Disabled until: \(myString)"
+            REENABLE_TIME = earlyDate ?? Date();
+            
+            disableAudio.setTitle("Enable Listening", for: .normal);
+            UserDefaults.standard.set(false, forKey: "audioEnabled")
+            
+        }else{
+            
         }
     }
 
