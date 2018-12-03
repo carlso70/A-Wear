@@ -163,8 +163,19 @@ class SettingsVC : UIViewController{
     
     @IBAction func disableCustom(_ sender: Any) {
         let customDisable = disablePicker.countDownDuration;
+        print(customDisable);
         UserDefaults.standard.set(true, forKey: "customDisabled");
         UserDefaults.standard.set(customDisable, forKey: "customDisableTime");
+        
+        let alert = UIAlertController(title: "Disabled", message:  "You have disabled the application", preferredStyle: .alert)
+        
+       
+        let ok = UIAlertAction(title: "Okay", style: .default, handler: nil)
+        
+        alert.addAction(ok)
+        
+        present(alert, animated: true, completion: nil)
+        
     }
     
     

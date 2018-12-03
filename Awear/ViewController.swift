@@ -85,6 +85,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
             UserDefaults.standard.set(false, forKey: "watchConnect")
         }
         
+       
         
         WATCH_CONNECT = UserDefaults.standard.bool(forKey: "watchConnect")
         RECORD_STATS = UserDefaults.standard.bool(forKey: "recordStats")
@@ -682,6 +683,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
                 print("HERE")
                 setupAudioRecording()
                 UserDefaults.standard.set(true, forKey: "audioEnabled")
+                 UserDefaults.standard.set(false, forKey: "customDisabled");
                 audioEnabled = true;
                 calibrateButton.isUserInteractionEnabled = true;
                 volumeSlider.isUserInteractionEnabled = true;
@@ -805,12 +807,12 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
             let formatter = DateFormatter();
             formatter.dateFormat = "MMM d, h:mm a";
             
-            
+            if(UserDefaults.standard.bool(forKey: "audioEnabled")){
             let time = UserDefaults.standard.integer(forKey: "customDisableTime")
             
             let earlyDate = Calendar.current.date(
                 byAdding: .second,
-                value: 15,
+                value: time,
                 to: Date())
             var myString = formatter.string(from: earlyDate as! Date)
             
@@ -820,6 +822,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
             
             disableAudio.setTitle("Enable Listening", for: .normal);
             UserDefaults.standard.set(false, forKey: "audioEnabled")
+            }
             
         }else{
             
