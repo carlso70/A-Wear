@@ -136,6 +136,12 @@ class App extends Component {
     this.updateUser(user);
   }
 
+  deleteChild = () => {
+    let user = this.state.user;
+    user.child = "";
+    this.updateUser(user);
+  }
+
   /********************** END API CALLS *********************/
 
   /******************** UI HANDLERS ***********************/
@@ -161,9 +167,12 @@ class App extends Component {
       let childControls = <div />
       if (this.state.user.child !== "" && this.state.child !== null) {
         childControls = (<div>
+          <h2 style={{ "margin": "20px"}}><Badge color="warning">Child: {this.state.user.child}</Badge></h2>
           <Button color="primary" onClick={() => this.toggleEnabled()} active={this.state.user.enabled == 1}>Enable Child iOS Recording</Button>{' '}
           <Button color="primary" onClick={() => this.toggleOutdoor()} active={this.state.user.outdoorMode == 1}>Outdoor Mode</Button>{' '}
           <Button color="primary" onClick={() => this.toggleRecord()} active={this.state.user.recordStats == 1}>Record Stats</Button>
+          <br/>
+          <Button color="danger" style={{"margin": "40px"}} onClick={() => this.deleteChild()}>Remove Child</Button>
         </div>);
       } else {
         childControls = (<div >
@@ -177,7 +186,7 @@ class App extends Component {
         <Container style={{ "margin": "40px" }}>
           <Row className="text-center">
             <Col>
-              <h1><Badge color="secondary">{this.state.user.username}</Badge></h1>
+              <h1 style={{ "margin": "40px"}}><Badge color="secondary">{this.state.user.username}</Badge></h1>
             </Col>
           </Row>
           <Row className="text-center">
