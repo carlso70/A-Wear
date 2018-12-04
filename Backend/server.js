@@ -33,12 +33,21 @@ app.get('/getuser/:userId', (req, res) => {
  * Update a user, by sending a FULL new user object to replace the user at username
  */
 app.post('/updateUser', (req, res) => {
-    sqliteDriver.updateUser(req.body.username, req.body.password, req.body.isParent,
-        req.body.child, req.body.enabled, req.body.outdoorMode, req.body.recordStats).then(user => {
-            res.send(user);
-        }).catch(err => {
-            res.send(err);
-        });
+    console.log("IN UPDATE USER requestbody:\n\n\n");
+    console.log(req.body);
+    /* Update User */
+    sqliteDriver.deleteUser(req.body.username);
+    sqliteDriver.insertUser(req.body.username, req.body.password, req.body.isParent,
+        req.body.child, req.body.enabled, req.body.outdoorMode, req.body.recordStats);
+     
+    /* Get the new and improved user */
+    sqliteDriver.getUser(req.body.username).then(user => {
+        console.log("\n\nAFTER UPDATE \n");
+        console.log(user)
+        res.send(user);
+    }).catch(err => {
+        res.send(err);
+    });   
 });
 
 /* 
@@ -95,7 +104,7 @@ app.post('/login', (req, res) => {
 
 app.get('/cleanout', (req, res) => {
     sqliteDriver.dropDB();
-    sqliteDriver.initDB();  
+    sqliteDriver.initDB();
 });
 
 // Listen to the App Engine-specified port, or 8080 otherwise

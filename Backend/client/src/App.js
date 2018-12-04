@@ -1,5 +1,8 @@
 import React, { Component } from 'react';
-import { Button, ButtonGroup, Form, FormGroup, Label, Input, Badge } from 'reactstrap';
+import {
+  Button, ButtonGroup, Form, FormGroup, Label,
+  Input, Badge, Container, Row, Col
+} from 'reactstrap';
 
 const awearUrl = "https://awear-222521.appspot.com";
 
@@ -11,7 +14,8 @@ class App extends Component {
       user: {},
       password: "",
       username: "",
-      cSelected: []
+      cSelected: [],
+      child: "",
     };
 
   }
@@ -33,13 +37,38 @@ class App extends Component {
     })
       .then(res => res.json())
       .then(res => {
-        console.log(res.json);
+        console.log(res);
         this.setState({
           user: res,
           loggedIn: true
         });
       }).catch(err => {
         console.log(err);
+      });
+  }
+
+  addChild = () => {
+    console.log("HERE")
+    if (this.state.child === "") return;
+
+    let user = this.state.user;
+    user.child = this.state.child;
+    fetch(awearUrl + "/updateUser", {
+      method: 'POST',
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(user)
+    })
+      .then(res => res.json())
+      .then(res => {
+        console.log(res);
+        this.setState({
+          user: res
+        });
+      })
+      .catch(err => {
+        console.log("ERROR: " + err);
       });
   }
 
@@ -67,6 +96,46 @@ class App extends Component {
         console.log(err);
       })
   }
+
+  updateUser = (user) => {
+    fetch(awearUrl + "/updateUser", {
+      method: 'POST',
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(user)
+    })
+      .then(res => res.json())
+      .then(res => {
+        console.log("NEW USER\n");
+        console.log(res)
+        this.setState({
+          user: res
+        });
+      })
+      .catch(err => {
+        console.log("ERROR: " + err);
+      });
+  }
+
+  toggleEnabled = () => {
+    let user = this.state.user;
+    user.enabled = this.state.user.enabled === 1 ? 0 : 1;
+    this.updateUser(user);
+  }
+
+  toggleOutdoor = () => {
+    let user = this.state.user;
+    user.outdoorMode = this.state.user.outdoorMode == 1 ? 0 : 1;
+    this.updateUser(user);
+  }
+
+  toggleRecord = () => {
+    let user = this.state.user;
+    user.recordStats = this.state.user.recordStats == 1 ? 0 : 1;
+    this.updateUser(user);
+  }
+
   /********************** END API CALLS *********************/
 
   /******************** UI HANDLERS ***********************/
@@ -91,18 +160,32 @@ class App extends Component {
     if (this.state.loggedIn && this.state.user) {
       let childControls = <div />
       if (this.state.user.child !== "" && this.state.child !== null) {
-        childControls = (<ButtonGroup>
-          <Button color="primary" onClick={() => this.onCheckboxBtnClick(1)} active={this.state.cSelected.includes(1)}>One</Button>
-          <Button color="primary" onClick={() => this.onCheckboxBtnClick(2)} active={this.state.cSelected.includes(2)}>Two</Button>
-          <Button color="primary" onClick={() => this.onCheckboxBtnClick(3)} active={this.state.cSelected.includes(3)}>Three</Button>
-        </ButtonGroup>);
+        childControls = (<div>
+          <Button color="primary" onClick={() => this.toggleEnabled()} active={this.state.user.enabled == 1}>Enable Child iOS Recording</Button>{' '}
+          <Button color="primary" onClick={() => this.toggleOutdoor()} active={this.state.user.outdoorMode == 1}>Outdoor Mode</Button>{' '}
+          <Button color="primary" onClick={() => this.toggleRecord()} active={this.state.user.recordStats == 1}>Record Stats</Button>
+        </div>);
+      } else {
+        childControls = (<div >
+          <Label for="child">Add Child Account</Label>
+          <Input name="child" id="child" value={this.state.child} onChange={this.handleChange} placeholder="Enter Child" />
+          <Button style={{ "margin": "20px" }} color="secondary" onClick={() => this.addChild()}>Add Child</Button>
+        </div>);
       }
 
       return (
-        <div>
-          <h1><Badge color="secondary">{this.state.user.username}</Badge></h1>
-          {childControls}
-        </div>
+        <Container style={{ "margin": "40px" }}>
+          <Row className="text-center">
+            <Col>
+              <h1><Badge color="secondary">{this.state.user.username}</Badge></h1>
+            </Col>
+          </Row>
+          <Row className="text-center">
+            <Col>
+              {childControls}
+            </Col>
+          </Row>
+        </Container>
       );
     } else {
       return (

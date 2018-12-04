@@ -20,23 +20,13 @@ module.exports = {
         });
     },
 
-    /* username: String, password: String, isParent: Boolean, child: String */
-    updateUser: function (username, password, isParent, child, enabled, outdoorMode, recordStats) {
-        if (child == null) child = "";
-        if (isParent == null) isParent = false;
-        if (enabled == null) enabled = false;
-        if (outdoorMode == null) outdoorMode = false;
-        if (recordStats == null) recordStats = false;
-
+    deleteUser: (username) => {
         db.serialize(() => {
-            var stmt = db.prepare(`REPLACE INTO userTable (username, password, isParent, child, 
-                enabled, outdoorMode, recordStats) VALUES (?, ?, ?, ?, ?, ?, ?)`);
-            stmt.run(username, password, isParent, child, enabled, outdoorMode, recordStats);
+            var stmt = db.prepare(`DELETE FROM userTable WHERE username = ?`);
+            stmt.run(username);
             stmt.finalize();
         });
     },
-
-
 
     /* Returns a promsie with a user by a specific user name */
     getUser: (username) => {
