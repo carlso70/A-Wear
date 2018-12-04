@@ -10,7 +10,6 @@
 		0CDF2EE92166B01F00A4F2C1 /* Launch Screen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0CDF2EE82166B01E00A4F2C1 /* Launch Screen.storyboard */; };
 		106B0CA042F3829959AF7A52 /* Pods_Awear.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C1E3C7C06B99C0FCD937B8D0 /* Pods_Awear.framework */; };
 		421B8F3E21897CFF0011CC87 /* SettingsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 421B8F3D21897CFF0011CC87 /* SettingsVC.swift */; };
-		421B8F4021897E790011CC87 /* HealthAppViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 421B8F3F21897E790011CC87 /* HealthAppViewController.swift */; };
 		42E06AE6218A94D900B159E3 /* StatisticsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42E06AE5218A94D900B159E3 /* StatisticsViewController.swift */; };
 		447D2B2E2181232B004006AC /* Interface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 447D2B2C2181232B004006AC /* Interface.storyboard */; };
 		447D2B302181232D004006AC /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 447D2B2F2181232D004006AC /* Assets.xcassets */; };
@@ -95,7 +94,6 @@
 		0CDF2EE82166B01E00A4F2C1 /* Launch Screen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = "Launch Screen.storyboard"; sourceTree = "<group>"; };
 		1D14A51861AECB37181B996C /* Pods-Awear.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Awear.release.xcconfig"; path = "Pods/Target Support Files/Pods-Awear/Pods-Awear.release.xcconfig"; sourceTree = "<group>"; };
 		421B8F3D21897CFF0011CC87 /* SettingsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsVC.swift; sourceTree = "<group>"; };
-		421B8F3F21897E790011CC87 /* HealthAppViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthAppViewController.swift; sourceTree = "<group>"; };
 		42E06AE5218A94D900B159E3 /* StatisticsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticsViewController.swift; sourceTree = "<group>"; };
 		447D2B252180F650004006AC /* Awear.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Awear.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		447D2B262180F650004006AC /* AwearTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AwearTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -247,7 +245,6 @@
 				61F559712158747400776195 /* ViewController.swift */,
 				61F559732158747400776195 /* Main.storyboard */,
 				42E06AE5218A94D900B159E3 /* StatisticsViewController.swift */,
-				421B8F3F21897E790011CC87 /* HealthAppViewController.swift */,
 				421B8F3D21897CFF0011CC87 /* SettingsVC.swift */,
 				61F559762158747600776195 /* Assets.xcassets */,
 				61F559782158747600776195 /* LaunchScreen.storyboard */,
@@ -544,7 +541,6 @@
 				6129BB1E218B705400508718 /* ConnectivityUtils.swift in Sources */,
 				61F559702158747400776195 /* AppDelegate.swift in Sources */,
 				6129BB19218B5FD500508718 /* StatModel.xcdatamodeld in Sources */,
-				421B8F4021897E790011CC87 /* HealthAppViewController.swift in Sources */,
 				6129BB1B218B632100508718 /* StatisticManager.swift in Sources */,
 				421B8F3E21897CFF0011CC87 /* SettingsVC.swift in Sources */,
 			);

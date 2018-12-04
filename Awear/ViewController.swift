@@ -30,7 +30,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
     
     var RECORD_STATS = true;
     var WATCH_CONNECT = true;
-    //var HEALTH_APP = true;
+//    var HEALTH_APP = false;
     var OUTDOOR_MODE = true;
     var OUTDOOR_AUTO = true;
     var OUTDOOR_MAN = true;
@@ -49,6 +49,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
     var audioEnabled = UserDefaults.standard.bool(forKey: "audioEnabled");
     var disableTime = 0;
     var timedEnabled = true;
+    var healthEnabled = false;
     
     
     /* Setup WC Session (Watch Connectivity) */
@@ -92,7 +93,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
         VIBRATION_LEVEL = UserDefaults.standard.integer(forKey: "vibrationLevel")
         audioEnabled =  UserDefaults.standard.bool(forKey: "audioEnabled")
        // OUTDOOR_MODE = UserDefaults.standard.bool(forKey: "outdoorEnable")
-       // HEALTH_APP = UserDefaults.standard.bool(forKey: "healthEnable")
+//        HEALTH_APP = UserDefaults.standard.bool(forKey: "healthEnable")
         OUTDOOR_AUTO = UserDefaults.standard.bool(forKey: "outdoorAutoEnable")
         OUTDOOR_MAN = UserDefaults.standard.bool(forKey: "outdoorManEnable")
         
@@ -155,7 +156,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
     
     /* VolumeSlider value between 1 - 10 */
     func changeLevelThreshold(level: Float) {
-        volumeLabel.text = "\(volumeSlider.value)"
+        volumeLabel.text = "\(String(format: "%.01f", volumeSlider.value))"
         LEVEL_THRESHOLD = level
     }
     
@@ -255,7 +256,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
         }
         
         if status == .denied || status == .restricted {
-            let alert = UIAlertController(title: "Location Services Disabled", message: "Please enable Location Services in Settings", preferredStyle: .alert)
+            let alert = UIAlertController(title: "Location Services Disabled", message: "Please enable Location Services in Settings to allow the app to automatically detect if you are indoors or outdoors.", preferredStyle: .alert)
             
             let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
             alert.addAction(okAction)
@@ -444,7 +445,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
         
         let level = recorder.averagePower(forChannel: 0) + 160
         let isLoud = level > LEVEL_THRESHOLD
-        currentVolume.text = "\(level)"
+        currentVolume.text = "\(String(format: "%.01f", level))"
         
         // do whatever you want with isLoud
         //print("IsLoud? : ",isLoud)
@@ -705,6 +706,8 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
                 print("Oops! Something went wrong during Authorization. \(e.localizedDescription)")
             } else {
                 print("User has completed the authorization.")
+                UserDefaults.standard.set(true, forKey: "healthEnabled")
+                print(self.healthEnabled)
             }
         }
     }
