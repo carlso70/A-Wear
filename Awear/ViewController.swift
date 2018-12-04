@@ -253,7 +253,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
         }
         
         if status == .denied || status == .restricted {
-            let alert = UIAlertController(title: "Location Services Disabled", message: "Please enable Location Services in Settings", preferredStyle: .alert)
+            let alert = UIAlertController(title: "Location Services Disabled", message: "Please enable Location Services in Settings to allow the app to automatically detect if you are indoors or outdoors.", preferredStyle: .alert)
             
             let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
             alert.addAction(okAction)
