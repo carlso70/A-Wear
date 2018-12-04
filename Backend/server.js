@@ -39,7 +39,7 @@ app.post('/updateUser', (req, res) => {
     sqliteDriver.deleteUser(req.body.username);
     sqliteDriver.insertUser(req.body.username, req.body.password, req.body.isParent,
         req.body.child, req.body.enabled, req.body.outdoorMode, req.body.recordStats);
-     
+
     /* Get the new and improved user */
     sqliteDriver.getUser(req.body.username).then(user => {
         console.log("\n\nAFTER UPDATE \n");
@@ -47,7 +47,7 @@ app.post('/updateUser', (req, res) => {
         res.send(user);
     }).catch(err => {
         res.send(err);
-    });   
+    });
 });
 
 /* 
@@ -70,19 +70,17 @@ app.post('/adduser', (req, res) => {
         if (user.username !== null || user.username !== "")
             res.sendStatus(500);
     }).catch(err => {
-        // console.log(err);
-    });
+        /* If there is an error that means the user was not found, which means we can add it */
+        sqliteDriver.insertUser(req.body.username, req.body.password, req.body.isParent,
+            req.body.child, req.body.enabled, req.body.outdoorMode, req.body.recordStats);
 
-    /* Insert the user */
-    sqliteDriver.insertUser(req.body.username, req.body.password, req.body.isParent,
-        req.body.child, req.body.enabled, req.body.outdoorMode, req.body.recordStats)
-
-    /* Fetch the newly created user from the db */
-    sqliteDriver.getUser(req.body.username).then(user => {
-        res.send(user);
-    }).catch(err => {
-        console.log(err);
-        res.sendStatus(500);
+        /* Fetch the newly created user from the db */
+        sqliteDriver.getUser(req.body.username).then(user => {
+            res.send(user);
+        }).catch(err => {
+            console.log(err);
+            res.sendStatus(500);
+        });
     });
 });
 

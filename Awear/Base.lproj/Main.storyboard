@@ -462,7 +462,7 @@
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <state key="normal" title="Make Account"/>
                                 <connections>
-                                    <action selector="makeAcct:" destination="iS9-gG-4oN" eventType="touchUpInside" id="iIz-NJ-CQc"/>
+                                    <action selector="makeAccount:" destination="iS9-gG-4oN" eventType="touchUpInside" id="mK9-Ib-UiL"/>
                                 </connections>
                             </button>
                         </subviews>
