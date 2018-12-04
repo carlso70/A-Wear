@@ -43,6 +43,7 @@ class App extends Component {
           loggedIn: true
         });
       }).catch(err => {
+        alert("Error logging in");
         console.log(err);
       });
   }
@@ -68,6 +69,7 @@ class App extends Component {
         });
       })
       .catch(err => {
+        alert("Error adding child");
         console.log("ERROR: " + err);
       });
   }
@@ -93,6 +95,7 @@ class App extends Component {
           loggedIn: true
         });
       }).catch(err => {
+        alert("Error creating account");
         console.log(err);
       })
   }
