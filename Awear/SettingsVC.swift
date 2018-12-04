@@ -17,6 +17,7 @@ import CoreLocation
 
 class SettingsVC : UIViewController{
     
+    
     @IBOutlet weak var cancelBtn: UIButton!
     @IBOutlet weak var vibrationSlider: UISlider!
     @IBOutlet weak var vibrationLvl: UILabel!
@@ -24,23 +25,18 @@ class SettingsVC : UIViewController{
     @IBOutlet weak var outdoorSwitch: UISwitch!
     @IBOutlet weak var resetStatsBtn: UIButton!
     @IBOutlet weak var statsSwitch: UISwitch!
-
+    @IBOutlet weak var disableBtn: UIButton!
+    
     @IBOutlet weak var saveBtn: UIButton!
     @IBOutlet weak var outdoorLbl: UILabel!
     @IBOutlet weak var outdoorMnlSwitch: UISwitch!
+    @IBOutlet weak var disablePicker: UIDatePicker!
     
+   
     var changed = false;
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        vibrationSlider.minimumValue = 1;
-        vibrationSlider.maximumValue = 3;
-        
-        
-        vibrationSlider.value = Float (UserDefaults.standard.integer(forKey: "vibrationLevel"))
-        let vol = lroundf(vibrationSlider.value);
-        vibrationLvl.text = "\(vol)";
         
    
         let outdoor = UserDefaults.standard.bool(forKey: "outdoorAutoEnable")
@@ -113,16 +109,6 @@ class SettingsVC : UIViewController{
       
     }
     
-    @IBAction func onVibrateChange(_ sender: Any){
-        let vol = lroundf(vibrationSlider.value);
-        vibrationLvl.text = "\(vol)";
-        
-        //UserDefaults.standard.set(vol, forKey: "vibrationLevel");
-        
-        changed = true;
-        
-    }
-    
 
     
     @IBAction func statsOnOff(_ sender: Any){
@@ -172,6 +158,28 @@ class SettingsVC : UIViewController{
     @IBAction func outdoorEnable(_ sender: Any) {
         changed = true;
     }
+    
+    
+    
+    @IBAction func disableCustom(_ sender: Any) {
+        let customDisable = disablePicker.countDownDuration;
+        print(customDisable);
+        UserDefaults.standard.set(true, forKey: "customDisabled");
+        UserDefaults.standard.set(customDisable, forKey: "customDisableTime");
+        
+        let alert = UIAlertController(title: "Disabled", message:  "You have disabled the application", preferredStyle: .alert)
+        
+       
+        let ok = UIAlertAction(title: "Okay", style: .default, handler: nil)
+        
+        alert.addAction(ok)
+        
+        present(alert, animated: true, completion: nil)
+        
+    }
+    
+    
+    
     
     
     @IBAction func save(_ sender: Any) {
