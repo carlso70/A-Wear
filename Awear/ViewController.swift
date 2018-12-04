@@ -40,10 +40,11 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
     @IBOutlet weak var volumeLabel: UILabel!
     @IBOutlet weak var volumeSlider: UISlider!
     @IBOutlet weak var calibrateButton: UIButton!
-    @IBOutlet weak var healthAppBtn: UIButton!
+    @IBOutlet weak var heartBeatUnit: UILabel!
     @IBOutlet weak var outdoorLbl: UILabel!
     @IBOutlet weak var renableTime: UILabel!
     @IBOutlet weak var disableAudio: UIButton!
+    @IBOutlet weak var healthKitAuth: UIButton!
     
     
     var audioEnabled = UserDefaults.standard.bool(forKey: "audioEnabled");
@@ -111,6 +112,9 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
         getMyLocation()
 
         print("VIBRATION LEVEL: \(VIBRATION_LEVEL)");
+        
+        heartRateDisplay.isHidden = true;
+        heartBeatUnit.isHidden = true;
     }
     
     /* Handles incoming messages from the apple watch */
@@ -706,8 +710,11 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
                 print("Oops! Something went wrong during Authorization. \(e.localizedDescription)")
             } else {
                 print("User has completed the authorization.")
-                UserDefaults.standard.set(true, forKey: "healthEnabled")
-                print(self.healthEnabled)
+                self.heartRateDisplay.isHidden = false;
+                self.heartBeatUnit.isHidden = false;
+                self.healthKitAuth.isHidden = true;
+//                UserDefaults.standard.set(true, forKey: "healthEnabled")
+//                print(self.healthEnabled)
             }
         }
     }
