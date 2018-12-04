@@ -4,6 +4,14 @@
 //   to coordinate using the same methodologies throughout the project.   //
 ////////////////////////////////////////////////////////////////////////////
 
+https://stackoverflow.com/questions/26962713/adding-swift-file-to-new-view-controller-in-xcode-easy?fbclid=IwAR3ByN9wXTfrn_lV02jW9ob8RMutj5x895LyS8zeNNACgexOA2J5YzpeVDM
+
+https://developer.apple.com/library/archive/referencelibrary/GettingStarted/DevelopiOSAppsSwift/CreateATableView.html?fbclid=IwAR1AA4TN_zxBRpj4rOp-16lJRwTZhGpmjzC9uu7NcusiZGuSuri4ugVIXuY
+
+https://stackoverflow.com/questions/31203241/how-can-i-use-userdefaults-in-swift?fbclid=IwAR38Oc3SaGkrxzyoL19WunzZ9eKnpPZXRuXiEgc1gazL3UANK3Vb-58KL5w
+
+https://www.youtube.com/watch?v=9HDGXPghU0Y&fbclid=IwAR2HwTu-c33yS5j8yuBnAOLafTopmFVDa3CKhTpGNIypS63-UEQKIiVpW7I
+
 Stackoverflow: iOS Background audio recording
 https://stackoverflow.com/questions/42020124/ios-background-audio-recording
 

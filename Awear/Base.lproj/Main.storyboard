@@ -180,6 +180,9 @@
                             </button>
                         </subviews>
                         <color key="backgroundColor" red="0.80895950449999998" green="0.92991775529999998" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <accessibility key="accessibilityConfiguration">
+                            <accessibilityTraits key="traits" updatesFrequently="YES"/>
+                        </accessibility>
                         <viewLayoutGuide key="safeArea" id="Uee-0j-aNJ" colorLabel="IBBuiltInLabel-Purple"/>
                     </view>
                     <navigationItem key="navigationItem" id="lIb-FC-vCi"/>
@@ -395,10 +398,10 @@
             </objects>
             <point key="canvasLocation" x="1830" y="-52"/>
         </scene>
-        <!--View Controller-->
+        <!--LoginVC View Controller-->
         <scene sceneID="N6y-sW-LLO">
             <objects>
-                <viewController id="iS9-gG-4oN" sceneMemberID="viewController">
+                <viewController id="iS9-gG-4oN" customClass="LoginVCViewController" customModule="Awear" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="7G9-bU-Wkd">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -458,6 +461,9 @@
                                 <rect key="frame" x="128" y="592" width="118" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <state key="normal" title="Make Account"/>
+                                <connections>
+                                    <action selector="makeAcct:" destination="iS9-gG-4oN" eventType="touchUpInside" id="iIz-NJ-CQc"/>
+                                </connections>
                             </button>
                         </subviews>
                         <color key="backgroundColor" red="0.80895950446627918" green="0.92991775531550369" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -471,7 +477,6 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="OY8-Tc-HJB"/>
-        <segue reference="xa7-xb-uCX"/>
+        <segue reference="sOE-zx-cOv"/>
     </inferredMetricsTieBreakers>
 </document>
