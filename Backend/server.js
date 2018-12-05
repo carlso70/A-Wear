@@ -21,8 +21,8 @@ app.get('/allusers', (req, res) => {
 /* 
  *  Gets a specific users info 
  */
-app.get('/getuser/:userId', (req, res) => {
-    sqliteDriver.getUser(req.params.userId).then(user => {
+app.post('/getuser', (req, res) => {
+    sqliteDriver.getUser(req.body.username).then(user => {
         res.send(user);
     }).catch(err => {
         res.send(err);

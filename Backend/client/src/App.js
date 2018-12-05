@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import {
-  Button, ButtonGroup, Form, FormGroup, Label,
+  Button, Card, CardBody, CardTitle, Form, FormGroup, Label,
   Input, Badge, Container, Row, Col
 } from 'reactstrap';
 
@@ -18,7 +18,6 @@ class App extends Component {
       child: "",
       childObj: {}
     };
-
   }
 
   /******************** API CALLS ***********************/
@@ -53,14 +52,24 @@ class App extends Component {
   }
 
   loadChildObject = (child) => {
-    fetch(awearUrl + "/getuser/" + child)
-    .then(res => res.json())
-    .then(res => {
-      this.setState({
-        childObj: res
-      });
+    let params = {
+      "username": child
+    };
+    fetch(awearUrl + "/getuser", {
+      method: 'post',
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(params)
     })
-    .catch(err => console.log(err));
+      .then(res => res.json())
+      .then(res => {
+        console.log(res);
+        this.setState({
+          childObj: res
+        });
+      })
+      .catch(err => console.log(err));
   }
 
   addChild = () => {
@@ -211,14 +220,20 @@ class App extends Component {
   render() {
     if (this.state.loggedIn && this.state.user) {
       let childControls = <div />
-      if (this.state.user.child !== "" && this.state.child !== null) {
+      if (this.state.user.child !== "") {
+        if (this.state.childObj === null) this.loadChildObject(this.state.user.child);
         childControls = (<div>
-          <h2 style={{ "margin": "20px"}}><Badge color="warning">Child: {this.state.user.child}</Badge></h2>
-          <Button color="primary" onClick={() => this.toggleEnabled()} active={this.state.user.enabled == 1}>Enable Child iOS Recording</Button>{' '}
-          <Button color="primary" onClick={() => this.toggleOutdoor()} active={this.state.user.outdoorMode == 1}>Outdoor Mode</Button>{' '}
-          <Button color="primary" onClick={() => this.toggleRecord()} active={this.state.user.recordStats == 1}>Record Stats</Button>
-          <br/>
-          <Button color="danger" style={{"margin": "40px"}} onClick={() => this.deleteChild()}>Remove Child</Button>
+          <Card>
+            <CardBody>
+              <CardTitle>Child Controls</CardTitle>
+              <h2 style={{ "margin": "20px" }}><Badge color="warning">Child: {this.state.user.child}</Badge></h2>
+              <Button color="primary" onClick={() => this.toggleChildEnabled()} active={this.state.childObj.enabled == 1}>Enable Child iOS Recording</Button>{' '}
+              <Button color="primary" onClick={() => this.toggleChildOutdoor()} active={this.state.childObj.outdoorMode == 1}>Outdoor Mode</Button>{' '}
+              <Button color="primary" onClick={() => this.toggleChildRecord()} active={this.state.childObj.recordStats == 1}>Record Stats</Button>
+              <br />
+              <Button color="danger" style={{ "margin": "40px" }} onClick={() => this.deleteChild()}>Remove Child</Button>
+            </CardBody>
+          </Card>
         </div>);
       } else {
         childControls = (<div >
@@ -232,7 +247,21 @@ class App extends Component {
         <Container style={{ "margin": "40px" }}>
           <Row className="text-center">
             <Col>
-              <h1 style={{ "margin": "40px"}}><Badge color="secondary">{this.state.user.username}</Badge></h1>
+              <h1 style={{ "margin": "40px" }}><Badge color="secondary">{this.state.user.username}</Badge></h1>
+            </Col>
+          </Row>
+          <Row className="text-center">
+            <Col>
+              <Card>
+                <CardBody>
+                  <CardTitle>User Controls</CardTitle>
+                  <Button color="primary" onClick={() => this.toggleEnabled()} active={this.state.user.enabled == 1}>Enable iOS Recording</Button>{' '}
+                  <Button color="primary" onClick={() => this.toggleOutdoor()} active={this.state.user.outdoorMode == 1}>Outdoor Mode</Button>{' '}
+                  <Button color="primary" onClick={() => this.toggleRecord()} active={this.state.user.recordStats == 1}>Record Stats</Button>
+                  <br />
+                  <Button color="danger" style={{ "margin": "40px" }} onClick={() => this.deleteChild()}>Remove Child</Button>
+                </CardBody>
+              </Card>
             </Col>
           </Row>
           <Row className="text-center">
@@ -240,7 +269,7 @@ class App extends Component {
               {childControls}
             </Col>
           </Row>
-        </Container>
+        </Container >
       );
     } else {
       return (
