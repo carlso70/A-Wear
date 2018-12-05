@@ -16,6 +16,7 @@ class App extends Component {
       username: "",
       cSelected: [],
       child: "",
+      childObj: {}
     };
 
   }
@@ -37,15 +38,29 @@ class App extends Component {
     })
       .then(res => res.json())
       .then(res => {
-        console.log(res);
         this.setState({
           user: res,
           loggedIn: true
+        }, () => {
+          if (res.child !== "") {
+            this.loadChildObject(res.child);
+          }
         });
       }).catch(err => {
         alert("Error logging in");
         console.log(err);
       });
+  }
+
+  loadChildObject = (child) => {
+    fetch(awearUrl + "/getuser/" + child)
+    .then(res => res.json())
+    .then(res => {
+      this.setState({
+        childObj: res
+      });
+    })
+    .catch(err => console.log(err));
   }
 
   addChild = () => {
@@ -66,6 +81,10 @@ class App extends Component {
         console.log(res);
         this.setState({
           user: res
+        }, () => {
+          if (res.child !== "") {
+            this.loadChildObject(res.child);
+          }
         });
       })
       .catch(err => {
@@ -114,6 +133,10 @@ class App extends Component {
         console.log(res)
         this.setState({
           user: res
+        }, () => {
+          if (res.child !== "") {
+            this.loadChildObject(res.child);
+          }
         });
       })
       .catch(err => {
@@ -121,7 +144,7 @@ class App extends Component {
       });
   }
 
-  /* USER API CONTROLS */
+  /************************************ USER API CONTROLS ************************************/
   toggleEnabled = () => {
     let user = this.state.user;
     user.enabled = this.state.user.enabled === 1 ? 0 : 1;
@@ -130,43 +153,40 @@ class App extends Component {
 
   toggleOutdoor = () => {
     let user = this.state.user;
-    user.outdoorMode = this.state.user.outdoorMode == 1 ? 0 : 1;
+    user.outdoorMode = this.state.user.outdoorMode === 1 ? 0 : 1;
     this.updateUser(user);
   }
 
   toggleRecord = () => {
     let user = this.state.user;
-    user.recordStats = this.state.user.recordStats == 1 ? 0 : 1;
+    user.recordStats = this.state.user.recordStats === 1 ? 0 : 1;
     this.updateUser(user);
   }
 
-  /* CHILD CONTROLS */
+  /**************************** CHILD CONTROLS ************************************/
   toggleChildEnabled = () => {
-    let user = this.state.user;
-    user.enabled = this.state.user.child.enabled === 1 ? 0 : 1;
-    this.updateUser(user);
+    let child = this.state.childObj;
+    child.enabled = this.state.childObj.enabled === 1 ? 0 : 1;
+    this.updateUser(child);
   }
 
   toggleChildOutdoor = () => {
-    let user = this.state.user;
-    user.outdoorMode = this.state.user.child.outdoorMode == 1 ? 0 : 1;
-    this.updateUser(user);
+    let child = this.state.childObj;
+    child.outdoorMode = this.state.childObj.outdoorMode === 1 ? 0 : 1;
+    this.updateUser(child);
   }
 
   toggleChildRecord = () => {
-    let child = this.state.user.child;
-    child.recordStats = this.state.user.child.recordStats == 1 ? 0 : 1;
-    this.updateUser(user);
+    let child = this.state.childObj;
+    child.recordStats = this.state.childObj.recordStats === 1 ? 0 : 1;
+    this.updateUser(child);
   }
-
 
   deleteChild = () => {
     let user = this.state.user;
     user.child = "";
     this.updateUser(user);
   }
-
-
 
   /********************** END API CALLS *********************/
 

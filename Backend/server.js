@@ -43,10 +43,12 @@ app.post('/updateUser', (req, res) => {
     /* Get the new and improved user */
     sqliteDriver.getUser(req.body.username).then(user => {
         console.log("\n\nAFTER UPDATE \n");
-        console.log(user)
-        res.send(user);
+        getFullUserObject(user).then(newUser => {
+            console.log(newUser)
+            res.send(newUser).end()
+        });
     }).catch(err => {
-        res.send(err);
+        res.sendStatus(500);
     });
 });
 
@@ -74,22 +76,13 @@ app.post('/adduser', (req, res) => {
         sqliteDriver.insertUser(req.body.username, req.body.password, req.body.isParent,
             req.body.child, req.body.enabled, req.body.outdoorMode, req.body.recordStats);
 
-<<<<<<< HEAD
-    /* Fetch the newly created user from the db */
-    sqliteDriver.getUser(req.body.username).then(user => {
-        res.send(getFullUserObject(user));
-    }).catch(err => {
-        console.log(err);
-        res.sendStatus(500);
-=======
         /* Fetch the newly created user from the db */
         sqliteDriver.getUser(req.body.username).then(user => {
-            res.send(user);
+            res.send(user).end();
         }).catch(err => {
             console.log(err);
             res.sendStatus(500);
         });
->>>>>>> 2623facfd62952e9069fff474e6e8775ab56035f
     });
 });
 
@@ -99,7 +92,7 @@ app.post('/login', (req, res) => {
     let pass = req.body.password;
     sqliteDriver.getUser(req.body.username).then(result => {
         if (result.password == pass) {
-            res.send(getFullUserObject(result)).end();
+            res.send(result).end();
         } else {
             res.sendStatus(500).end();
         }
@@ -119,29 +112,3 @@ const PORT = process.env.PORT || 8080;
 app.listen(PORT, () => {
     console.log(`Server listening on port ${PORT}...`);
 });
-
-
-/* Helper to get the full user object to send */
-function getFullUserObject(user) {
-    if (user.child !== "") {
-        sqliteDriver.getUser(user.child).then(sub => {
-            user.child = sub;
-            return user;
-        })
-    } else {
-        return user;
-    }
-}
-/* Testing */
-// sqliteDriver.dropDB();
-// sqliteDriver.initDB();
-
-// for (var i = 0; i < 10; i++) {
-//     sqliteDriver.insertUser("testname" + i, "pass" + i, i % 2 == 0, "testname " + i - 1);
-// }
-
-// sqliteDriver.getUser("testname0").then(user => console.log(user)).catch(err => console.log("ERR: " + err));
-
-// sqliteDriver.getAllUsers().then(res => {
-//     console.log(res);
-// }).catch(err => console.log(err));
