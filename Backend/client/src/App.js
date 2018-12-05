@@ -121,6 +121,7 @@ class App extends Component {
       });
   }
 
+  /* USER API CONTROLS */
   toggleEnabled = () => {
     let user = this.state.user;
     user.enabled = this.state.user.enabled === 1 ? 0 : 1;
@@ -139,11 +140,33 @@ class App extends Component {
     this.updateUser(user);
   }
 
+  /* CHILD CONTROLS */
+  toggleChildEnabled = () => {
+    let user = this.state.user;
+    user.enabled = this.state.user.child.enabled === 1 ? 0 : 1;
+    this.updateUser(user);
+  }
+
+  toggleChildOutdoor = () => {
+    let user = this.state.user;
+    user.outdoorMode = this.state.user.child.outdoorMode == 1 ? 0 : 1;
+    this.updateUser(user);
+  }
+
+  toggleChildRecord = () => {
+    let child = this.state.user.child;
+    child.recordStats = this.state.user.child.recordStats == 1 ? 0 : 1;
+    this.updateUser(user);
+  }
+
+
   deleteChild = () => {
     let user = this.state.user;
     user.child = "";
     this.updateUser(user);
   }
+
+
 
   /********************** END API CALLS *********************/
 

@@ -39,7 +39,7 @@ app.post('/updateUser', (req, res) => {
     sqliteDriver.deleteUser(req.body.username);
     sqliteDriver.insertUser(req.body.username, req.body.password, req.body.isParent,
         req.body.child, req.body.enabled, req.body.outdoorMode, req.body.recordStats);
-     
+
     /* Get the new and improved user */
     sqliteDriver.getUser(req.body.username).then(user => {
         console.log("\n\nAFTER UPDATE \n");
@@ -47,7 +47,7 @@ app.post('/updateUser', (req, res) => {
         res.send(user);
     }).catch(err => {
         res.send(err);
-    });   
+    });
 });
 
 /* 
@@ -79,7 +79,7 @@ app.post('/adduser', (req, res) => {
 
     /* Fetch the newly created user from the db */
     sqliteDriver.getUser(req.body.username).then(user => {
-        res.send(user);
+        res.send(getFullUserObject(user));
     }).catch(err => {
         console.log(err);
         res.sendStatus(500);
@@ -92,7 +92,7 @@ app.post('/login', (req, res) => {
     let pass = req.body.password;
     sqliteDriver.getUser(req.body.username).then(result => {
         if (result.password == pass) {
-            res.send(result).end();
+            res.send(getFullUserObject(result)).end();
         } else {
             res.sendStatus(500).end();
         }
@@ -113,6 +113,18 @@ app.listen(PORT, () => {
     console.log(`Server listening on port ${PORT}...`);
 });
 
+
+/* Helper to get the full user object to send */
+function getFullUserObject(user) {
+    if (user.child !== "") {
+        sqliteDriver.getUser(user.child).then(sub => {
+            user.child = sub;
+            return user;
+        })
+    } else {
+        return user;
+    }
+}
 /* Testing */
 // sqliteDriver.dropDB();
 // sqliteDriver.initDB();
