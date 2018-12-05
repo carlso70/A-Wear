@@ -154,6 +154,26 @@ class App extends Component {
       });
   }
 
+  updateChild = (child) => {
+    fetch(awearUrl + "/updateUser", {
+      method: 'POST',
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(child)
+    })
+      .then(res => res.json())
+      .then(res => {
+        console.log("NEW USER UPDATE\n");
+        this.setState({
+          childObj: res
+        });
+      })
+      .catch(err => {
+        console.log("ERROR: " + err);
+      });
+  }
+
   /************************************ USER API CONTROLS ************************************/
   toggleEnabled = () => {
     let user = this.state.user;
@@ -175,22 +195,21 @@ class App extends Component {
 
   /**************************** CHILD CONTROLS ************************************/
   toggleChildEnabled = () => {
-    console.log(this.state);
     let child = this.state.childObj;
     child.enabled = this.state.childObj.enabled === 1 ? 0 : 1;
-    this.updateUser(child);
+    this.updateChild(child);
   }
 
   toggleChildOutdoor = () => {
-    let child = this.state.childObj;
+    let child = this.state.user.childObj;
     child.outdoorMode = this.state.childObj.outdoorMode === 1 ? 0 : 1;
-    this.updateUser(child);
+    this.updateChild(child);
   }
 
   toggleChildRecord = () => {
     let child = this.state.childObj;
     child.recordStats = this.state.childObj.recordStats === 1 ? 0 : 1;
-    this.updateUser(child);
+    this.updateChild(child);
   }
 
   deleteChild = () => {
