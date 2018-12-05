@@ -241,8 +241,7 @@ class App extends Component {
   render() {
     if (this.state.loggedIn && this.state.user) {
       let childControls = <div />
-      if (this.state.user.child !== "") {
-        if (this.state.childObj === null) this.loadChildObject(this.state.user.child);
+      if (this.state.user.child !== "" && !this.isEmpty(this.state.childObj)) {
         childControls = (<div>
           <Card>
             <CardBody>
