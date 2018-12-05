@@ -26,8 +26,7 @@ class LoginVCViewController: UIViewController {
     
     @IBAction func login(_ sender: Any) {
         let awearUrl = "https://awear-222521.appspot.com/login";
-        
-        print("LOGIN")
+
         Alamofire.request(awearUrl, method: .post, parameters: ["username": username.text ?? "", "password": password.text ?? ""], encoding: JSONEncoding.default, headers: nil).responseJSON { response in
             switch response.result {
             case .success(let JSON):
@@ -35,11 +34,12 @@ class LoginVCViewController: UIViewController {
                 let response = JSON as! NSDictionary
                 print(response.object(forKey: "username")!)
                 
+                AdminUtils.updateSettings(response: response)
+                self.performSegue(withIdentifier: "loginSegue", sender: self)
             case .failure(let error):
                 print("Request failed with error: \(error)")
             }
         }
-        //        performSegue(withIdentifier: "loginSegue", sender: self)
     }
     
 }
