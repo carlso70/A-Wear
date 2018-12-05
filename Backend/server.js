@@ -35,6 +35,13 @@ app.post('/getuser', (req, res) => {
 app.post('/updateUser', (req, res) => {
     console.log("IN UPDATE USER requestbody:\n\n\n");
     console.log(req.body);
+    /* If adding a new child, check if object exists */
+    sqliteDriver.getUser(req.body.child).then(user => {
+        if (user == {}) res.sendStatus(500);
+    }).catch(err => {
+        res.sendStatus(500);
+    })
+
     /* Update User */
     sqliteDriver.deleteUser(req.body.username);
     sqliteDriver.insertUser(req.body.username, req.body.password, req.body.isParent,

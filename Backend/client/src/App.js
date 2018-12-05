@@ -52,6 +52,7 @@ class App extends Component {
   }
 
   loadChildObject = (child) => {
+    console.log("loading child named: " + child + '\n');
     let params = {
       "username": child
     };
@@ -64,6 +65,7 @@ class App extends Component {
     })
       .then(res => res.json())
       .then(res => {
+        console.log("CHILD OBJECT RECIEVED: \n");
         console.log(res);
         this.setState({
           childObj: res
@@ -74,7 +76,7 @@ class App extends Component {
 
   addChild = () => {
     console.log("HERE")
-    if (this.state.child === "") return;
+    if (this.state.child === "") alert("ERROR ADDING EMPTY CHILD");
 
     let user = this.state.user;
     user.child = this.state.child;
@@ -138,8 +140,7 @@ class App extends Component {
     })
       .then(res => res.json())
       .then(res => {
-        console.log("NEW USER\n");
-        console.log(res)
+        console.log("NEW USER UPDATE\n");
         this.setState({
           user: res
         }, () => {
@@ -227,11 +228,9 @@ class App extends Component {
             <CardBody>
               <CardTitle>Child Controls</CardTitle>
               <h2 style={{ "margin": "20px" }}><Badge color="warning">Child: {this.state.user.child}</Badge></h2>
-              <Button color="primary" onClick={() => this.toggleChildEnabled()} active={this.state.childObj.enabled == 1}>Enable Child iOS Recording</Button>{' '}
-              <Button color="primary" onClick={() => this.toggleChildOutdoor()} active={this.state.childObj.outdoorMode == 1}>Outdoor Mode</Button>{' '}
-              <Button color="primary" onClick={() => this.toggleChildRecord()} active={this.state.childObj.recordStats == 1}>Record Stats</Button>
-              <br />
-              <Button color="danger" style={{ "margin": "40px" }} onClick={() => this.deleteChild()}>Remove Child</Button>
+              <Button color="primary" onClick={() => this.toggleChildEnabled()} active={this.state.childObj.enabled === 1}>Enable Child iOS Recording</Button>{' '}
+              <Button color="primary" onClick={() => this.toggleChildOutdoor()} active={this.state.childObj.outdoorMode === 1}>Outdoor Mode</Button>{' '}
+              <Button color="primary" onClick={() => this.toggleChildRecord()} active={this.state.childObj.recordStats === 1}>Record Stats</Button>
             </CardBody>
           </Card>
         </div>);
@@ -289,6 +288,14 @@ class App extends Component {
         </div>
       );
     }
+  }
+
+  isEmpty(obj) {
+    for (var key in obj) {
+      if (obj.hasOwnProperty(key))
+        return false;
+    }
+    return true;
   }
 }
 
