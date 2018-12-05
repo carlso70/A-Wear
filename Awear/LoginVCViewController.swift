@@ -26,8 +26,17 @@ class LoginVCViewController: UIViewController {
     
     @IBAction func login(_ sender: Any) {
         let awearUrl = "https://awear-222521.appspot.com/login";
-
-        Alamofire.request(awearUrl, method: .post, parameters: ["username": username.text ?? "", "password": password.text ?? ""], encoding: JSONEncoding.default, headers: nil).responseJSON { response in
+        
+        if (username.text == "" || password.text == "") {
+            let alert = UIAlertController(title: "Error", message: "Fill out all fields.", preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: NSLocalizedString("OK", comment: "Default action"), style: .default, handler: { _ in
+                NSLog("The \"OK\" alert occured.")
+            }))
+            self.present(alert, animated: true, completion: nil)
+            return;
+        }
+        
+        Alamofire.request(awearUrl, method: .post, parameters: ["username": username.text ?? "-1", "password": password.text ?? "-1"], encoding: JSONEncoding.default, headers: nil).responseJSON { response in
             switch response.result {
             case .success(let JSON):
                 print("Success with JSON: \(JSON)")
@@ -38,6 +47,11 @@ class LoginVCViewController: UIViewController {
                 self.performSegue(withIdentifier: "loginSegue", sender: self)
             case .failure(let error):
                 print("Request failed with error: \(error)")
+                let alert = UIAlertController(title: "Failure", message: "Failed to login. Invalid credentials.", preferredStyle: .alert)
+                alert.addAction(UIAlertAction(title: NSLocalizedString("OK", comment: "Default action"), style: .default, handler: { _ in
+                    NSLog("The \"OK\" alert occured.")
+                }))
+                self.present(alert, animated: true, completion: nil)
             }
         }
     }
