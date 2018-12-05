@@ -175,6 +175,7 @@ class App extends Component {
 
   /**************************** CHILD CONTROLS ************************************/
   toggleChildEnabled = () => {
+    console.log(this.state);
     let child = this.state.childObj;
     child.enabled = this.state.childObj.enabled === 1 ? 0 : 1;
     this.updateUser(child);
