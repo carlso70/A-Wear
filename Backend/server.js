@@ -70,19 +70,26 @@ app.post('/adduser', (req, res) => {
         if (user.username !== null || user.username !== "")
             res.sendStatus(500);
     }).catch(err => {
-        // console.log(err);
-    });
+        /* If there is an error that means the user was not found, which means we can add it */
+        sqliteDriver.insertUser(req.body.username, req.body.password, req.body.isParent,
+            req.body.child, req.body.enabled, req.body.outdoorMode, req.body.recordStats);
 
-    /* Insert the user */
-    sqliteDriver.insertUser(req.body.username, req.body.password, req.body.isParent,
-        req.body.child, req.body.enabled, req.body.outdoorMode, req.body.recordStats)
-
+<<<<<<< HEAD
     /* Fetch the newly created user from the db */
     sqliteDriver.getUser(req.body.username).then(user => {
         res.send(getFullUserObject(user));
     }).catch(err => {
         console.log(err);
         res.sendStatus(500);
+=======
+        /* Fetch the newly created user from the db */
+        sqliteDriver.getUser(req.body.username).then(user => {
+            res.send(user);
+        }).catch(err => {
+            console.log(err);
+            res.sendStatus(500);
+        });
+>>>>>>> 2623facfd62952e9069fff474e6e8775ab56035f
     });
 });
 

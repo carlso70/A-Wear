@@ -447,7 +447,7 @@
                                 <color key="backgroundColor" red="0.93725490199999995" green="0.93725490199999995" blue="0.95686274510000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <state key="normal" title="Log In"/>
                                 <connections>
-                                    <segue destination="BYZ-38-t0r" kind="show" id="sOE-zx-cOv"/>
+                                    <action selector="login:" destination="iS9-gG-4oN" eventType="touchUpInside" id="5Bw-Qs-2la"/>
                                 </connections>
                             </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Don't have an account?" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="auD-wP-Bft">
@@ -462,7 +462,7 @@
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <state key="normal" title="Make Account"/>
                                 <connections>
-                                    <action selector="makeAcct:" destination="iS9-gG-4oN" eventType="touchUpInside" id="iIz-NJ-CQc"/>
+                                    <action selector="makeAccount:" destination="iS9-gG-4oN" eventType="touchUpInside" id="mK9-Ib-UiL"/>
                                 </connections>
                             </button>
                         </subviews>
@@ -470,6 +470,11 @@
                         <viewLayoutGuide key="safeArea" id="wEa-bv-C7l"/>
                     </view>
                     <navigationItem key="navigationItem" id="4dg-Be-9GB"/>
+                    <connections>
+                        <outlet property="password" destination="3J0-kb-BIM" id="I7h-Ur-z9n"/>
+                        <outlet property="username" destination="3J0-kb-BIM" id="Ccb-sC-Oqc"/>
+                        <segue destination="BYZ-38-t0r" kind="show" identifier="loginSegue" id="Btd-5e-HdZ"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="cAG-21-184" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -477,6 +482,6 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="sOE-zx-cOv"/>
+        <segue reference="Btd-5e-HdZ"/>
     </inferredMetricsTieBreakers>
 </document>

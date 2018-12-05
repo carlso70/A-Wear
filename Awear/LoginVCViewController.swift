@@ -7,28 +7,39 @@
 //
 
 import UIKit
+import Alamofire
 
 class LoginVCViewController: UIViewController {
-
+    
+    @IBOutlet weak var username: UITextField!
+    @IBOutlet weak var password: UITextField!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-
         // Do any additional setup after loading the view.
     }
     
     @IBAction func makeAccount(_ sender: Any) {
-        guard let url = URL(string: "https://stackoverflow.com") else { return }
+        guard let url = URL(string: "https://awear-client.appspot.com") else { return }
         UIApplication.shared.open(url)
     }
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
+    
+    @IBAction func login(_ sender: Any) {
+        let awearUrl = "https://awear-222521.appspot.com/login";
+        
+        print("LOGIN")
+        Alamofire.request(awearUrl, method: .post, parameters: ["username": username.text ?? "", "password": password.text ?? ""], encoding: JSONEncoding.default, headers: nil).responseJSON { response in
+            switch response.result {
+            case .success(let JSON):
+                print("Success with JSON: \(JSON)")
+                let response = JSON as! NSDictionary
+                print(response.object(forKey: "username")!)
+                
+            case .failure(let error):
+                print("Request failed with error: \(error)")
+            }
+        }
+        //        performSegue(withIdentifier: "loginSegue", sender: self)
     }
-    */
-
+    
 }
