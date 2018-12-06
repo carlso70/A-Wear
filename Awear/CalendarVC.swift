@@ -25,8 +25,6 @@ class CalendarVC : UIViewController,  UITableViewDelegate, UITableViewDataSource
     var events: [EKEvent] = [];
     @IBOutlet weak var tableView: UITableView!
     
-    var test: [String] = ["test", "test1", "hiKatie"]
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -55,7 +53,12 @@ class CalendarVC : UIViewController,  UITableViewDelegate, UITableViewDataSource
                     
                     // Fetch all events that match the predicate
                     self.events = store.events(matching: predicate)
-                    print("The content of array is\(self.events)")
+                    
+                    //swift 3
+                    DispatchQueue.main.async{
+                        self.tableView.reloadData()
+                    }
+                    
                 }
             }
         }
@@ -75,19 +78,20 @@ class CalendarVC : UIViewController,  UITableViewDelegate, UITableViewDataSource
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        //        return events.count
-        return test.count
+        return events.count
     }
     
-    //    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {}
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        print("you selected event: \(events[indexPath.row])")
+    }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath as IndexPath)
-        cell.textLabel?.text = test[indexPath.row]
-//        let events = self.events[indexPath.row]
-//        cell.textLabel?.text = events.title
-//        cell.detailTextLabel!.text = events.startDate.description
-//        print("event cell returned")
+        let event = events[indexPath.row]
+        print("Current event is \(event)")
+        cell.textLabel?.text = event.title
+        cell.detailTextLabel?.text = event.startDate.description
+        print("event cell returned")
         return cell
     }
 }

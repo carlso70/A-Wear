@@ -391,6 +391,11 @@
                                         </tableViewCellContentView>
                                     </tableViewCell>
                                 </prototypes>
+                                <connections>
+                                    <outlet property="dataSource" destination="WrW-RU-a7D" id="d6g-OK-zlN"/>
+                                    <outlet property="delegate" destination="WrW-RU-a7D" id="9yl-jg-WcH"/>
+                                    <outlet property="prefetchDataSource" destination="WrW-RU-a7D" id="cOT-vp-kKj"/>
+                                </connections>
                             </tableView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
