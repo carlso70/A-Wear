@@ -17,12 +17,17 @@ import CoreLocation
 import EventKit
 
 
+var globalCalVC: CalendarVC?
+
 class CalendarVC : UIViewController,  UITableViewDelegate, UITableViewDataSource{
     
     @IBOutlet weak var backBtn: UIButton!
     
     // var cal;
     var events: [EKEvent] = [];
+    
+    
+    
     @IBOutlet weak var tableView: UITableView!
     
     var test: [String] = ["test", "test1", "hiKatie"]
@@ -34,6 +39,8 @@ class CalendarVC : UIViewController,  UITableViewDelegate, UITableViewDataSource
         
         let store = EKEventStore()
         
+        globalCalVC = self as! CalendarVC
+        
         // Get the appropriate calendar
         let calendar = Calendar.current
         
@@ -44,7 +51,7 @@ class CalendarVC : UIViewController,  UITableViewDelegate, UITableViewDataSource
                     print("User has granted permission!")
                     // Create the start date components
                     var oneDayAgoComponents = DateComponents()
-                    oneDayAgoComponents.day = -1
+                    oneDayAgoComponents.day = 0
                     let oneDayAgo = calendar.date(byAdding: oneDayAgoComponents, to: Date())
                     
                     // Create the end date components
@@ -74,7 +81,9 @@ class CalendarVC : UIViewController,  UITableViewDelegate, UITableViewDataSource
     }
     
     @IBAction func back(_ sender: Any) {
-       // self.dismiss(animated: true, completion: nil)
+        removePastDates()
+        getMostRecentDate()
+        self.dismiss(animated: true, completion: nil)
     }
     
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
@@ -87,6 +96,30 @@ class CalendarVC : UIViewController,  UITableViewDelegate, UITableViewDataSource
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         print("you selected event: \(events[indexPath.row])")
+        
+        let alert = UIAlertController(title: "Disable during Event", message: "Would you like to automatically disable during this event?", preferredStyle: .alert)
+        
+        let yesAction = UIAlertAction(title: "Yes", style: .default, handler: { (action) in
+            self.disableDates.append(self.events[indexPath.row].startDate)
+            
+            print(self.disableDates)
+            
+            self.getMostRecentDate()
+            return
+        })
+        
+        let noAction = UIAlertAction(title: "No", style: .default, handler: { (action) in
+            
+            return
+        })
+        
+        alert.addAction(yesAction)
+        alert.addAction(noAction)
+        
+        present(alert, animated: true, completion: nil)
+        
+        
+        
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -97,5 +130,52 @@ class CalendarVC : UIViewController,  UITableViewDelegate, UITableViewDataSource
         cell.detailTextLabel?.text = event.startDate.description
         print("event cell returned")
         return cell
+    }
+    
+    func sortArray(){
+        disableDates.sort()
+        disableDates = Array(Set(disableDates))
+        disableDates.sort()
+       // disableDates.
+        print(disableDates)
+    }
+    
+    func getMostRecentDate(){
+        
+        removePastDates()
+        
+        if(disableDates.isEmpty){
+            UserDefaults.standard.set(false, forKey: "calendarDisable")
+            return
+        }else{
+        
+            sortArray()
+            let d = disableDates[0]
+            UserDefaults.standard.set(d, forKey: "disableDate")
+            UserDefaults.standard.set(true, forKey: "calendarDisable")
+        }
+    }
+    
+    func removePastDates(){
+        sortArray()
+        
+        if(!disableDates.isEmpty)
+        {
+        var d = disableDates[0]
+        while(Date() > d){
+            disableDates.remove(at: 0)
+            
+            if(disableDates.isEmpty){
+                UserDefaults.standard.set(false, forKey: "calendarDisable")
+                return
+            }else{
+                sortArray()
+                d = disableDates[0]
+            }
+            
+            
+        }
+        }
+        
     }
 }

@@ -54,6 +54,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
     var healthEnabled = false;
     
     
+    
     /* Setup WC Session (Watch Connectivity) */
     var session: WCSession?
     
@@ -116,7 +117,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
             UserDefaults.standard.set(false, forKey: "watchConnect")
         }
         
-        UserDefaults.standard.set(false, forKey: "hasDates")
+        UserDefaults.standard.set(false, forKey: "calendarDisable")
         
         WATCH_CONNECT = UserDefaults.standard.bool(forKey: "watchConnect")
         RECORD_STATS = UserDefaults.standard.bool(forKey: "recordStats")
@@ -253,6 +254,10 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
             audioEnabled = true;
             UserDefaults.standard.set(audioEnabled, forKey: "audioEnabled")
             UserDefaults.standard.set(false, forKey: "customDisabled");
+            UserDefaults.standard.set(false, forKey: "meetingDisabled");
+            
+            globalCalVC!.getMostRecentDate()
+            
             REENABLE_TIME = Date();
             UserDefaults.standard.set(Date(), forKey: "reenableTime")
             setupAudioRecording();
@@ -578,9 +583,9 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
     func recordStat(voiceLevel: Float) {
         var heartRate = 85.00
         do {
-            fetchLatestHeartRateSample { (result) in
+           /* fetchLatestHeartRateSample { (result) in
                 heartRate = (result?.last?.quantity.doubleValue(for: HKUnit.count().unitDivided(by: HKUnit.minute())))!
-            }
+            }*/
         }
         
         /* Save event to db */
@@ -720,6 +725,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
                 setupAudioRecording()
                 UserDefaults.standard.set(true, forKey: "audioEnabled")
                  UserDefaults.standard.set(false, forKey: "customDisabled");
+                UserDefaults.standard.set(false, forKey: "meetingDisabled");
                 audioEnabled = true;
                 calibrateButton.isUserInteractionEnabled = true;
                 volumeSlider.isUserInteractionEnabled = true;
@@ -795,7 +801,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
         
         let hor = lround(curr?.horizontalAccuracy ?? -1)
         
-        print(hor)
+        //print(hor)
         
         if (hor < 0)
         {
@@ -872,23 +878,21 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
     
     func checkCalendarDisable(){
         
-        if(UserDefaults.standard.bool(forKey: "hasDates"))
+        if(UserDefaults.standard.bool(forKey: "calendarDisable"))
         {
         
-            var dates = UserDefaults.standard.array(forKey: "datesDisable") as! [Date]
-        
-        print("hereheherherherh")
-            print(dates)
-        
-        
-            var dat = dates[0] as Date
+            var date = UserDefaults.standard.object(forKey: "disableDate") as! Date
+            print("here")
+            print(date)
+            print("current date")
+            print(Date())
             
-            if(dat >= Date()){
-            UserDefaults.standard.set(true, forKey: "calendarDisable")
-            
-            let formatter = DateFormatter();
-            formatter.dateFormat = "MMM d, h:mm a";
-            
+            if(date <= Date() && !UserDefaults.standard.bool(forKey: "meetingDisabled")){
+                
+                
+                let formatter = DateFormatter();
+                formatter.dateFormat = "MMM d, h:mm a";
+                
             audioEnabled = false;
             recorder.stop();
             calibrateButton.isUserInteractionEnabled = false;
@@ -897,8 +901,8 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
                 let time = UserDefaults.standard.integer(forKey: "customDisableTime")
                 
                 let earlyDate = Calendar.current.date(
-                    byAdding: .second,
-                    value: 216000,
+                    byAdding: .minute,
+                    value: 60,
                     to: Date())
                 var myString = formatter.string(from: earlyDate as! Date)
                 
@@ -909,6 +913,8 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
                 
                 disableAudio.setTitle("Enable Listening", for: .normal);
                 UserDefaults.standard.set(false, forKey: "audioEnabled")
+                UserDefaults.standard.set(true, forKey: "meetingDisabled");
+            }
             }
             
             
@@ -918,4 +924,4 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
         }
     }
 
-}
+
