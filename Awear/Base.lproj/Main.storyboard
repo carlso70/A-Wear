@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="iS9-gG-4oN">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14313.18" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="iS9-gG-4oN">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14460.20"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14283.14"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -178,6 +178,14 @@
                                     </segue>
                                 </connections>
                             </button>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="nBR-VK-2F0">
+                                <rect key="frame" x="156" y="43" width="62" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="Calendar"/>
+                                <connections>
+                                    <segue destination="WrW-RU-a7D" kind="show" id="QZT-zX-iOX"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" red="0.80895950449999998" green="0.92991775529999998" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <accessibility key="accessibilityConfiguration">
@@ -319,6 +327,9 @@
                     </view>
                     <connections>
                         <outlet property="cancelBtn" destination="OMM-Xc-PuX" id="quv-Gp-n6F"/>
+                        <outlet property="disableBtn" destination="2Mj-rJ-tM4" id="yWP-gz-AL5"/>
+                        <outlet property="disablePicker" destination="2JL-LH-qge" id="gN9-VL-uw4"/>
+                        <outlet property="lblDisable" destination="2JL-LH-qge" id="1F7-tK-Ppp"/>
                         <outlet property="outdoorLbl" destination="TUC-7b-rD8" id="jQA-oG-Xcp"/>
                         <outlet property="outdoorMnlSwitch" destination="o0p-vK-JXJ" id="BKN-f4-A1d"/>
                         <outlet property="outdoorSwitch" destination="sKd-rs-sWe" id="54K-4N-BLc"/>
@@ -349,6 +360,34 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Uu1-8T-Elh" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-830" y="-672"/>
+        </scene>
+        <!--Calendar Controller-->
+        <scene sceneID="DrC-KU-ID7">
+            <objects>
+                <viewController id="WrW-RU-a7D" userLabel="Calendar Controller" customClass="CalendarVC" customModule="Awear" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="OLF-h1-x2h">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="1PR-dC-JoI">
+                                <rect key="frame" x="34" y="44" width="34" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="Back"/>
+                                <connections>
+                                    <action selector="back:" destination="WrW-RU-a7D" eventType="touchUpInside" id="SpC-bo-99l"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <viewLayoutGuide key="safeArea" id="JGw-gx-Ufl"/>
+                    </view>
+                    <connections>
+                        <outlet property="backBtn" destination="1PR-dC-JoI" id="4E4-8l-KT4"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Mmr-hf-AMO" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="665" y="206"/>
         </scene>
         <!--Statistics View Controller-->
         <scene sceneID="2Rh-EH-uC2">
