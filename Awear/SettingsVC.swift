@@ -14,9 +14,9 @@ import UIKit
 import AVFoundation
 import CoreAudio
 import CoreLocation
+import Alamofire
 
 class SettingsVC : UIViewController{
-    
     
     @IBOutlet weak var cancelBtn: UIButton!
     @IBOutlet weak var vibrationSlider: UISlider!
@@ -38,10 +38,30 @@ class SettingsVC : UIViewController{
     override func viewDidLoad() {
         super.viewDidLoad()
         
-   
-        let outdoor = UserDefaults.standard.bool(forKey: "outdoorAutoEnable")
-        let manout = UserDefaults.standard.bool(forKey: "outdoorManEnable")
+        let awearUrl = "https://awear-222521.appspot.com/getuser";
         
+        var outdoor = UserDefaults.standard.bool(forKey: "outdoorAutoEnable")
+        var manout = UserDefaults.standard.bool(forKey: "outdoorManEnable")
+        
+        Alamofire.request(awearUrl, method: .post, parameters: ["username": UserDefaults.standard.string(forKey: "username") ?? "-1"], encoding: JSONEncoding.default, headers: nil).responseJSON { response in
+            switch response.result {
+            case .success(let JSON):
+                print("SUCCESS IN API REQUEST IN Settings VC")
+                let response = JSON as! NSDictionary
+                print(response)
+                AdminUtils.updateSettings(response: response)
+                outdoor = response.object(forKey: "outdoorMode") as! Bool
+                manout = response.object(forKey: "outdoorMode") as! Bool
+            case .failure(let error):
+                print(error)
+            }
+        }
+        
+        print(UserDefaults.standard.dictionaryRepresentation())
+        
+//        let outdoor = UserDefaults.standard.bool(forKey: "outdoorAutoEnable")
+//        let manout = UserDefaults.standard.bool(forKey: "outdoorManEnable")
+//
         
         // auto switch
         if(outdoor){
@@ -60,13 +80,9 @@ class SettingsVC : UIViewController{
             }else{
                 outdoorMnlSwitch.setOn(false, animated: false)
             }
-            
         }
         
-        
         let stats = UserDefaults.standard.bool(forKey: "recordStats")
-        
-        
         if(stats){
             statsSwitch.setOn(true, animated: false)
         }
@@ -173,7 +189,6 @@ class SettingsVC : UIViewController{
         alert.addAction(ok)
         
         present(alert, animated: true, completion: nil)
-        
     }
     
     
