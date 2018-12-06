@@ -19,9 +19,6 @@ import EventKit
 
 class CalendarViewController : UIViewController{
     
-
-
-    
     @IBOutlet weak var backBtn: UIButton!
     @IBOutlet weak var helpBtn: UIButton!
     
