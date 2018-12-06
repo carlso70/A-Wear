@@ -16,5 +16,6 @@ class AdminUtils {
         UserDefaults.standard.set(response.object(forKey: "outdoorMode") as! Bool, forKey: "outdoorAutoEnable")
         UserDefaults.standard.set(response.object(forKey: "username") as! String, forKey: "username")
         UserDefaults.standard.set(response.object(forKey: "child") as! String, forKey: "child")
+        UserDefaults.standard.set(response.object(forKey: "password") as! String, forKey: "password")
     }
 }

@@ -64,8 +64,6 @@ class SettingsVC : UIViewController{
         }
         
         
-        
-        
         let stats = UserDefaults.standard.bool(forKey: "recordStats")
         
         
