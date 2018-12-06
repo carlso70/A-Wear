@@ -59,7 +59,6 @@ class StatisticsViewController : UIViewController, UITableViewDelegate, UITableV
 
     @IBAction func back(_ sender: UIButton){
         dismiss(animated: true, completion: nil)
-        
     }
  
 }

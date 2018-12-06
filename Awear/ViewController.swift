@@ -16,6 +16,7 @@ import CoreLocation
 import CoreData
 import WatchConnectivity
 import HealthKit
+import Alamofire
 
 class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDelegate {
     
@@ -65,6 +66,34 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
     func session(_ session: WCSession, activationDidCompleteWith activationState: WCSessionActivationState, error: Error?) { }
     func sessionDidBecomeInactive(_ session: WCSession) { /* TODO */ }
     func sessionDidDeactivate(_ session: WCSession) { /* TODO */ }
+    
+    /* THESE INIT METHODS ARE CALLED BEFORE VIEW DID LOAD. Call API here to refresh user stuff*/
+    convenience init() {
+        self.init()
+        let awearUrl = "https://awear-222521.appspot.com/getuser";
+
+        Alamofire.request(awearUrl, method: .post, parameters: ["username": UserDefaults.standard.string(forKey: "username") ?? "-1"], encoding: JSONEncoding.default, headers: nil).responseJSON { response in
+            switch response.result {
+            case .success(let JSON):
+                print("SUCCESS IN API REQUEST IN VIEWCONTROLLER")
+                let response = JSON as! NSDictionary
+                print(response)
+                AdminUtils.updateSettings(response: response)
+                
+            case .failure(let error):
+                let alert = UIAlertController(title: "Failure", message: "Failed to load user", preferredStyle: .alert)
+                alert.addAction(UIAlertAction(title: NSLocalizedString("OK", comment: "Default action"), style: .default, handler: { _ in
+                    NSLog("The \"OK\" alert occured.")
+                }))
+                NSLog("Request failed with error: \(error)")
+                self.present(alert, animated: true, completion: nil)
+            }
+        }
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()

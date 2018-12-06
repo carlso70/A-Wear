@@ -510,7 +510,7 @@
                     </view>
                     <navigationItem key="navigationItem" id="4dg-Be-9GB"/>
                     <connections>
-                        <outlet property="password" destination="3J0-kb-BIM" id="I7h-Ur-z9n"/>
+                        <outlet property="password" destination="Lpw-Kb-9Tn" id="4gv-va-zGY"/>
                         <outlet property="username" destination="3J0-kb-BIM" id="Ccb-sC-Oqc"/>
                         <segue destination="BYZ-38-t0r" kind="show" identifier="loginSegue" id="Btd-5e-HdZ"/>
                     </connections>
