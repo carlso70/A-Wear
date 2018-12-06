@@ -22,15 +22,17 @@ class CalendarVC : UIViewController{
     @IBOutlet weak var backBtn: UIButton!
     
    // var cal;
+    var events: [EKEvent] = [];
+    @IBOutlet weak var tableView: UITableView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        var store = EKEventStore()
+        let store = EKEventStore()
         
         
         // Get the appropriate calendar
-        var calendar = Calendar.current
+        let calendar = Calendar.current
         
         
         if store.responds(to: #selector(EKEventStore.requestAccess(to:completion:))) {
@@ -41,19 +43,19 @@ class CalendarVC : UIViewController{
                     // Create the start date components
                     var oneDayAgoComponents = DateComponents()
                     oneDayAgoComponents.day = -1
-                    var oneDayAgo = calendar.date(byAdding: oneDayAgoComponents, to: Date())
+                    let oneDayAgo = calendar.date(byAdding: oneDayAgoComponents, to: Date())
                     
                     // Create the end date components
                     var oneYearFromNowComponents = DateComponents()
                     oneYearFromNowComponents.year = 1
-                    var oneYearFromNow = calendar.date(byAdding: oneYearFromNowComponents, to: Date())
+                    let oneYearFromNow = calendar.date(byAdding: oneYearFromNowComponents, to: Date())
                     
                     // Create the predicate from the event store's instance method
-                    var predicate: NSPredicate = store.predicateForEvents(withStart: oneDayAgo ?? Date(), end: oneYearFromNow ?? Date(), calendars: nil)
+                    let predicate: NSPredicate = store.predicateForEvents(withStart: oneDayAgo ?? Date(), end: oneYearFromNow ?? Date(), calendars: nil)
                     
                     // Fetch all events that match the predicate
-                    var events = store.events(matching: predicate)
-                    print("The content of array is\(events)")
+                    self.events = store.events(matching: predicate)
+                    print("The content of array is\(self.events)")
                     }
             }
         }
@@ -68,6 +70,31 @@ class CalendarVC : UIViewController{
     
     @IBAction func back(_ sender: Any) {
          self.dismiss(animated: true, completion: nil)
+    }
+    
+    func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+        return 1
+    }
+    
+    
+    //MARK: UITableViewDataSource
+    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        //TEST PRINT EVENT COUNT
+        print("event count (print) \(events.count)")
+        
+        
+        return events.count 
+    }
+    
+    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+        
+        let cellIdentifier = "cell"
+        let cell:UITableViewCell! = tableView.dequeueReusableCell(withIdentifier: cellIdentifier, for: indexPath as IndexPath)
+        let events:EKEvent! = self.events[indexPath.row] 
+        cell.textLabel!.text = events.title
+        cell.detailTextLabel!.text = events.startDate.description
+        print("event cell returned")
+        return cell
     }
     
 }
