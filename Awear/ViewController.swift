@@ -54,6 +54,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
     var healthEnabled = false;
     
     
+    
     /* Setup WC Session (Watch Connectivity) */
     var session: WCSession?
     
@@ -91,6 +92,26 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
         getUser()
         setupSettings()
         
+        UserDefaults.standard.set(false, forKey: "calendarDisable")
+        
+        WATCH_CONNECT = UserDefaults.standard.bool(forKey: "watchConnect")
+        RECORD_STATS = UserDefaults.standard.bool(forKey: "recordStats")
+        VIBRATION_LEVEL = UserDefaults.standard.integer(forKey: "vibrationLevel")
+        audioEnabled =  UserDefaults.standard.bool(forKey: "audioEnabled")
+       // OUTDOOR_MODE = UserDefaults.standard.bool(forKey: "outdoorEnable")
+//        HEALTH_APP = UserDefaults.standard.bool(forKey: "healthEnable")
+        OUTDOOR_AUTO = UserDefaults.standard.bool(forKey: "outdoorAutoEnable")
+        OUTDOOR_MAN = UserDefaults.standard.bool(forKey: "outdoorManEnable")
+        
+        if(OUTDOOR_AUTO){
+            checkAutoOutdoor();
+        }else if(OUTDOOR_MAN){
+            checkOutdoor()
+        }else{
+            OUTDOOR_MODE = false;
+            outdoorLbl.text = ""
+        }
+    
         setupNotifications()
         setupAudioRecording()
         getMyLocation()
@@ -272,6 +293,10 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
             audioEnabled = true;
             UserDefaults.standard.set(audioEnabled, forKey: "audioEnabled")
             UserDefaults.standard.set(false, forKey: "customDisabled");
+            UserDefaults.standard.set(false, forKey: "meetingDisabled");
+            
+            globalCalVC!.getMostRecentDate()
+            
             REENABLE_TIME = Date();
             UserDefaults.standard.set(Date(), forKey: "reenableTime")
             setupAudioRecording();
@@ -480,6 +505,8 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
     @objc func levelTimerCallback() {
         checkDisabled()
         checkCustomDisable()
+        checkCalendarDisable()
+        
         OUTDOOR_AUTO = UserDefaults.standard.bool(forKey: "outdoorAutoEnable")
         OUTDOOR_MAN = UserDefaults.standard.bool(forKey: "outdoorManEnable")
         
@@ -599,9 +626,9 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
     func recordStat(voiceLevel: Float) {
         var heartRate = 85.00
         do {
-            fetchLatestHeartRateSample { (result) in
+           /* fetchLatestHeartRateSample { (result) in
                 heartRate = (result?.last?.quantity.doubleValue(for: HKUnit.count().unitDivided(by: HKUnit.minute())))!
-            }
+            }*/
         }
         
         /* Save event to db */
@@ -740,8 +767,8 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
                 print("HERE")
                 setupAudioRecording()
                 UserDefaults.standard.set(true, forKey: "audioEnabled")
-                UserDefaults.standard.set(false, forKey: "customDisabled");
-                audioEnabled = true;
+                 UserDefaults.standard.set(false, forKey: "customDisabled");
+                UserDefaults.standard.set(false, forKey: "meetingDisabled");
                 calibrateButton.isUserInteractionEnabled = true;
                 volumeSlider.isUserInteractionEnabled = true;
                 disableAudio.setTitle("Disable Listening", for: .normal);
@@ -802,7 +829,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
                 
                 guard error == nil else {
                     //                    print("Error: \(error!.localizedDescription)")
-                    return
+                    //                    print("Error: \(error!.localizedDescription)")
                 }
                 completion(results as? [HKQuantitySample])
         }
@@ -817,7 +844,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
         let hor = lround(curr?.horizontalAccuracy ?? -1)
         
         //        print(hor)
-        
+        //print(hor)
         if (hor < 0)
         {
             OUTDOOR_MODE = false;
@@ -892,3 +919,52 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
     }
     
 }
+    func checkCalendarDisable(){
+        
+        if(UserDefaults.standard.bool(forKey: "calendarDisable"))
+        {
+        
+            var date = UserDefaults.standard.object(forKey: "disableDate") as! Date
+            print("here")
+            print(date)
+            print("current date")
+            print(Date())
+            
+            if(date <= Date() && !UserDefaults.standard.bool(forKey: "meetingDisabled")){
+                
+                
+                let formatter = DateFormatter();
+                formatter.dateFormat = "MMM d, h:mm a";
+                
+            audioEnabled = false;
+            recorder.stop();
+            calibrateButton.isUserInteractionEnabled = false;
+            volumeSlider.isUserInteractionEnabled = false;
+            if(UserDefaults.standard.bool(forKey: "audioEnabled")){
+                let time = UserDefaults.standard.integer(forKey: "customDisableTime")
+                
+                let earlyDate = Calendar.current.date(
+                    byAdding: .minute,
+                    value: 60,
+                    to: Date())
+                var myString = formatter.string(from: earlyDate as! Date)
+                
+                
+                
+                renableTime.text = "Disabled until: \(myString)"
+                REENABLE_TIME = earlyDate ?? Date();
+                
+                disableAudio.setTitle("Enable Listening", for: .normal);
+                UserDefaults.standard.set(false, forKey: "audioEnabled")
+                UserDefaults.standard.set(true, forKey: "meetingDisabled");
+            }
+            }
+            
+            
+        }
+        
+    
+        }
+    }
+
+
