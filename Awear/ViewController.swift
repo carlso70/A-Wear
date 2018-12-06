@@ -244,9 +244,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
             
             present(alert, animated: true, completion: nil)
             
-            // add reenable time
-            // print("HEEERETERTERT")
-            //renableTime.text = "Disabled until: \(disableTime)"
+           
             
             disableApplication(time: disableTime)
             return

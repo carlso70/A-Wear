@@ -86,6 +86,14 @@ class CalendarVC : UIViewController,  UITableViewDelegate, UITableViewDataSource
         self.dismiss(animated: true, completion: nil)
     }
     
+    @IBAction func help(_ sender: Any) {
+        let alert = UIAlertController(title: "Meeting Times", message: "This page allows you to view meeting times from your calendar and set them to automatically disable your application when the event starts", preferredStyle: .alert)
+        
+        let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+        alert.addAction(okAction)
+        
+        present(alert, animated: true, completion: nil)
+    }
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         return 1
     }
@@ -103,13 +111,21 @@ class CalendarVC : UIViewController,  UITableViewDelegate, UITableViewDataSource
             self.disableDates.append(self.events[indexPath.row].startDate)
             
             print(self.disableDates)
-            
+            tableView.cellForRow(at: indexPath)?.textLabel?.text = self.events[indexPath.row].title + " \tDISABLED"
+            //tableView.cellForRow(at: indexPath)?.selectedBackgroundView?.backgroundColor = UIColor.red
             self.getMostRecentDate()
             return
         })
         
         let noAction = UIAlertAction(title: "No", style: .default, handler: { (action) in
             
+            if(self.disableDates.contains(self.events[indexPath.row].startDate)){
+                tableView.cellForRow(at: indexPath)?.textLabel?.text = self.events[indexPath.row].title
+                let r = self.disableDates.firstIndex(of: self.events[indexPath.row].startDate)
+                self.disableDates.remove(at: r ?? 0)
+            }
+            
+            self.getMostRecentDate()
             return
         })
         
@@ -124,10 +140,14 @@ class CalendarVC : UIViewController,  UITableViewDelegate, UITableViewDataSource
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath as IndexPath)
+        //let cell = UITableViewCell(style: UITableViewCell.CellStyle.subtitle, reuseIdentifier: "Cell")
+        //let cell = tableView.dequeueReusableCell
         let event = events[indexPath.row]
         print("Current event is \(event)")
         cell.textLabel?.text = event.title
         cell.detailTextLabel?.text = event.startDate.description
+        cell.detailTextLabel?.isEnabled = true
+        cell.detailTextLabel?.isHidden = false
         print("event cell returned")
         return cell
     }
