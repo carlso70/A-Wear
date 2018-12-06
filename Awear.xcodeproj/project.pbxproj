@@ -11,6 +11,7 @@
 		106B0CA042F3829959AF7A52 /* Pods_Awear.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C1E3C7C06B99C0FCD937B8D0 /* Pods_Awear.framework */; };
 		421B8F3E21897CFF0011CC87 /* SettingsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 421B8F3D21897CFF0011CC87 /* SettingsVC.swift */; };
 		429BF33821B8C38D002415B7 /* CalendarVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 429BF33721B8C38D002415B7 /* CalendarVC.swift */; };
+		429BF33A21B8FC0E002415B7 /* CalendarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 429BF33921B8FC0E002415B7 /* CalendarViewController.swift */; };
 		42E06AE6218A94D900B159E3 /* StatisticsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42E06AE5218A94D900B159E3 /* StatisticsViewController.swift */; };
 		447D2B2E2181232B004006AC /* Interface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 447D2B2C2181232B004006AC /* Interface.storyboard */; };
 		447D2B302181232D004006AC /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 447D2B2F2181232D004006AC /* Assets.xcassets */; };
@@ -98,6 +99,7 @@
 		1D14A51861AECB37181B996C /* Pods-Awear.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Awear.release.xcconfig"; path = "Pods/Target Support Files/Pods-Awear/Pods-Awear.release.xcconfig"; sourceTree = "<group>"; };
 		421B8F3D21897CFF0011CC87 /* SettingsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsVC.swift; sourceTree = "<group>"; };
 		429BF33721B8C38D002415B7 /* CalendarVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarVC.swift; sourceTree = "<group>"; };
+		429BF33921B8FC0E002415B7 /* CalendarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarViewController.swift; sourceTree = "<group>"; };
 		42E06AE5218A94D900B159E3 /* StatisticsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticsViewController.swift; sourceTree = "<group>"; };
 		447D2B252180F650004006AC /* Awear.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Awear.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		447D2B262180F650004006AC /* AwearTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AwearTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -228,6 +230,7 @@
 		61F559632158747400776195 = {
 			isa = PBXGroup;
 			children = (
+				429BF33921B8FC0E002415B7 /* CalendarViewController.swift */,
 				61F5596E2158747400776195 /* Awear */,
 				61F559832158747600776195 /* AwearTests */,
 				61F5598E2158747600776195 /* AwearUITests */,
@@ -567,6 +570,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				429BF33A21B8FC0E002415B7 /* CalendarViewController.swift in Sources */,
 				61F559722158747400776195 /* ViewController.swift in Sources */,
 				42E06AE6218A94D900B159E3 /* StatisticsViewController.swift in Sources */,
 				429BF33821B8C38D002415B7 /* CalendarVC.swift in Sources */,

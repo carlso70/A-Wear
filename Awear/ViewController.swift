@@ -116,7 +116,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
             UserDefaults.standard.set(false, forKey: "watchConnect")
         }
         
-       
+        UserDefaults.standard.set(false, forKey: "hasDates")
         
         WATCH_CONNECT = UserDefaults.standard.bool(forKey: "watchConnect")
         RECORD_STATS = UserDefaults.standard.bool(forKey: "recordStats")
@@ -457,6 +457,8 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
     @objc func levelTimerCallback() {
         checkDisabled()
         checkCustomDisable()
+        checkCalendarDisable()
+        
         OUTDOOR_AUTO = UserDefaults.standard.bool(forKey: "outdoorAutoEnable")
         OUTDOOR_MAN = UserDefaults.standard.bool(forKey: "outdoorManEnable")
         
@@ -865,6 +867,54 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
             
         }else{
             
+        }
+    }
+    
+    func checkCalendarDisable(){
+        
+        if(UserDefaults.standard.bool(forKey: "hasDates"))
+        {
+        
+            var dates = UserDefaults.standard.array(forKey: "datesDisable") as! [Date]
+        
+        print("hereheherherherh")
+            print(dates)
+        
+        
+            var dat = dates[0] as Date
+            
+            if(dat >= Date()){
+            UserDefaults.standard.set(true, forKey: "calendarDisable")
+            
+            let formatter = DateFormatter();
+            formatter.dateFormat = "MMM d, h:mm a";
+            
+            audioEnabled = false;
+            recorder.stop();
+            calibrateButton.isUserInteractionEnabled = false;
+            volumeSlider.isUserInteractionEnabled = false;
+            if(UserDefaults.standard.bool(forKey: "audioEnabled")){
+                let time = UserDefaults.standard.integer(forKey: "customDisableTime")
+                
+                let earlyDate = Calendar.current.date(
+                    byAdding: .second,
+                    value: 216000,
+                    to: Date())
+                var myString = formatter.string(from: earlyDate as! Date)
+                
+                
+                
+                renableTime.text = "Disabled until: \(myString)"
+                REENABLE_TIME = earlyDate ?? Date();
+                
+                disableAudio.setTitle("Enable Listening", for: .normal);
+                UserDefaults.standard.set(false, forKey: "audioEnabled")
+            }
+            
+            
+        }
+        
+    
         }
     }
 

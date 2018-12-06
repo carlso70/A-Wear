@@ -27,6 +27,8 @@ class CalendarVC : UIViewController,  UITableViewDelegate, UITableViewDataSource
     
     var test: [String] = ["test", "test1", "hiKatie"]
     
+    var disableDates: [Date] = []
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -56,6 +58,17 @@ class CalendarVC : UIViewController,  UITableViewDelegate, UITableViewDataSource
                     // Fetch all events that match the predicate
                     self.events = store.events(matching: predicate)
                     print("The content of array is\(self.events)")
+                    
+                    var hlp = self.events[0].startDate
+                    
+                    print(hlp)
+                    
+                    self.disableDates.append(hlp ?? Date())
+                    
+                    print(self.disableDates)
+                    
+                    UserDefaults.standard.set(true, forKey: "hasDates")
+                    UserDefaults.standard.set(self.disableDates, forKey: "disableDates")
                 }
             }
         }
@@ -67,7 +80,7 @@ class CalendarVC : UIViewController,  UITableViewDelegate, UITableViewDataSource
     }
     
     @IBAction func back(_ sender: Any) {
-        self.dismiss(animated: true, completion: nil)
+       // self.dismiss(animated: true, completion: nil)
     }
     
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
@@ -75,18 +88,18 @@ class CalendarVC : UIViewController,  UITableViewDelegate, UITableViewDataSource
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        //        return events.count
-        return test.count
+                return events.count
+        //return test.count
     }
     
     //    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {}
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath as IndexPath)
-        cell.textLabel?.text = test[indexPath.row]
-//        let events = self.events[indexPath.row]
-//        cell.textLabel?.text = events.title
-//        cell.detailTextLabel!.text = events.startDate.description
+        //cell.textLabel?.text = test[indexPath.row]
+        let events = self.events[indexPath.row]
+        cell.textLabel?.text = events.title
+        cell.detailTextLabel!.text = events.startDate.description
 //        print("event cell returned")
         return cell
     }
