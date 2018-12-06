@@ -19,9 +19,6 @@ class SettingsVC : UIViewController{
     
     
     @IBOutlet weak var cancelBtn: UIButton!
-    @IBOutlet weak var vibrationSlider: UISlider!
-    @IBOutlet weak var vibrationLvl: UILabel!
-    
     @IBOutlet weak var outdoorSwitch: UISwitch!
     @IBOutlet weak var resetStatsBtn: UIButton!
     @IBOutlet weak var statsSwitch: UISwitch!
@@ -31,6 +28,7 @@ class SettingsVC : UIViewController{
     @IBOutlet weak var outdoorLbl: UILabel!
     @IBOutlet weak var outdoorMnlSwitch: UISwitch!
     @IBOutlet weak var disablePicker: UIDatePicker!
+    @IBOutlet weak var lblDisable: UIDatePicker!
     
    
     var changed = false;
@@ -63,8 +61,19 @@ class SettingsVC : UIViewController{
             
         }
         
+        disablePicker.countDownDuration = 300;
         
+        let custDis = UserDefaults.standard.bool(forKey: "customDisabled");
         
+        if(custDis){
+            disablePicker.isHidden = true;
+            disableBtn.isHidden = true;
+            lblDisable.isHidden = true;
+        }else{
+            disablePicker.isHidden = false;
+            disableBtn.isHidden = false;
+            lblDisable.isHidden = false;
+        }
         
         let stats = UserDefaults.standard.bool(forKey: "recordStats")
         
@@ -176,6 +185,10 @@ class SettingsVC : UIViewController{
         
         present(alert, animated: true, completion: nil)
         
+        disablePicker.isHidden = true;
+        disableBtn.isHidden = true;
+        lblDisable.isHidden = true; 
+        
     }
     
     
@@ -202,12 +215,7 @@ class SettingsVC : UIViewController{
             UserDefaults.standard.set(false, forKey: "recordStats");
         }
         
-        
-        let vol = lroundf(vibrationSlider.value);
-        vibrationLvl.text = "\(vol)";
-        
-        UserDefaults.standard.set(vol, forKey: "vibrationLevel");
-        
+
         if(outdoorSwitch.isOn){
             UserDefaults.standard.set(true, forKey: "outdoorAutoEnable");
             
