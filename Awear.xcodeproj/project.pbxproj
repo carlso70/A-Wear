@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0C4AE43921B9E8CB0054069D /* Reachability.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C4AE43821B9E8CB0054069D /* Reachability.swift */; };
 		0CDF2EE92166B01F00A4F2C1 /* Launch Screen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0CDF2EE82166B01E00A4F2C1 /* Launch Screen.storyboard */; };
 		106B0CA042F3829959AF7A52 /* Pods_Awear.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C1E3C7C06B99C0FCD937B8D0 /* Pods_Awear.framework */; };
 		421B8F3E21897CFF0011CC87 /* SettingsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 421B8F3D21897CFF0011CC87 /* SettingsVC.swift */; };
@@ -95,6 +96,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		0C4AE43821B9E8CB0054069D /* Reachability.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Reachability.swift; sourceTree = "<group>"; };
 		0CDF2EE82166B01E00A4F2C1 /* Launch Screen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = "Launch Screen.storyboard"; sourceTree = "<group>"; };
 		1D14A51861AECB37181B996C /* Pods-Awear.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Awear.release.xcconfig"; path = "Pods/Target Support Files/Pods-Awear/Pods-Awear.release.xcconfig"; sourceTree = "<group>"; };
 		421B8F3D21897CFF0011CC87 /* SettingsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsVC.swift; sourceTree = "<group>"; };
@@ -267,6 +269,7 @@
 				6129BB1D218B705400508718 /* ConnectivityUtils.swift */,
 				610DBF0E218C103600804AF8 /* Log.swift */,
 				61597B3521B8441000FF2D46 /* AdminUtils.swift */,
+				0C4AE43821B9E8CB0054069D /* Reachability.swift */,
 			);
 			path = Awear;
 			sourceTree = "<group>";
@@ -582,6 +585,7 @@
 				6129BB19218B5FD500508718 /* StatModel.xcdatamodeld in Sources */,
 				6129BB1B218B632100508718 /* StatisticManager.swift in Sources */,
 				421B8F3E21897CFF0011CC87 /* SettingsVC.swift in Sources */,
+				0C4AE43921B9E8CB0054069D /* Reachability.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

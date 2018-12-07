@@ -18,14 +18,24 @@ import WatchConnectivity
 import HealthKit
 import Alamofire
 
+struct Connectivity {
+    static let sharedInstance = NetworkReachabilityManager()!
+    static var isConnectedToInternet:Bool {
+        return self.sharedInstance.isReachable
+    }
+}
+
 class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDelegate {
     
+    
+    var reach: Reachability!
     var recorder: AVAudioRecorder!
     var levelTimer = Timer()
     var LEVEL_THRESHOLD: Float = 160
     var isCalibrating = false
     var VIBRATION_LEVEL = 1
     var REENABLE_TIME = Date();
+    var NOTIFICATION_TIME = Date();
     let locationMgr = CLLocationManager()
     let healthStore = HKHealthStore()
     
@@ -100,7 +110,17 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
         super.viewDidLoad()
         makePretty();
         // Do any additional setup after loading the view, typically from a nib.
+//        if Connectivity.isConnectedToInternet {
+//            print("Connected")
+//        } else {
+//            print("No Internet")
+//        }
         
+        if Reachability.isConnectedToNetwork(){
+            print("Internet Connection Available!")
+        }else{
+            print("Internet Connection not Available!")
+        }
         if WCSession.isSupported() {
             session = WCSession.default
             session?.delegate = self
@@ -491,14 +511,14 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
         //print("IsLoud? : ",isLoud)
         // Need to stop timer and audio session before playing a vibration
         // Notifications
-        if isLoud {
+        if isLoud && Date() > NOTIFICATION_TIME.addingTimeInterval(5) {
             //            let generator = UINotificationFeedbackGenerator()
             //                view.backgroundColor = UIColor.red
             // Need to stop timer and audio session before playing a vibration
             //  generator.impactOccurred()
             ConnectivityUtils.sendLoudNoiseMessageToWatch(session: session, isLoud: true)
             recordStat(voiceLevel: level)
-            
+            NOTIFICATION_TIME = Date()
             let diff = level/LEVEL_THRESHOLD
             if(diff > 1.3) {
                 let generator = UINotificationFeedbackGenerator()
@@ -786,7 +806,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
             sortDescriptors: [sortDescriptor]) { (_, results, error) in
                 
                 guard error == nil else {
-                    print("Error: \(error!.localizedDescription)")
+//                    print("Error: \(error!.localizedDescription)")
                     return
                 }
                 completion(results as? [HKQuantitySample])
