@@ -163,7 +163,7 @@ class SettingsVC : UIViewController{
     @IBAction func autoOutdoorChange(_ sender: Any) {
         changed = true;
         if(outdoorSwitch.isOn){
-            let alert = UIAlertController(title: "Automatic Outdoor Mode", message: "Automatic Outdoor mode is now active. This may be inaccurate. If you need it to be completely accurate please use the manual mode.", preferredStyle: .alert)
+            let alert = UIAlertController(title: "Automatic Outdoor Mode", message: "Automatic Outdoor mode is now active. This will cause your application to be in Indoor mode when connected to WiFi and Outdoor mode when not connected.", preferredStyle: .alert)
             
             let ok = UIAlertAction(title: "Okay", style: .default, handler: nil)
             
