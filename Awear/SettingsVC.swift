@@ -30,7 +30,7 @@ class SettingsVC : UIViewController{
     @IBOutlet weak var disablePicker: UIDatePicker!
     @IBOutlet weak var lblDisable: UIDatePicker!
     
-   
+    
     var changed = false;
     
     override func viewDidLoad() {
@@ -57,9 +57,9 @@ class SettingsVC : UIViewController{
         
         print(UserDefaults.standard.dictionaryRepresentation())
         
-//        let outdoor = UserDefaults.standard.bool(forKey: "outdoorAutoEnable")
-//        let manout = UserDefaults.standard.bool(forKey: "outdoorManEnable")
-//
+        //        let outdoor = UserDefaults.standard.bool(forKey: "outdoorAutoEnable")
+        //        let manout = UserDefaults.standard.bool(forKey: "outdoorManEnable")
+        //
         
         // auto switch
         if(outdoor){
@@ -74,7 +74,7 @@ class SettingsVC : UIViewController{
             outdoorMnlSwitch.isHidden = false;
             
             if(manout){
-               outdoorMnlSwitch.setOn(true, animated: false)
+                outdoorMnlSwitch.setOn(true, animated: false)
             }else{
                 outdoorMnlSwitch.setOn(false, animated: false)
             }
@@ -111,34 +111,32 @@ class SettingsVC : UIViewController{
     @IBAction func cancel(_ sender: UIButton){
         
         if(changed){
-        let alert = UIAlertController(title: "Are you sure?", message: "You have unsaved settings you will lose if you exit now.", preferredStyle: .alert)
-        
-        let yesAction = UIAlertAction(title: "Yes", style: .default, handler: { (action) in
-            self.dismiss(animated: true, completion: nil)
-            print("dont save stats")
-            return
-        })
-        
-        let noAction = UIAlertAction(title: "No", style: .default, handler: { (action) in
+            let alert = UIAlertController(title: "Are you sure?", message: "You have unsaved settings you will lose if you exit now.", preferredStyle: .alert)
             
-            return
-        })
-        
-        alert.addAction(yesAction)
-        alert.addAction(noAction)
-        
-        present(alert, animated: true, completion: nil)
+            let yesAction = UIAlertAction(title: "Yes", style: .default, handler: { (action) in
+                self.dismiss(animated: true, completion: nil)
+                print("dont save stats")
+                return
+            })
+            
+            let noAction = UIAlertAction(title: "No", style: .default, handler: { (action) in
+                
+                return
+            })
+            
+            alert.addAction(yesAction)
+            alert.addAction(noAction)
+            
+            present(alert, animated: true, completion: nil)
         }
         else{
             self.dismiss(animated: true, completion: nil)
         }
-      
+        
     }
     
-
-    
     @IBAction func statsOnOff(_ sender: Any){
-      changed = true;
+        changed = true;
     }
     
     @IBAction func resetStatsClick(_ sender: Any) {
@@ -195,7 +193,7 @@ class SettingsVC : UIViewController{
         
         let alert = UIAlertController(title: "Disabled", message:  "You have disabled the application", preferredStyle: .alert)
         
-       
+        
         let ok = UIAlertAction(title: "Okay", style: .default, handler: nil)
         
         alert.addAction(ok)
@@ -208,9 +206,42 @@ class SettingsVC : UIViewController{
         
     }
     
-    
-    
-    
+    func saveOnline() {
+        /*
+         * Add user post request
+         * body:
+         *      {
+         *          username: string,
+         *          password: string,
+         *          isParent: bool,
+         *          child: string,
+         *          enabled: bool,
+         *          outdoorMode: bool,
+         *          recordStats: bool
+         *      }
+         */
+        let awearUrl = "https://awear-222521.appspot.com/updateUser"
+        let parameters = ["username": UserDefaults.standard.string(forKey: "username") ?? "",
+                          "password": UserDefaults.standard.string(forKey: "password") ?? "",
+                          "isParent": UserDefaults.standard.bool(forKey: "isParent"),
+                          "child": UserDefaults.standard.string(forKey: "child") ?? "",
+                          "enabled": UserDefaults.standard.bool(forKey: "audioEnabled"),
+                          "outdoorMode": UserDefaults.standard.bool(forKey: "outdoorManEnable"),
+                          "recordStats": UserDefaults.standard.bool(forKey: "recordStats")] as [String : Any];
+        
+        print("Parameters = \(parameters)")
+        Alamofire.request(awearUrl, method: .post, parameters: parameters, encoding: JSONEncoding.default, headers: nil).responseJSON { response in
+            switch response.result {
+            case .success(let JSON):
+                print("SUCCESS IN API REQUEST IN Settings VC")
+                let response = JSON as! NSDictionary
+                print(response)
+                AdminUtils.updateSettings(response: response)
+            case .failure(let error):
+                print(error)
+            }
+        }
+    }
     
     @IBAction func save(_ sender: Any) {
         let alert = UIAlertController(title: "Saved!", message: "All setting changes have been saved.", preferredStyle: .alert)
@@ -223,16 +254,12 @@ class SettingsVC : UIViewController{
         
         changed = false;
         
-        
-        if(statsSwitch.isOn)
-        {
+        if(statsSwitch.isOn) {
             UserDefaults.standard.set(true, forKey: "recordStats");
-        }
-        else{
+        } else{
             UserDefaults.standard.set(false, forKey: "recordStats");
         }
         
-
         if(outdoorSwitch.isOn){
             UserDefaults.standard.set(true, forKey: "outdoorAutoEnable");
             
@@ -244,16 +271,12 @@ class SettingsVC : UIViewController{
             
             //present(alert, animated: true, completion: nil)
         }else{
-    
             UserDefaults.standard.set(false, forKey: "outdoorAutoEnable");
-            
             if(outdoorMnlSwitch.isOn){
                 UserDefaults.standard.set(true, forKey: "outdoorManEnable");
             }else{
                 UserDefaults.standard.set(false, forKey: "outdoorManEnable");
             }
-            
-            
         }
         
         if(outdoorMnlSwitch.isOn){
@@ -261,8 +284,8 @@ class SettingsVC : UIViewController{
         }else{
             UserDefaults.standard.set(false, forKey: "outdoorManEnable");
         }
-        
-        
+
+        self.saveOnline()
     }
     
     
