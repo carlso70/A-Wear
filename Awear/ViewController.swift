@@ -41,7 +41,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
     
     var RECORD_STATS = true;
     var WATCH_CONNECT = true;
-//    var HEALTH_APP = false;
+    //    var HEALTH_APP = false;
     var OUTDOOR_MODE = true;
     var OUTDOOR_AUTO = true;
     var OUTDOOR_MAN = true;
@@ -78,34 +78,6 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
     func sessionDidBecomeInactive(_ session: WCSession) { /* TODO */ }
     func sessionDidDeactivate(_ session: WCSession) { /* TODO */ }
     
-//    /* THESE INIT METHODS ARE CALLED BEFORE VIEW DID LOAD. Call API here to refresh user stuff*/
-//    convenience init() {
-//        self.init()
-//        let awearUrl = "https://awear-222521.appspot.com/getuser";
-//
-//        Alamofire.request(awearUrl, method: .post, parameters: ["username": UserDefaults.standard.string(forKey: "username") ?? "-1"], encoding: JSONEncoding.default, headers: nil).responseJSON { response in
-//            switch response.result {
-//            case .success(let JSON):
-//                print("SUCCESS IN API REQUEST IN VIEWCONTROLLER")
-//                let response = JSON as! NSDictionary
-//                print(response)
-//                AdminUtils.updateSettings(response: response)
-//                
-//            case .failure(let error):
-//                let alert = UIAlertController(title: "Failure", message: "Failed to load user", preferredStyle: .alert)
-//                alert.addAction(UIAlertAction(title: NSLocalizedString("OK", comment: "Default action"), style: .default, handler: { _ in
-//                    NSLog("The \"OK\" alert occured.")
-//                }))
-//                NSLog("Request failed with error: \(error)")
-//                self.present(alert, animated: true, completion: nil)
-//            }
-//        }
-//    }
-//
-//    required init?(coder aDecoder: NSCoder) {
-//        super.init(coder: aDecoder)
-//    }
-//
     override func viewDidLoad() {
         super.viewDidLoad()
         makePretty();
@@ -137,14 +109,73 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
             UserDefaults.standard.set(false, forKey: "watchConnect")
         }
         
+        getUser()
+        setupSettings()
+        
         UserDefaults.standard.set(false, forKey: "calendarDisable")
+        
+        setupNotifications()
+        setupAudioRecording()
+        getMyLocation()
+        
+        print("VIBRATION LEVEL: \(VIBRATION_LEVEL)");
+        
+        heartRateDisplay.isHidden = true;
+        heartBeatUnit.isHidden = true;
+    }
+    
+    func getUser() {
+        let awearUrl = "https://awear-222521.appspot.com/getuser";
+        Alamofire.request(awearUrl, method: .post, parameters: ["username": UserDefaults.standard.string(forKey: "username") ?? "-1"], encoding: JSONEncoding.default, headers: nil).responseJSON { response in
+            switch response.result {
+            case .success(let JSON):
+                print("SUCCESS IN API REQUEST IN VIEWCONTROLLER")
+                let response = JSON as! NSDictionary
+                print(response)
+                AdminUtils.updateSettings(response: response)
+                self.setupSettings()
+                if (response.object(forKey: "enabled") as! Bool == true) {
+                    /* Switch audio to be enabled */
+                    print("Should enalbe")
+                    self.audioEnabled = true;
+                    UserDefaults.standard.set(self.audioEnabled, forKey: "audioEnabled")
+                    self.REENABLE_TIME = Date();
+                    UserDefaults.standard.set(Date(), forKey: "reenableTime")
+                    self.setupAudioRecording();
+                    self.calibrateButton.isUserInteractionEnabled = true;
+                    self.volumeSlider.isUserInteractionEnabled = true;
+                    //levelTimerCallback();
+                    self.disableAudio.setTitle("Disable Listening", for: .normal);
+                    self.renableTime.text = "";
+                    
+                    let alert = UIAlertController(title: "Listening Enabled", message: "Your application will now listen and notify you", preferredStyle: .alert)
+                    let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+                    alert.addAction(okAction)
+                    
+                    self.present(alert, animated: true, completion: nil)
+                } else if (response.object(forKey: "enabled") as! Bool == false) {
+                    self.disableTime = -1
+                    self.disableApplication(time: -1)
+                }
+            case .failure(let error):
+                let alert = UIAlertController(title: "Failure", message: "Failed to load user", preferredStyle: .alert)
+                alert.addAction(UIAlertAction(title: NSLocalizedString("OK", comment: "Default action"), style: .default, handler: { _ in
+                    NSLog("The \"OK\" alert occured.")
+                }))
+                NSLog("Request failed with error: \(error)")
+                self.present(alert, animated: true, completion: nil)
+            }
+        }
+    }
+    
+    func setupSettings() {
         
         WATCH_CONNECT = UserDefaults.standard.bool(forKey: "watchConnect")
         RECORD_STATS = UserDefaults.standard.bool(forKey: "recordStats")
         VIBRATION_LEVEL = UserDefaults.standard.integer(forKey: "vibrationLevel")
         audioEnabled =  UserDefaults.standard.bool(forKey: "audioEnabled")
-       // OUTDOOR_MODE = UserDefaults.standard.bool(forKey: "outdoorEnable")
-//        HEALTH_APP = UserDefaults.standard.bool(forKey: "healthEnable")
+        // OUTDOOR_MODE = UserDefaults.standard.bool(forKey: "outdoorEnable")
+        //        HEALTH_APP = UserDefaults.standard.bool(forKey: "healthEnable")
         OUTDOOR_AUTO = UserDefaults.standard.bool(forKey: "outdoorAutoEnable")
         OUTDOOR_MAN = UserDefaults.standard.bool(forKey: "outdoorManEnable")
         
@@ -156,15 +187,6 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
             OUTDOOR_MODE = false;
             outdoorLbl.text = ""
         }
-    
-        setupNotifications()
-        setupAudioRecording()
-        getMyLocation()
-
-        print("VIBRATION LEVEL: \(VIBRATION_LEVEL)");
-        
-        heartRateDisplay.isHidden = true;
-        heartBeatUnit.isHidden = true;
     }
     
     /* Handles incoming messages from the apple watch */
@@ -264,9 +286,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
             
             present(alert, animated: true, completion: nil)
             
-            // add reenable time
-            // print("HEEERETERTERT")
-            //renableTime.text = "Disabled until: \(disableTime)"
+           
             
             disableApplication(time: disableTime)
             return
@@ -304,6 +324,10 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
         self.disableEnable()
     }
     
+    @IBAction func refreshUser(_ sender: Any) {
+        self.getUser()
+    }
+    
     // Uses core location to get the user's current location
     func getMyLocation() {
         let status  = CLLocationManager.authorizationStatus()
@@ -330,11 +354,11 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
     /* CL LOCATION MANANAGER DELAGATE METHODS */
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         let currentLocation = locations.last!
-//        print("Current location: \(currentLocation)")
+        //        print("Current location: \(currentLocation)")
     }
     
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
-//        print("Error \(error)")
+        //        print("Error \(error)")
     }
     /* END OF CL LOCATION MANAGER DELEAGATE METHODS */
     
@@ -603,14 +627,14 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
     func recordStat(voiceLevel: Float) {
         var heartRate = 85.00
         do {
-           /* fetchLatestHeartRateSample { (result) in
-                heartRate = (result?.last?.quantity.doubleValue(for: HKUnit.count().unitDivided(by: HKUnit.minute())))!
-            }*/
+             fetchLatestHeartRateSample { (result) in
+             heartRate = (result?.last?.quantity.doubleValue(for: HKUnit.count().unitDivided(by: HKUnit.minute())))!
+             }
         }
         
         /* Save event to db */
         if(RECORD_STATS){
-        StatisticManager.save(date: Date.init(), threshold: LEVEL_THRESHOLD, voiceLevel: voiceLevel, heartRate: Double(heartRate))
+            StatisticManager.save(date: Date.init(), threshold: LEVEL_THRESHOLD, voiceLevel: voiceLevel, heartRate: Double(heartRate))
             print("saving stats")
         }
     }
@@ -744,9 +768,8 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
                 print("HERE")
                 setupAudioRecording()
                 UserDefaults.standard.set(true, forKey: "audioEnabled")
-                 UserDefaults.standard.set(false, forKey: "customDisabled");
+                UserDefaults.standard.set(false, forKey: "customDisabled");
                 UserDefaults.standard.set(false, forKey: "meetingDisabled");
-                audioEnabled = true;
                 calibrateButton.isUserInteractionEnabled = true;
                 volumeSlider.isUserInteractionEnabled = true;
                 disableAudio.setTitle("Disable Listening", for: .normal);
@@ -770,8 +793,8 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
                 self.heartRateDisplay.isHidden = false;
                 self.heartBeatUnit.isHidden = false;
                 self.healthKitAuth.isHidden = true;
-//                UserDefaults.standard.set(true, forKey: "healthEnabled")
-//                print(self.healthEnabled)
+                //                UserDefaults.standard.set(true, forKey: "healthEnabled")
+                //                print(self.healthEnabled)
             }
         }
     }
@@ -859,7 +882,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
                 return;
             }
             let y = x?.description
-
+            
             self.heartRateDisplay.text = y
             print("\(String(describing: result?.last?.quantity))\n")
         }
@@ -879,49 +902,6 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
             formatter.dateFormat = "MMM d, h:mm a";
             
             if(UserDefaults.standard.bool(forKey: "audioEnabled")){
-            let time = UserDefaults.standard.integer(forKey: "customDisableTime")
-            
-            let earlyDate = Calendar.current.date(
-                byAdding: .second,
-                value: time,
-                to: Date())
-            var myString = formatter.string(from: earlyDate as! Date)
-            
-            
-            renableTime.text = "Disabled until: \(myString)"
-            REENABLE_TIME = earlyDate ?? Date();
-            
-            disableAudio.setTitle("Enable Listening", for: .normal);
-            UserDefaults.standard.set(false, forKey: "audioEnabled")
-            }
-            
-        }else{
-            
-        }
-    }
-    
-    func checkCalendarDisable(){
-        
-        if(UserDefaults.standard.bool(forKey: "calendarDisable"))
-        {
-        
-            var date = UserDefaults.standard.object(forKey: "disableDate") as! Date
-            print("here")
-            print(date)
-            print("current date")
-            print(Date())
-            
-            if(date <= Date() && !UserDefaults.standard.bool(forKey: "meetingDisabled")){
-                
-                
-                let formatter = DateFormatter();
-                formatter.dateFormat = "MMM d, h:mm a";
-                
-            audioEnabled = false;
-            recorder.stop();
-            calibrateButton.isUserInteractionEnabled = false;
-            volumeSlider.isUserInteractionEnabled = false;
-            if(UserDefaults.standard.bool(forKey: "audioEnabled")){
                 let time = UserDefaults.standard.integer(forKey: "customDisableTime")
                 
                 let earlyDate = Calendar.current.date(
@@ -937,15 +917,45 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
                 
                 disableAudio.setTitle("Enable Listening", for: .normal);
                 UserDefaults.standard.set(false, forKey: "audioEnabled")
-                UserDefaults.standard.set(true, forKey: "meetingDisabled");
             }
-            }
-            
-            
-        }
-        
-    
         }
     }
-
-
+    
+    
+    func checkCalendarDisable() {
+        if(UserDefaults.standard.bool(forKey: "calendarDisable")) {
+            let date = UserDefaults.standard.object(forKey: "disableDate") as! Date
+            print(date)
+            print("current date")
+            print(Date())
+            
+            if(date <= Date() && !UserDefaults.standard.bool(forKey: "meetingDisabled")){
+                let formatter = DateFormatter();
+                formatter.dateFormat = "MMM d, h:mm a";
+                
+                self.audioEnabled = false;
+                recorder.stop();
+                calibrateButton.isUserInteractionEnabled = false;
+                volumeSlider.isUserInteractionEnabled = false;
+                if(UserDefaults.standard.bool(forKey: "audioEnabled")){
+                    _ = UserDefaults.standard.integer(forKey: "customDisableTime")
+                    
+                    let earlyDate = Calendar.current.date(
+                        byAdding: .minute,
+                        value: 60,
+                        to: Date())
+                    var myString = formatter.string(from: earlyDate as! Date)
+                    
+                    
+                    
+                    renableTime.text = "Disabled until: \(myString)"
+                    REENABLE_TIME = earlyDate ?? Date();
+                    
+                    disableAudio.setTitle("Enable Listening", for: .normal);
+                    UserDefaults.standard.set(false, forKey: "audioEnabled")
+                    UserDefaults.standard.set(true, forKey: "meetingDisabled");
+                }
+            }
+        }
+    }
+}
