@@ -26,8 +26,6 @@ class CalendarVC : UIViewController,  UITableViewDelegate, UITableViewDataSource
     // var cal;
     var events: [EKEvent] = [];
     
-    
-    
     @IBOutlet weak var tableView: UITableView!
     
     var test: [String] = ["test", "test1", "hiKatie"]

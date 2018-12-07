@@ -267,7 +267,6 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
             present(alert, animated: true, completion: nil)
             
            
-            
             disableApplication(time: disableTime)
             return
         } else {
@@ -292,6 +291,8 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
             alert.addAction(okAction)
             
             present(alert, animated: true, completion: nil)
+            
+            self.saveOnline()
         }
     }
     
@@ -456,8 +457,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
         calibrate()
     }
     
-    func dBFS_convertTo_dB (dBFSValue: Float) -> Float
-    {
+    func dBFS_convertTo_dB (dBFSValue: Float) -> Float {
         var level:Float = 0.0
         let peak_bottom:Float = -60.0 // dBFS -> -160..0   so it can be -80 or -60
         
@@ -619,6 +619,43 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
         }
     }
     
+    func saveOnline() {
+        /*
+         * Add user post request
+         * body:
+         *      {
+         *          username: string,
+         *          password: string,
+         *          isParent: bool,
+         *          child: string,
+         *          enabled: bool,
+         *          outdoorMode: bool,
+         *          recordStats: bool
+         *      }
+         */
+        let awearUrl = "https://awear-222521.appspot.com/updateUser"
+        let parameters = ["username": UserDefaults.standard.string(forKey: "username") ?? "",
+                          "password": UserDefaults.standard.string(forKey: "password") ?? "",
+                          "isParent": UserDefaults.standard.bool(forKey: "isParent"),
+                          "child": UserDefaults.standard.string(forKey: "child") ?? "",
+                          "enabled": UserDefaults.standard.bool(forKey: "audioEnabled"),
+                          "outdoorMode": UserDefaults.standard.bool(forKey: "outdoorManEnable"),
+                          "recordStats": UserDefaults.standard.bool(forKey: "recordStats")] as [String : Any];
+        
+        print("Parameters = \(parameters)")
+        Alamofire.request(awearUrl, method: .post, parameters: parameters, encoding: JSONEncoding.default, headers: nil).responseJSON { response in
+            switch response.result {
+            case .success(let JSON):
+                print("SUCCESS IN API REQUEST IN Settings VC")
+                let response = JSON as! NSDictionary
+                print(response)
+                AdminUtils.updateSettings(response: response)
+            case .failure(let error):
+                print(error)
+            }
+        }
+    }
+    
     func disableApplication(time: Int){
         // disable application for time Int
         
@@ -667,6 +704,8 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
             renableTime.text = ""
             print(time)
         }
+        
+        self.saveOnline()
     }
     
     func sendNotification() {
