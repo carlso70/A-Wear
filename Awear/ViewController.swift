@@ -93,6 +93,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
         setupSettings()
         
         UserDefaults.standard.set(false, forKey: "calendarDisable")
+        UserDefaults.standard.set(false, forKey: "cvc")
         
         setupNotifications()
         setupAudioRecording()
@@ -276,7 +277,10 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
             UserDefaults.standard.set(false, forKey: "customDisabled");
             UserDefaults.standard.set(false, forKey: "meetingDisabled");
             
-            globalCalVC!.getMostRecentDate()
+            if(UserDefaults.standard.bool(forKey: "cvc"))
+            {
+                globalCalVC!.getMostRecentDate()
+            }
             
             REENABLE_TIME = Date();
             UserDefaults.standard.set(Date(), forKey: "reenableTime")
@@ -750,6 +754,12 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
                 UserDefaults.standard.set(true, forKey: "audioEnabled")
                 UserDefaults.standard.set(false, forKey: "customDisabled");
                 UserDefaults.standard.set(false, forKey: "meetingDisabled");
+                
+                if(UserDefaults.standard.bool(forKey: "cvc"))
+                {
+                    globalCalVC!.getMostRecentDate()
+                }
+                
                 calibrateButton.isUserInteractionEnabled = true;
                 volumeSlider.isUserInteractionEnabled = true;
                 disableAudio.setTitle("Disable Listening", for: .normal);
