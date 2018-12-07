@@ -18,14 +18,24 @@ import WatchConnectivity
 import HealthKit
 import Alamofire
 
+struct Connectivity {
+    static let sharedInstance = NetworkReachabilityManager()!
+    static var isConnectedToInternet:Bool {
+        return self.sharedInstance.isReachable
+    }
+}
+
 class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDelegate {
     
+    
+    var reach: Reachability!
     var recorder: AVAudioRecorder!
     var levelTimer = Timer()
     var LEVEL_THRESHOLD: Float = 160
     var isCalibrating = false
     var VIBRATION_LEVEL = 1
     var REENABLE_TIME = Date();
+    var NOTIFICATION_TIME = Date();
     let locationMgr = CLLocationManager()
     let healthStore = HKHealthStore()
     
@@ -72,7 +82,17 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
         super.viewDidLoad()
         makePretty();
         // Do any additional setup after loading the view, typically from a nib.
+//        if Connectivity.isConnectedToInternet {
+//            print("Connected")
+//        } else {
+//            print("No Internet")
+//        }
         
+        if Reachability.isConnectedToNetwork(){
+            print("Internet Connection Available!")
+        }else{
+            print("Internet Connection not Available!")
+        }
         if WCSession.isSupported() {
             session = WCSession.default
             session?.delegate = self
@@ -515,14 +535,14 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
         //print("IsLoud? : ",isLoud)
         // Need to stop timer and audio session before playing a vibration
         // Notifications
-        if isLoud {
+        if isLoud && Date() > NOTIFICATION_TIME.addingTimeInterval(5) {
             //            let generator = UINotificationFeedbackGenerator()
             //                view.backgroundColor = UIColor.red
             // Need to stop timer and audio session before playing a vibration
             //  generator.impactOccurred()
             ConnectivityUtils.sendLoudNoiseMessageToWatch(session: session, isLoud: true)
             recordStat(voiceLevel: level)
-            
+            NOTIFICATION_TIME = Date()
             let diff = level/LEVEL_THRESHOLD
             if(diff > 1.3) {
                 let generator = UINotificationFeedbackGenerator()
@@ -846,6 +866,11 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
             predicate: predicate,
             limit: 1,
             sortDescriptors: [sortDescriptor]) { (_, results, error) in
+                
+                guard error == nil else {
+//                    print("Error: \(error!.localizedDescription)")
+                    return
+                }
                 completion(results as? [HKQuantitySample])
         }
         
@@ -854,39 +879,43 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
     }
     
     func checkAutoOutdoor(){
-        let curr = locationMgr.location
-        
-        let hor = lround(curr?.horizontalAccuracy ?? -1)
-        
-        //        print(hor)
-        //print(hor)
-        if (hor < 0)
-        {
+        if Reachability.isConnectedToNetwork() == true {
+            print("Internet connection OK")
             OUTDOOR_MODE = false;
-            // No Signal
-        }
-        else if(hor < 32)
-        {
-            // Full Signal
+            outdoorLbl.text = ""
+        } else {
+            print("Internet connection FAILED")
             OUTDOOR_MODE = true;
-        }
-        else{
-            OUTDOOR_MODE = false;
-        }
-        
-        if(OUTDOOR_MODE){
             outdoorLbl.text = "OUTDOOR MODE IS ON"
         }
-        else{
-            outdoorLbl.text = ""
-        }
+//        let curr = locationMgr.location
+//
+//        let hor = lround(curr?.horizontalAccuracy ?? -1)
+//
+//        //print(hor)
+//
+        
+//        if (hor < 0)
+//        {
+//            OUTDOOR_MODE = false;
+//            // No Signal
+//        }
+//        else if(hor < 32)
+//        {
+//            // Full Signal
+//            OUTDOOR_MODE = true;
+//        }
+//        else{
+//            OUTDOOR_MODE = false;
+//        }
+
     }
     
     @IBAction func getHeartRate() {
         fetchLatestHeartRateSample { (result) in
             //this version gives the values in the form of 00.0
             let x = result?.last?.quantity.doubleValue(for: HKUnit.count().unitDivided(by: HKUnit.minute())) ?? nil
-            
+
             if(x?.description == nil)
             {
                 return;
@@ -915,10 +944,13 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
                 let time = UserDefaults.standard.integer(forKey: "customDisableTime")
                 
                 let earlyDate = Calendar.current.date(
-                    byAdding: .second,
-                    value: time,
+                    byAdding: .minute,
+                    value: 60,
                     to: Date())
                 var myString = formatter.string(from: earlyDate as! Date)
+                
+                
+                
                 renableTime.text = "Disabled until: \(myString)"
                 REENABLE_TIME = earlyDate ?? Date();
                 
