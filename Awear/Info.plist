@@ -35,6 +35,8 @@
 		<string>audio</string>
 		<string>location</string>
 	</array>
+	<key>LSApplicationCategoryType</key>
+	<string></string>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>NSCalendarsUsageDescription</key>
@@ -58,5 +60,7 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
+	<key>com.apple.developer.networking.wifi-info</key>
+	<string>to add certain wifis </string>
 </dict>
 </plist>
