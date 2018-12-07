@@ -26,6 +26,8 @@ class CalendarVC : UIViewController,  UITableViewDelegate, UITableViewDataSource
     // var cal;
     var events: [EKEvent] = [];
     
+    
+
     @IBOutlet weak var tableView: UITableView!
     
     var test: [String] = ["test", "test1", "hiKatie"]
@@ -38,6 +40,8 @@ class CalendarVC : UIViewController,  UITableViewDelegate, UITableViewDataSource
         super.viewDidLoad()
         
         let store = EKEventStore()
+        
+        UserDefaults.standard.set(true, forKey: "cvc")
         
         //cals.append()
         globalCalVC = self as! CalendarVC
@@ -65,6 +69,8 @@ class CalendarVC : UIViewController,  UITableViewDelegate, UITableViewDataSource
                     
                     // Fetch all events that match the predicate
                     self.events = store.events(matching: predicate)
+                    
+                    
                     
                     //swift 3
                     DispatchQueue.main.async{
