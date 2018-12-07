@@ -607,9 +607,9 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
     func recordStat(voiceLevel: Float) {
         var heartRate = 85.00
         do {
-            /* fetchLatestHeartRateSample { (result) in
+             fetchLatestHeartRateSample { (result) in
              heartRate = (result?.last?.quantity.doubleValue(for: HKUnit.count().unitDivided(by: HKUnit.minute())))!
-             }*/
+             }
         }
         
         /* Save event to db */
