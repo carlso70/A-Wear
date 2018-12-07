@@ -18,14 +18,24 @@ import WatchConnectivity
 import HealthKit
 import Alamofire
 
+struct Connectivity {
+    static let sharedInstance = NetworkReachabilityManager()!
+    static var isConnectedToInternet:Bool {
+        return self.sharedInstance.isReachable
+    }
+}
+
 class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDelegate {
     
+    
+    var reach: Reachability!
     var recorder: AVAudioRecorder!
     var levelTimer = Timer()
     var LEVEL_THRESHOLD: Float = 160
     var isCalibrating = false
     var VIBRATION_LEVEL = 1
     var REENABLE_TIME = Date();
+    var NOTIFICATION_TIME = Date();
     let locationMgr = CLLocationManager()
     let healthStore = HKHealthStore()
     
@@ -72,7 +82,17 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
         super.viewDidLoad()
         makePretty();
         // Do any additional setup after loading the view, typically from a nib.
+//        if Connectivity.isConnectedToInternet {
+//            print("Connected")
+//        } else {
+//            print("No Internet")
+//        }
         
+        if Reachability.isConnectedToNetwork(){
+            print("Internet Connection Available!")
+        }else{
+            print("Internet Connection not Available!")
+        }
         if WCSession.isSupported() {
             session = WCSession.default
             session?.delegate = self
@@ -268,7 +288,6 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
             present(alert, animated: true, completion: nil)
             
            
-            
             disableApplication(time: disableTime)
             return
         } else {
@@ -296,6 +315,8 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
             alert.addAction(okAction)
             
             present(alert, animated: true, completion: nil)
+            
+            self.saveOnline()
         }
     }
     
@@ -460,8 +481,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
         calibrate()
     }
     
-    func dBFS_convertTo_dB (dBFSValue: Float) -> Float
-    {
+    func dBFS_convertTo_dB (dBFSValue: Float) -> Float {
         var level:Float = 0.0
         let peak_bottom:Float = -60.0 // dBFS -> -160..0   so it can be -80 or -60
         
@@ -519,14 +539,14 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
         //print("IsLoud? : ",isLoud)
         // Need to stop timer and audio session before playing a vibration
         // Notifications
-        if isLoud {
+        if isLoud && Date() > NOTIFICATION_TIME.addingTimeInterval(5) {
             //            let generator = UINotificationFeedbackGenerator()
             //                view.backgroundColor = UIColor.red
             // Need to stop timer and audio session before playing a vibration
             //  generator.impactOccurred()
             ConnectivityUtils.sendLoudNoiseMessageToWatch(session: session, isLoud: true)
             recordStat(voiceLevel: level)
-            
+            NOTIFICATION_TIME = Date()
             let diff = level/LEVEL_THRESHOLD
             if(diff > 1.3) {
                 let generator = UINotificationFeedbackGenerator()
@@ -623,6 +643,43 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
         }
     }
     
+    func saveOnline() {
+        /*
+         * Add user post request
+         * body:
+         *      {
+         *          username: string,
+         *          password: string,
+         *          isParent: bool,
+         *          child: string,
+         *          enabled: bool,
+         *          outdoorMode: bool,
+         *          recordStats: bool
+         *      }
+         */
+        let awearUrl = "https://awear-222521.appspot.com/updateUser"
+        let parameters = ["username": UserDefaults.standard.string(forKey: "username") ?? "",
+                          "password": UserDefaults.standard.string(forKey: "password") ?? "",
+                          "isParent": UserDefaults.standard.bool(forKey: "isParent"),
+                          "child": UserDefaults.standard.string(forKey: "child") ?? "",
+                          "enabled": UserDefaults.standard.bool(forKey: "audioEnabled"),
+                          "outdoorMode": UserDefaults.standard.bool(forKey: "outdoorManEnable"),
+                          "recordStats": UserDefaults.standard.bool(forKey: "recordStats")] as [String : Any];
+        
+        print("Parameters = \(parameters)")
+        Alamofire.request(awearUrl, method: .post, parameters: parameters, encoding: JSONEncoding.default, headers: nil).responseJSON { response in
+            switch response.result {
+            case .success(let JSON):
+                print("SUCCESS IN API REQUEST IN Settings VC")
+                let response = JSON as! NSDictionary
+                print(response)
+                AdminUtils.updateSettings(response: response)
+            case .failure(let error):
+                print(error)
+            }
+        }
+    }
+    
     func disableApplication(time: Int){
         // disable application for time Int
         
@@ -671,6 +728,8 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
             renableTime.text = ""
             print(time)
         }
+        
+        self.saveOnline()
     }
     
     func sendNotification() {
@@ -817,6 +876,11 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
             predicate: predicate,
             limit: 1,
             sortDescriptors: [sortDescriptor]) { (_, results, error) in
+                
+                guard error == nil else {
+//                    print("Error: \(error!.localizedDescription)")
+                    return
+                }
                 completion(results as? [HKQuantitySample])
         }
         
@@ -825,39 +889,43 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
     }
     
     func checkAutoOutdoor(){
-        let curr = locationMgr.location
-        
-        let hor = lround(curr?.horizontalAccuracy ?? -1)
-        
-        //        print(hor)
-        //print(hor)
-        if (hor < 0)
-        {
+        if Reachability.isConnectedToNetwork() == true {
+            print("Internet connection OK")
             OUTDOOR_MODE = false;
-            // No Signal
-        }
-        else if(hor < 32)
-        {
-            // Full Signal
+            outdoorLbl.text = ""
+        } else {
+            print("Internet connection FAILED")
             OUTDOOR_MODE = true;
-        }
-        else{
-            OUTDOOR_MODE = false;
-        }
-        
-        if(OUTDOOR_MODE){
             outdoorLbl.text = "OUTDOOR MODE IS ON"
         }
-        else{
-            outdoorLbl.text = ""
-        }
+//        let curr = locationMgr.location
+//
+//        let hor = lround(curr?.horizontalAccuracy ?? -1)
+//
+//        //print(hor)
+//
+        
+//        if (hor < 0)
+//        {
+//            OUTDOOR_MODE = false;
+//            // No Signal
+//        }
+//        else if(hor < 32)
+//        {
+//            // Full Signal
+//            OUTDOOR_MODE = true;
+//        }
+//        else{
+//            OUTDOOR_MODE = false;
+//        }
+
     }
     
     @IBAction func getHeartRate() {
         fetchLatestHeartRateSample { (result) in
             //this version gives the values in the form of 00.0
             let x = result?.last?.quantity.doubleValue(for: HKUnit.count().unitDivided(by: HKUnit.minute())) ?? nil
-            
+
             if(x?.description == nil)
             {
                 return;
@@ -886,10 +954,13 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
                 let time = UserDefaults.standard.integer(forKey: "customDisableTime")
                 
                 let earlyDate = Calendar.current.date(
-                    byAdding: .second,
-                    value: time,
+                    byAdding: .minute,
+                    value: 60,
                     to: Date())
                 var myString = formatter.string(from: earlyDate as! Date)
+                
+                
+                
                 renableTime.text = "Disabled until: \(myString)"
                 REENABLE_TIME = earlyDate ?? Date();
                 
