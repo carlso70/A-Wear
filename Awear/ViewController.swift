@@ -17,6 +17,10 @@ import CoreData
 import WatchConnectivity
 import HealthKit
 import Alamofire
+import Foundation
+import SystemConfiguration.CaptiveNetwork
+//import CoreWLAN
+
 
 struct Connectivity {
     static let sharedInstance = NetworkReachabilityManager()!
@@ -26,7 +30,6 @@ struct Connectivity {
 }
 
 class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDelegate {
-    
     
     var reach: Reachability!
     var recorder: AVAudioRecorder!
@@ -888,10 +891,73 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
         healthStore.execute(query)
     }
     
+//    func getWiFiSsid() -> String? {
+//        var ssid: String?
+//        if let interfaces = CNCopySupportedInterfaces() as NSArray? {
+//            for interface in interfaces {
+//                if let interfaceInfo = CNCopyCurrentNetworkInfo(interface as! CFString) as NSDictionary? {
+//                    ssid = interfaceInfo[kCNNetworkInfoKeySSID as String] as? String
+//                    break
+//                }
+//            }
+//        }
+//        return ssid
+//    }
+    var ssid: String?
+    func getWiFiSsid() -> String? {
+        if let interfaces = CNCopySupportedInterfaces() as NSArray? {
+            for interface in interfaces {
+                if let interfaceInfo = CNCopyCurrentNetworkInfo(interface as! CFString) as NSDictionary? {
+                    
+                    ssid = interfaceInfo[kCNNetworkInfoKeySSID as String] as? String
+                    
+                    
+                }
+            }
+        }
+        return ssid
+    }
+    
+    func fetchSSIDInfo() -> String {
+        for i in (0..<3) {
+            let ssid = ViewController.readSSID()
+            print ("SSID: \(Date()): \(i), \(ssid)")
+            if !ssid.isEmpty {
+                return ssid
+            }
+        }
+        
+        return ""
+    }
+    
+    private static func readSSID() -> String {
+        guard let interfaceNames = CNCopySupportedInterfaces() as? [String] else {
+            return ""
+        }
+        return interfaceNames.compactMap { name in
+            guard let info = CNCopyCurrentNetworkInfo(name as CFString) as? [String:AnyObject] else {
+                return nil
+            }
+            guard let ssid = info[kCNNetworkInfoKeySSID as String] as? String else {
+                return nil
+            }
+            return ssid
+            }
+            .filter({ (ssid) -> Bool in
+                !ssid.isEmpty
+                }
+            )
+            .first ?? ""
+    }  
+    
     func checkAutoOutdoor(){
         if Reachability.isConnectedToNetwork() == true {
             print("Internet connection OK")
             OUTDOOR_MODE = false;
+            print("ssid:")
+            print(fetchSSIDInfo())
+//            print("wifi network:")
+           
             outdoorLbl.text = ""
         } else {
             print("Internet connection FAILED")
