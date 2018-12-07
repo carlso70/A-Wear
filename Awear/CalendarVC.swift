@@ -32,11 +32,14 @@ class CalendarVC : UIViewController,  UITableViewDelegate, UITableViewDataSource
     
     var disableDates: [Date] = []
     
+    var cals: [EKCalendar] = []
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
         let store = EKEventStore()
         
+        //cals.append()
         globalCalVC = self as! CalendarVC
         
         // Get the appropriate calendar
@@ -54,7 +57,7 @@ class CalendarVC : UIViewController,  UITableViewDelegate, UITableViewDataSource
                     
                     // Create the end date components
                     var oneYearFromNowComponents = DateComponents()
-                    oneYearFromNowComponents.year = 1
+                    oneYearFromNowComponents.month = 6
                     let oneYearFromNow = calendar.date(byAdding: oneYearFromNowComponents, to: Date())
                     
                     // Create the predicate from the event store's instance method
@@ -137,13 +140,20 @@ class CalendarVC : UIViewController,  UITableViewDelegate, UITableViewDataSource
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        
+        let formatter = DateFormatter();
+        formatter.dateFormat = "MMM d, h:mm a";
+        
+        
         let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath as IndexPath)
         //let cell = UITableViewCell(style: UITableViewCell.CellStyle.subtitle, reuseIdentifier: "Cell")
         //let cell = tableView.dequeueReusableCell
         let event = events[indexPath.row]
         print("Current event is \(event)")
         cell.textLabel?.text = event.title
-        cell.detailTextLabel?.text = event.startDate.description
+        
+        var myString = formatter.string(from: event.startDate as! Date)
+        cell.detailTextLabel?.text = myString
         cell.detailTextLabel?.isEnabled = true
         cell.detailTextLabel?.isHidden = false
         print("event cell returned")
