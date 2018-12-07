@@ -406,6 +406,15 @@
                                     <outlet property="prefetchDataSource" destination="WrW-RU-a7D" id="cOT-vp-kKj"/>
                                 </connections>
                             </tableView>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ikD-Ob-erG">
+                                <rect key="frame" x="321" y="43" width="30" height="36"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="20"/>
+                                <state key="normal" title="?"/>
+                                <connections>
+                                    <action selector="help:" destination="WrW-RU-a7D" eventType="touchUpInside" id="AON-wN-llu"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <viewLayoutGuide key="safeArea" id="JGw-gx-Ufl"/>
