@@ -817,32 +817,36 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
     }
     
     func checkAutoOutdoor(){
-        let curr = locationMgr.location
-        
-        let hor = lround(curr?.horizontalAccuracy ?? -1)
-        
-        //print(hor)
-        
-        if (hor < 0)
-        {
+        if Reachability.isConnectedToNetwork() == true {
+            print("Internet connection OK")
             OUTDOOR_MODE = false;
-            // No Signal
-        }
-        else if(hor < 32)
-        {
-            // Full Signal
+            outdoorLbl.text = ""
+        } else {
+            print("Internet connection FAILED")
             OUTDOOR_MODE = true;
-        }
-        else{
-            OUTDOOR_MODE = false;
-        }
-        
-        if(OUTDOOR_MODE){
             outdoorLbl.text = "OUTDOOR MODE IS ON"
         }
-        else{
-            outdoorLbl.text = ""
-        }
+//        let curr = locationMgr.location
+//
+//        let hor = lround(curr?.horizontalAccuracy ?? -1)
+//
+//        //print(hor)
+//
+        
+//        if (hor < 0)
+//        {
+//            OUTDOOR_MODE = false;
+//            // No Signal
+//        }
+//        else if(hor < 32)
+//        {
+//            // Full Signal
+//            OUTDOOR_MODE = true;
+//        }
+//        else{
+//            OUTDOOR_MODE = false;
+//        }
+
     }
     
     @IBAction func getHeartRate() {
